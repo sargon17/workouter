@@ -2,20 +2,29 @@ import React from "react";
 
 import { createClient } from "@/utils/supabase/server";
 import { toast } from "sonner";
+import { cn } from "@/lib/utils";
 
+import { format } from "date-fns";
 import { getUser } from "@/lib/fetch";
 
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 
 import NewWorkoutButton from "./NewWorkoutButton";
+import Link from "next/link";
 
 export default async function WorkoutList() {
   const supabase = createClient();
   const user = await getUser(supabase);
   if (!user) return null;
 
-  let { data: workouts, error } = await supabase.from("workouts").select("").eq("user_id", user.id);
+  let { data: workouts, error } = await supabase
+    .from("workouts")
+    .select("")
+    .eq("user_id", user.id)
+    .order("date", { ascending: true })
+    .filter("date", "gte", new Date().toISOString().slice(0, 10)); // filters out past workouts
 
   if (error) {
     console.error("error", error);
@@ -31,33 +40,63 @@ export default async function WorkoutList() {
   return (
     <div className="w-full p-4">
       <div className="mb-4">
-        <h1 className=" text-xl font-bold">Your Workouts</h1>
+        <h1 className=" text-xl font-bold">Your Next Workouts</h1>
       </div>
-      <div className="flex flex-wrap">
+      <div className="flex flex-wrap gap-2">
         {workouts.length === 0 && <NoWorkouts />}
-        {workouts.map((workout: any) => (
-          <WorkoutCard workout={workout} />
+        {workouts.map((workout: any, i: number) => (
+          <WorkoutCard
+            workout={workout}
+            highlighted={i === 0}
+          />
         ))}
       </div>
     </div>
   );
 }
 
-const WorkoutCard = ({ workout }: { workout: any }) => (
-  <Card
-    key={workout.id}
-    className="w-full md:w-1/2 lg:w-1/3"
-  >
-    <CardHeader>
-      <CardTitle>{workout.title}</CardTitle>
-      <CardDescription>{workout.date}</CardDescription>
-    </CardHeader>
-    <CardContent></CardContent>
-    <CardFooter>
-      <p>{workout.created_at}</p>
-    </CardFooter>
-  </Card>
-);
+const WorkoutCard = ({ workout, highlighted = false }: { workout: any; highlighted?: boolean }) => {
+  let renderDate = format(new Date(workout.date), "PPP");
+
+  const today = new Date();
+  const tomorrow = new Date(today);
+  tomorrow.setDate(tomorrow.getDate() + 1);
+
+  switch (workout.date) {
+    case today.toISOString().slice(0, 10):
+      renderDate = "Today";
+      break;
+
+    case tomorrow.toISOString().slice(0, 10):
+      renderDate = "Tomorrow";
+      break;
+
+    default:
+      renderDate = format(new Date(workout.date), "PPP");
+      break;
+  }
+
+  return (
+    <Card
+      key={workout.id}
+      className={cn("w-full md:w-1/2 lg:w-1/3")}
+    >
+      <CardHeader>
+        <div className="flex items-center gap-2">
+          <CardTitle>{workout.title}</CardTitle>
+          {highlighted && <Badge>Next</Badge>}
+        </div>
+        <CardDescription>{renderDate}</CardDescription>
+      </CardHeader>
+      <CardContent></CardContent>
+      <CardFooter>
+        <Button variant="outline">
+          <Link href={`/workouts/${workout.id}`}>View Workout</Link>
+        </Button>
+      </CardFooter>
+    </Card>
+  );
+};
 
 const NoWorkouts = () => (
   <div className="w-full h-[100%] flex flex-col justify-center items-center">
@@ -65,8 +104,6 @@ const NoWorkouts = () => (
     <p className="text-xs text-center pb-4 text-stone-200">
       Click the button below to create your first workout
     </p>
-    {/* <Button>New Workout</Button>
-     */}
     <NewWorkoutButton />
   </div>
 );
