@@ -1,18 +1,21 @@
 import React from "react";
 
+import { SingleWorkout } from "@/types/workout";
+
 import { createClient } from "@/utils/supabase/server";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 
-import { format } from "date-fns";
 import { getUser } from "@/lib/fetch";
 
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 
-import NewWorkoutButton from "./NewWorkoutButton";
 import Link from "next/link";
+
+import NewWorkoutButton from "./NewWorkoutButton";
+import PrintDate from "../date/PrintDate";
 
 export default async function WorkoutList() {
   const supabase = createClient();
@@ -24,7 +27,7 @@ export default async function WorkoutList() {
     .select("")
     .eq("user_id", user.id)
     .order("date", { ascending: true })
-    .filter("date", "gte", new Date().toISOString().slice(0, 10)); // filters out past workouts
+    .filter("date", "gte", new Date().toISOString().slice(0, 10)); // only show workouts from today onwards
 
   if (error) {
     console.error("error", error);
@@ -46,7 +49,7 @@ export default async function WorkoutList() {
         {workouts.length === 0 && <NoWorkouts />}
         {workouts.map((workout: any, i: number) => (
           <WorkoutCard
-            workout={workout}
+            workout={workout as SingleWorkout}
             highlighted={i === 0}
           />
         ))}
@@ -55,27 +58,7 @@ export default async function WorkoutList() {
   );
 }
 
-const WorkoutCard = ({ workout, highlighted = false }: { workout: any; highlighted?: boolean }) => {
-  let renderDate = format(new Date(workout.date), "PPP");
-
-  const today = new Date();
-  const tomorrow = new Date(today);
-  tomorrow.setDate(tomorrow.getDate() + 1);
-
-  switch (workout.date) {
-    case today.toISOString().slice(0, 10):
-      renderDate = "Today";
-      break;
-
-    case tomorrow.toISOString().slice(0, 10):
-      renderDate = "Tomorrow";
-      break;
-
-    default:
-      renderDate = format(new Date(workout.date), "PPP");
-      break;
-  }
-
+const WorkoutCard = ({ workout, highlighted = false }: { workout: SingleWorkout; highlighted?: boolean }) => {
   return (
     <Card
       key={workout.id}
@@ -86,7 +69,9 @@ const WorkoutCard = ({ workout, highlighted = false }: { workout: any; highlight
           <CardTitle>{workout.title}</CardTitle>
           {highlighted && <Badge>Next</Badge>}
         </div>
-        <CardDescription>{renderDate}</CardDescription>
+        <CardDescription>
+          <PrintDate date={workout.date} />
+        </CardDescription>
       </CardHeader>
       <CardContent></CardContent>
       <CardFooter>
