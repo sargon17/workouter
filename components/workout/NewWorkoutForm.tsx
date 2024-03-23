@@ -53,6 +53,9 @@ export default function NewWorkoutForm({ user }: { user: any }) {
     } else {
       toast("Workout created");
       form.reset();
+
+      // refresh the page
+      window.location.reload();
     }
   }
 
