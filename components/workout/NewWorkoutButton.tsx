@@ -14,7 +14,7 @@ import NewWorkoutForm from "./NewWorkoutForm";
 
 import { getUser } from "@/lib/fetch";
 
-export default async function NewWorkoutButton() {
+export default async function NewWorkoutButton({ children }: { children: React.ReactNode }) {
   const supabase = createClient();
 
   let user = await getUser(supabase);
@@ -23,9 +23,7 @@ export default async function NewWorkoutButton() {
 
   return (
     <Drawer>
-      <DrawerTrigger>
-        <Button>New Workout</Button>
-      </DrawerTrigger>
+      <DrawerTrigger>{children || <Button>Add Workout</Button>}</DrawerTrigger>
       <DrawerContent>
         <DrawerHeader>
           <DrawerTitle>Create a new Workout</DrawerTitle>

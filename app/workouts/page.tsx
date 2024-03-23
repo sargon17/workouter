@@ -1,5 +1,6 @@
 import { createClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
+import { Plus } from "lucide-react";
 
 import Header from "@/components/Header";
 import WorkoutList from "@/components/workout/WorkoutList";
@@ -22,7 +23,11 @@ export default async function ProtectedPage() {
   return (
     <>
       <Header>
-        <NewWorkoutButton />
+        <NewWorkoutButton>
+          <Button size="icon">
+            <Plus className="h-4 w-4" />
+          </Button>
+        </NewWorkoutButton>
       </Header>
       <WorkoutList />
     </>

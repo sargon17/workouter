@@ -104,6 +104,8 @@ const NoWorkouts = () => (
     <p className="text-xs text-center pb-4 text-stone-200">
       Click the button below to create your first workout
     </p>
-    <NewWorkoutButton />
+    <NewWorkoutButton>
+      <Button>Create Workout</Button>
+    </NewWorkoutButton>
   </div>
 );
