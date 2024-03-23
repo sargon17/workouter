@@ -4,11 +4,7 @@ import { createClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
 import { SubmitButton } from "./submit-button";
 
-export default function Login({
-  searchParams,
-}: {
-  searchParams: { message: string };
-}) {
+export default function Login({ searchParams }: { searchParams: { message: string } }) {
   const signIn = async (formData: FormData) => {
     "use server";
 
@@ -25,7 +21,7 @@ export default function Login({
       return redirect("/login?message=Could not authenticate user");
     }
 
-    return redirect("/protected");
+    return redirect("/workouts");
   };
 
   const signUp = async (formData: FormData) => {
@@ -75,7 +71,10 @@ export default function Login({
       </Link>
 
       <form className="animate-in flex-1 flex flex-col w-full justify-center gap-2 text-foreground">
-        <label className="text-md" htmlFor="email">
+        <label
+          className="text-md"
+          htmlFor="email"
+        >
           Email
         </label>
         <input
@@ -84,7 +83,10 @@ export default function Login({
           placeholder="you@example.com"
           required
         />
-        <label className="text-md" htmlFor="password">
+        <label
+          className="text-md"
+          htmlFor="password"
+        >
           Password
         </label>
         <input
@@ -109,9 +111,7 @@ export default function Login({
           Sign Up
         </SubmitButton>
         {searchParams?.message && (
-          <p className="mt-4 p-4 bg-foreground/10 text-foreground text-center">
-            {searchParams.message}
-          </p>
+          <p className="mt-4 p-4 bg-foreground/10 text-foreground text-center">{searchParams.message}</p>
         )}
       </form>
     </div>
