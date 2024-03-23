@@ -1,8 +1,5 @@
-import { createClient } from "@/utils/supabase/server";
-import { ChevronLeft } from "lucide-react";
 import { ReactNode } from "react";
 
-import { Button } from "./ui/button";
 import Link from "next/link";
 import BackButton from "./BackButton";
 
