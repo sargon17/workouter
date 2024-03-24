@@ -20,6 +20,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
+import { useRouter } from "next/navigation";
+import { DrawerClose } from "../ui/drawer";
+
 const formSchema = z.object({
   title: z.string().nonempty(),
   date: z.date(),
@@ -27,6 +30,7 @@ const formSchema = z.object({
 
 export default function NewWorkoutForm({ user }: { user: any }) {
   const supabase = createClient();
+  const router = useRouter();
 
   if (!user) {
     throw new Error("User not found");
@@ -55,7 +59,7 @@ export default function NewWorkoutForm({ user }: { user: any }) {
       form.reset();
 
       // refresh the page
-      window.location.reload();
+      router.refresh();
     }
   }
 
@@ -99,7 +103,9 @@ export default function NewWorkoutForm({ user }: { user: any }) {
               </FormItem>
             )}
           />
-          <Button type="submit">Submit</Button>
+          <DrawerClose>
+            <Button type="submit">Submit</Button>
+          </DrawerClose>
         </form>
       </Form>
     </div>
