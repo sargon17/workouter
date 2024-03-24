@@ -1,4 +1,4 @@
-import NewTargetSetForm from "@/components/set/NewTargetSetForm";
+import NewTargetSetForm from "@/components/target_set/NewTargetSetForm";
 
 import { createClient } from "@/utils/supabase/server";
 import { Button } from "@/components/ui/button";

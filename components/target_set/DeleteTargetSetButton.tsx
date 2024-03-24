@@ -16,7 +16,7 @@ export default function DeleteTargetSetButton({
   const router = useRouter();
 
   const handleDelete = async () => {
-    const { error } = await supabase.from("sets").delete().eq("id", set_id);
+    const { error } = await supabase.from("target_sets").delete().eq("id", set_id);
 
     if (error) {
       toast("Something went wrong while deleting the target set");

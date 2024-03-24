@@ -12,8 +12,8 @@ import PrintDate from "../date/PrintDate";
 import { Card, CardHeader, CardTitle, CardFooter } from "../ui/card";
 import { Button } from "../ui/button";
 
-import NewTargetSetButton from "../set/NewTargetSetButton";
-import TargetSetItem from "../set/TargetSetItem";
+import NewTargetSetButton from "../target_set/NewTargetSetButton";
+import TargetSetItem from "../target_set/TargetSetItem";
 
 type WorkoutDetailsProps = {
   id: string;

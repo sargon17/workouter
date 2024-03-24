@@ -41,7 +41,7 @@ export default function NewWorkoutForm({ workout_exercise_id }: { workout_exerci
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     const { data, error } = await supabase
-      .from("sets")
+      .from("target_sets")
       .insert([{ ...values, workout_exercise_id: workout_exercise_id }])
       .select();
 
