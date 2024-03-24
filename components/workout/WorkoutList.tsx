@@ -38,8 +38,6 @@ export default async function WorkoutList() {
     workouts = [];
   }
 
-  console.log("workouts", workouts);
-
   return (
     <div className="w-full p-4">
       <div className="mb-4">
