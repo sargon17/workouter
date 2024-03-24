@@ -46,7 +46,7 @@ export default function TargetSetItem({
           <span className="hover:text-stone-100">{children}</span>
         </DropdownMenuTrigger>
         <DropdownMenuContent>
-          <DropdownMenuLabel>Target Set</DropdownMenuLabel>
+          <DropdownMenuLabel>Target Set Actions</DropdownMenuLabel>
           <DropdownMenuSeparator />
           <DropdownMenuItem
             onClick={() => {
@@ -73,7 +73,7 @@ export default function TargetSetItem({
       >
         <DrawerContent>
           <DrawerHeader>
-            <DrawerTitle>Add a new Target Set</DrawerTitle>
+            <DrawerTitle>Edit Target Set</DrawerTitle>
           </DrawerHeader>
           <EditTargetSetForm
             set_id={set_id}
