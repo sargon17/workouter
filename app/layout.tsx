@@ -18,7 +18,6 @@ export const metadata = {
   title: "Workouter",
   description: "Workouter is a intuitive workout tracker and planner",
 
-  visualViewport: "width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no",
   initialScale: "1.0",
   maximumScale: "1.0",
   userScalable: "no",
@@ -40,6 +39,12 @@ export const metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
+      <Head>
+        <meta
+          name="viewport"
+          content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+        />
+      </Head>
       <body
         className={cn(
           "min-h-screen bg-background font-sans antialiased dark:bg-stone-950 text-stone-50 overflow-hidden",
