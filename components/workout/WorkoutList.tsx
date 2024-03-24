@@ -1,5 +1,7 @@
 import React from "react";
 
+import { MoreHorizontal } from "lucide-react";
+
 import { SingleWorkout } from "@/types/workout";
 
 import { createClient } from "@/utils/supabase/server";
@@ -16,6 +18,8 @@ import Link from "next/link";
 
 import NewWorkoutButton from "./NewWorkoutButton";
 import PrintDate from "../date/PrintDate";
+
+import SingleWorkoutMoreButton from "./SingleWorkoutMoreButton";
 
 export default async function WorkoutList() {
   const supabase = createClient();
@@ -63,9 +67,23 @@ const WorkoutCard = ({ workout, highlighted = false }: { workout: SingleWorkout;
       className={cn("w-full md:w-1/2 lg:w-1/3")}
     >
       <CardHeader>
-        <div className="flex items-center gap-2">
-          <CardTitle>{workout.title}</CardTitle>
-          {highlighted && <Badge>Next</Badge>}
+        <div className="flex justify-between items-center">
+          <div className="flex items-center gap-2">
+            <CardTitle>{workout.title}</CardTitle>
+            {highlighted && <Badge>Next</Badge>}
+          </div>
+          <SingleWorkoutMoreButton
+            id={workout.id}
+            title={workout.title}
+            date={workout.date}
+          >
+            <Button
+              size="icon"
+              variant="ghost"
+            >
+              <MoreHorizontal className="h-4 w-4" />
+            </Button>
+          </SingleWorkoutMoreButton>
         </div>
         <CardDescription>
           <PrintDate date={workout.date} />
