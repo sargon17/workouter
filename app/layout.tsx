@@ -2,7 +2,7 @@ import { Inter as FontSans } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/components/ui/sonner";
 
-import Head from "next/head";
+import type { Viewport } from "next";
 
 import { cn } from "@/lib/utils";
 
@@ -13,15 +13,20 @@ const fontSans = FontSans({
 
 const defaultUrl = process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "http://localhost:3000";
 
+export const viewport: Viewport = {
+  themeColor: "black",
+  initialScale: 1,
+  width: "device-width",
+  height: "device-height",
+  userScalable: false,
+  minimumScale: 1,
+  maximumScale: 1,
+};
+
 export const metadata = {
   metadataBase: new URL(defaultUrl),
   title: "Workouter",
   description: "Workouter is a intuitive workout tracker and planner",
-
-  initialScale: "1.0",
-  maximumScale: "1.0",
-  userScalable: "no",
-  with: "device-width",
 
   // add manifest.json
   manifest: "/manifest.json",
@@ -39,12 +44,6 @@ export const metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <Head>
-        <meta
-          name="viewport"
-          content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
-        />
-      </Head>
       <body
         className={cn(
           "min-h-screen bg-background font-sans antialiased dark:bg-stone-950 text-stone-50 overflow-hidden",
