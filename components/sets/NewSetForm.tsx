@@ -82,7 +82,7 @@ export default function NewWorkoutForm({ workout_exercise_id }: { workout_exerci
                       }}
                     />
                   </FormControl>
-                  <FormDescription>Target reps</FormDescription>
+                  <FormDescription>Reps</FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
@@ -103,7 +103,7 @@ export default function NewWorkoutForm({ workout_exercise_id }: { workout_exerci
                       }}
                     />
                   </FormControl>
-                  <FormDescription>Target weight in kg</FormDescription>
+                  <FormDescription>Weight in kg</FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
