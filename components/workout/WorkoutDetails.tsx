@@ -15,6 +15,9 @@ import { Button } from "../ui/button";
 import NewTargetSetButton from "../target_set/NewTargetSetButton";
 import TargetSetItem from "../target_set/TargetSetItem";
 
+import SetItem from "../sets/SetItem";
+import NewSetButton from "../sets/NewSetButton";
+
 type WorkoutDetailsProps = {
   id: string;
 };
@@ -99,7 +102,28 @@ const ExerciseCard = ({ exercise }: { exercise: any }) => {
           </div>
         </div>
       </CardHeader>
-      <CardFooter></CardFooter>
+      <CardFooter>
+        <div className="flex flex-wrap gap-2 items-center">
+          {sets.map((set: any) => (
+            <SetItem
+              key={set.id}
+              id={set.id}
+              reps={set.reps}
+              weight={set.weight}
+            >
+              {set.reps} x {set.weight}kg
+            </SetItem>
+          ))}
+          <NewSetButton workout_exercise_id={exercise.id}>
+            <Button
+              variant="ghost"
+              size="sm"
+            >
+              <Plus className="h-3 w-3" />
+            </Button>
+          </NewSetButton>
+        </div>
+      </CardFooter>
     </Card>
   );
 };
