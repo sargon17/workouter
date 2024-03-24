@@ -20,6 +20,8 @@ import NewSetButton from "../sets/NewSetButton";
 
 import NewWorkoutExerciseButton from "../workout_exercises/NewWorkoutExerciseButton";
 
+import SingleWorkoutMoreButton from "./SingleWorkoutMoreButton";
+
 type WorkoutDetailsProps = {
   id: string;
 };
@@ -43,7 +45,21 @@ export default async function WorkoutDetails({ id }: WorkoutDetailsProps) {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold">{workout.title} Workout</h1>
+      <div className=" flex justify-start items-center gap-2">
+        <h1 className="text-2xl font-bold">{workout.title} Workout</h1>
+        <SingleWorkoutMoreButton
+          id={workout.id}
+          title={workout.title}
+          date={workout.date}
+        >
+          <Button
+            size="icon"
+            variant="ghost"
+          >
+            <MoreHorizontal className="h-4 w-4" />
+          </Button>
+        </SingleWorkoutMoreButton>
+      </div>
       <PrintDate date={workout.date} />
       <div className="flex flex-wrap gap-2 py-4">
         {workout_exercises &&
