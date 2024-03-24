@@ -39,7 +39,7 @@ export default async function WorkoutList() {
   }
 
   return (
-    <div className="w-full p-4">
+    <div className="w-full">
       <div className="mb-4">
         <h1 className=" text-xl font-bold">Your Next Workouts</h1>
       </div>

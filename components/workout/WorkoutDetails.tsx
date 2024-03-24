@@ -18,6 +18,8 @@ import TargetSetItem from "../target_set/TargetSetItem";
 import SetItem from "../sets/SetItem";
 import NewSetButton from "../sets/NewSetButton";
 
+import NewWorkoutExerciseButton from "../workout_exercises/NewWorkoutExerciseButton";
+
 type WorkoutDetailsProps = {
   id: string;
 };
@@ -46,6 +48,11 @@ export default async function WorkoutDetails({ id }: WorkoutDetailsProps) {
       <div className="flex flex-wrap gap-2 py-4">
         {workout_exercises &&
           workout_exercises.map((workout_exercise: any) => <ExerciseCard exercise={workout_exercise} />)}
+        <div className="w-full h-20 flex justify-center items-center">
+          <NewWorkoutExerciseButton workout_id={id}>
+            <Button>Add Exercise</Button>
+          </NewWorkoutExerciseButton>
+        </div>
       </div>
     </div>
   );
