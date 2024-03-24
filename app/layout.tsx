@@ -27,7 +27,6 @@ export const metadata = {
   themeColor: "#000000",
   msTileColor: "#000000",
   favicon: "/favicon.ico",
-  // add apple touch icon
   appleTouchIcon: "/apple-touch-icon.png",
 };
 
