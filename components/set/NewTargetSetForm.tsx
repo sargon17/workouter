@@ -14,11 +14,13 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { DatePicker } from "../DatePicker";
+
+import { DrawerClose } from "@/components/ui/drawer";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import { useRouter } from "next/navigation";
 
 const formSchema = z.object({
   target_reps: z.number().int().positive(),
@@ -27,6 +29,7 @@ const formSchema = z.object({
 
 export default function NewWorkoutForm({ workout_exercise_id }: { workout_exercise_id: any }) {
   const supabase = createClient();
+  const router = useRouter();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -51,7 +54,7 @@ export default function NewWorkoutForm({ workout_exercise_id }: { workout_exerci
       form.reset();
 
       // refresh the page
-      window.location.reload();
+      router.refresh();
     }
   }
 
@@ -106,7 +109,9 @@ export default function NewWorkoutForm({ workout_exercise_id }: { workout_exerci
               )}
             />
           </div>
-          <Button type="submit">Submit</Button>
+          <DrawerClose>
+            <Button type="submit">Submit</Button>
+          </DrawerClose>
         </form>
       </Form>
     </div>
