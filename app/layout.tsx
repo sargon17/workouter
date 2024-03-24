@@ -17,6 +17,13 @@ export const metadata = {
   metadataBase: new URL(defaultUrl),
   title: "Workouter",
   description: "Workouter is a intuitive workout tracker and planner",
+
+  visualViewport: "width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no",
+  initialScale: "1.0",
+  maximumScale: "1.0",
+  userScalable: "no",
+  with: "device-width",
+
   // add manifest.json
   manifest: "/manifest.json",
   mobileWebAppCapable: "yes",
