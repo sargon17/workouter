@@ -1,6 +1,7 @@
 import { createClient } from "@/utils/supabase/server";
 
 import Header from "@/components/Header";
+import Body from "@/components/Body";
 
 import { Button } from "@/components/ui/button";
 import Link from "next/link";

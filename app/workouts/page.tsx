@@ -8,6 +8,7 @@ import WorkoutList from "@/components/workout/WorkoutList";
 import { Button } from "@/components/ui/button";
 
 import NewWorkoutButton from "@/components/workout/NewWorkoutButton";
+import Body from "@/components/Body";
 
 export default async function ProtectedPage() {
   const supabase = createClient();
@@ -29,7 +30,9 @@ export default async function ProtectedPage() {
           </Button>
         </NewWorkoutButton>
       </Header>
-      <WorkoutList />
+      <Body>
+        <WorkoutList />
+      </Body>
     </>
   );
 }

@@ -7,6 +7,7 @@ import Header from "@/components/Header";
 import { Button } from "@/components/ui/button";
 
 import WorkoutDetails from "@/components/workout/WorkoutDetails";
+import Body from "@/components/Body";
 
 interface PageProps {
   params: {
@@ -22,9 +23,9 @@ export default function page({ params }: PageProps) {
           <Plus className="h-4 w-4" />
         </Button>
       </Header>
-      <div className="p-4">
+      <Body>
         <WorkoutDetails id={params.id} />
-      </div>
+      </Body>
     </div>
   );
 }
