@@ -26,7 +26,7 @@ export default async function WorkoutDetails({ id }: WorkoutDetailsProps) {
 
   let { data: workout_exercises, error } = await supabase
     .from("workout_exercises")
-    .select("id, exercises(*), sets(*)")
+    .select("id, exercises(*), sets(*), target_sets(*)")
     .eq("workout_id", id);
 
   if (error) {
@@ -50,6 +50,7 @@ export default async function WorkoutDetails({ id }: WorkoutDetailsProps) {
 
 const ExerciseCard = ({ exercise }: { exercise: any }) => {
   const sets = exercise.sets;
+  const target_sets = exercise.target_sets;
 
   return (
     <Card
@@ -71,16 +72,18 @@ const ExerciseCard = ({ exercise }: { exercise: any }) => {
         </div>
         <div className="text-xs text-stone-400">
           <p className=" font-semibold text-stone-300">
-            {sets.length}
-            {sets.length === 1 ? " set" : " sets"}
+            {target_sets.length}
+            {target_sets.length === 1 ? " set" : " sets"}
           </p>
 
           <div className="flex justify-start items-center gap-2">
             <span className="font-semibold text-stone-300">Target:</span>{" "}
-            {sets.map((set: any) => (
+            {target_sets.map((set: any) => (
               <TargetSetItem
                 set_id={set.id}
                 key={set.id}
+                target_reps={set.target_reps}
+                target_weight={set.target_weight}
               >
                 {set.target_reps} x {set.target_weight}kg
               </TargetSetItem>
