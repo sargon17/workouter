@@ -22,6 +22,8 @@ import NewWorkoutExerciseButton from "../workout_exercises/NewWorkoutExerciseBut
 
 import SingleWorkoutMoreButton from "./SingleWorkoutMoreButton";
 
+import SingleWorkoutExerciseMoreButton from "../workout_exercises/SingleWorkoutExerciseMoreButton";
+
 type WorkoutDetailsProps = {
   id: string;
 };
@@ -88,12 +90,14 @@ const ExerciseCard = ({ exercise }: { exercise: any }) => {
           <CardTitle>{exercise.exercises.title}</CardTitle>
 
           <div>
-            <Button
-              size="icon"
-              variant="ghost"
-            >
-              <MoreHorizontal className="h-4 w-4" />
-            </Button>
+            <SingleWorkoutExerciseMoreButton id={exercise.id}>
+              <Button
+                size="icon"
+                variant="ghost"
+              >
+                <MoreHorizontal className="h-4 w-4" />
+              </Button>
+            </SingleWorkoutExerciseMoreButton>
           </div>
         </div>
         <div className="text-xs text-stone-400">
