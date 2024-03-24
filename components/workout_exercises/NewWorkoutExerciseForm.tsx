@@ -29,6 +29,9 @@ import {
 } from "@/components/ui/form";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { toast } from "sonner";
+import { DrawerClose } from "../ui/drawer";
+
+import NewExerciseButton from "../exercises/NewExerciseButton";
 
 const FormSchema = z.object({
   exercise_id: z.number().int(),
@@ -98,7 +101,9 @@ export function NewWorkoutExerciseForm({ workout_id, exercises }: { workout_id: 
                     <CommandInput placeholder="Search exercise..." />
                     <CommandList>
                       <CommandEmpty>
-                        <Button>Create New Exercise</Button>
+                        <NewExerciseButton>
+                          <Button>Create New Exercise</Button>
+                        </NewExerciseButton>
                       </CommandEmpty>
                       <CommandGroup>
                         {exercises.map((exercise: any) => (
@@ -118,7 +123,9 @@ export function NewWorkoutExerciseForm({ workout_id, exercises }: { workout_id: 
             </FormItem>
           )}
         />
-        <Button type="submit">Submit</Button>
+        <DrawerClose>
+          <Button type="submit">Submit</Button>
+        </DrawerClose>
       </form>
     </Form>
   );
