@@ -12,7 +12,7 @@ import { Button } from "@/components/ui/button";
 export default async function ProtectedPage(
   { searchParams } = {
     searchParams: {
-      t: "future" as "future" | "past",
+      t: "upcoming" as "upcoming" | "past",
     },
   }
 ) {
