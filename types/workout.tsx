@@ -1,5 +1,6 @@
 type StatusType = {
   name: "planed" | "in progress" | "done" | "canceled" | "skipped" | "to plan";
+  id: string;
 };
 
 type SingleWorkout = {

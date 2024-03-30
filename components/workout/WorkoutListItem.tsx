@@ -9,7 +9,7 @@ import { Separator } from "@/components/ui/separator";
 
 import { SingleWorkout } from "@/types/workout";
 
-import StatusLabel from "../StatusLabel";
+import StatusLabel from "../status/StatusLabel";
 
 export default function WorkoutListItem({
   workout,
@@ -27,7 +27,12 @@ export default function WorkoutListItem({
         <div>
           <div className="flex gap-2 items-center">
             <h2 className="text-md font-bold">{workout.title}</h2>
-            {workout.workout_statuses && <StatusLabel status={workout.workout_statuses?.name} />}
+            {workout.workout_statuses && (
+              <StatusLabel
+                status={workout.workout_statuses?.name}
+                workout_id={workout.id}
+              />
+            )}
           </div>
           <PrintDate date={workout.date} />
           <div className="text-sm text-stone-400">
