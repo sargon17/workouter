@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import PrintDate from "../date/PrintDate";
 import SingleWorkoutMoreButton from "./SingleWorkoutMoreButton";
+import Link from "next/link";
 
 import { Separator } from "@/components/ui/separator";
 
@@ -38,7 +39,9 @@ export default function WorkoutListItem({
             </Button>
           </SingleWorkoutMoreButton>
           <Button size={"icon"}>
-            <ArrowRight className="h-4 w-4" />
+            <Link href={`/workouts/${workout.id}`}>
+              <ArrowRight className="h-4 w-4" />
+            </Link>
           </Button>
         </div>
       </div>
