@@ -94,10 +94,8 @@ export default async function WorkoutDetails({ id }: WorkoutDetailsProps) {
 }
 
 const ExerciseCard = ({ exercise }: { exercise: any }) => {
-  const sets = exercise.sets;
-  const target_sets = exercise.target_sets;
-
-  console.log(exercise);
+  const sets = exercise.sets.sort((a: any, b: any) => a.id - b.id);
+  const target_sets = exercise.target_sets.sort((a: any, b: any) => a.id - b.id);
 
   return (
     <Card
