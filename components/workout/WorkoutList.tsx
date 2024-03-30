@@ -1,25 +1,14 @@
 import React from "react";
 
-import { MoreHorizontal } from "lucide-react";
-
 import { SingleWorkout } from "@/types/workout";
 
 import { createClient } from "@/utils/supabase/server";
 import { toast } from "sonner";
-import { cn } from "@/lib/utils";
 
 import { getUser } from "@/lib/fetch";
-
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-
-import Link from "next/link";
 
 import NewWorkoutButton from "./NewWorkoutButton";
-import PrintDate from "../date/PrintDate";
-
-import SingleWorkoutMoreButton from "./SingleWorkoutMoreButton";
 
 import WorkoutListItem from "./WorkoutListItem";
 
