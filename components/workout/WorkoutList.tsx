@@ -13,6 +13,10 @@ import NewWorkoutButton from "./NewWorkoutButton";
 import WorkoutListItem from "./WorkoutListItem";
 import Link from "next/link";
 
+import { Tab, TabItem } from "@/components/Tab";
+
+import { cn } from "@/lib/utils";
+
 export default async function WorkoutList({ isPast = false }: { isPast?: boolean }) {
   const supabase = createClient();
   const user = await getUser(supabase);
@@ -38,14 +42,24 @@ export default async function WorkoutList({ isPast = false }: { isPast?: boolean
 
   return (
     <div className="w-full h-full">
-      <div>
-        <Link href="/workouts">Next Workouts</Link>
-        <Link href="/workouts?t=past">Previous Workouts</Link>
-      </div>
       {workouts.length > 0 && (
         <>
-          <div className="mb-4">
-            <h1 className=" text-xl font-bold">Your Next Workouts</h1>
+          <div className="mb-4 flex justify-between gap-2 ">
+            <h1 className=" text-lg font-bold">{isPast ? "Previous" : "Upcoming"} Workouts</h1>
+            <Tab>
+              <TabItem
+                href="/workouts"
+                active={!isPast}
+              >
+                Upcoming
+              </TabItem>
+              <TabItem
+                href="/workouts?t=past"
+                active={isPast}
+              >
+                Previous
+              </TabItem>
+            </Tab>
           </div>
           <div className="flex flex-wrap gap-2">
             {workouts.map((workout: any, i: number) => (
