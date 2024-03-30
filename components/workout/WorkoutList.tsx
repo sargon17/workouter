@@ -1,37 +1,35 @@
 import React from "react";
 
-import { MoreHorizontal } from "lucide-react";
-
 import { SingleWorkout } from "@/types/workout";
 
 import { createClient } from "@/utils/supabase/server";
 import { toast } from "sonner";
-import { cn } from "@/lib/utils";
 
 import { getUser } from "@/lib/fetch";
-
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-
-import Link from "next/link";
 
 import NewWorkoutButton from "./NewWorkoutButton";
-import PrintDate from "../date/PrintDate";
 
-import SingleWorkoutMoreButton from "./SingleWorkoutMoreButton";
+import WorkoutListItem from "./WorkoutListItem";
+import Link from "next/link";
 
-export default async function WorkoutList() {
+import { Tab, TabItem } from "@/components/Tab";
+
+import { cn } from "@/lib/utils";
+
+export default async function WorkoutList({ isPast = false }: { isPast?: boolean }) {
   const supabase = createClient();
   const user = await getUser(supabase);
   if (!user) return null;
+
+  const filterDirection = isPast ? "lt" : "gte";
 
   let { data: workouts, error } = await supabase
     .from("workouts")
     .select("")
     .eq("user_id", user.id)
-    .order("date", { ascending: true })
-    .filter("date", "gte", new Date().toISOString().slice(0, 10)); // only show workouts from today onwards
+    .order("date", { ascending: !isPast })
+    .filter("date", filterDirection, new Date().toISOString().slice(0, 10));
 
   if (error) {
     console.error("error", error);
@@ -43,66 +41,47 @@ export default async function WorkoutList() {
   }
 
   return (
-    <div className="w-full">
-      <div className="mb-4">
-        <h1 className=" text-xl font-bold">Your Next Workouts</h1>
-      </div>
-      <div className="flex flex-wrap gap-2">
-        {workouts.length === 0 && <NoWorkouts />}
-        {workouts.map((workout: any, i: number) => (
-          <WorkoutCard
-            workout={workout as SingleWorkout}
-            highlighted={i === 0}
-          />
-        ))}
-      </div>
+    <div className="w-full h-full">
+      {workouts.length > 0 && (
+        <>
+          <div className="mb-4 flex justify-between gap-2 ">
+            <h1 className=" text-lg font-bold">{isPast ? "Previous" : "Upcoming"} Workouts</h1>
+            <Tab>
+              <TabItem
+                href="/workouts"
+                active={!isPast}
+              >
+                Upcoming
+              </TabItem>
+              <TabItem
+                href="/workouts?t=past"
+                active={isPast}
+              >
+                Previous
+              </TabItem>
+            </Tab>
+          </div>
+          <div className="flex flex-wrap gap-2">
+            {workouts.map((workout: any, i: number) => (
+              <WorkoutListItem
+                workout={workout as SingleWorkout}
+                highlighted={i === 0}
+                key={workout.id}
+              />
+            ))}
+          </div>
+        </>
+      )}
+      {workouts.length === 0 && <NoWorkouts />}
     </div>
   );
 }
 
-const WorkoutCard = ({ workout, highlighted = false }: { workout: SingleWorkout; highlighted?: boolean }) => {
-  return (
-    <Card
-      key={workout.id}
-      className={cn("w-full md:w-1/2 lg:w-1/3")}
-    >
-      <CardHeader>
-        <div className="flex justify-between items-center">
-          <div className="flex items-center gap-2">
-            <CardTitle>{workout.title}</CardTitle>
-            {highlighted && <Badge>Next</Badge>}
-          </div>
-          <SingleWorkoutMoreButton
-            id={workout.id}
-            title={workout.title}
-            date={workout.date}
-          >
-            <Button
-              size="icon"
-              variant="ghost"
-            >
-              <MoreHorizontal className="h-4 w-4" />
-            </Button>
-          </SingleWorkoutMoreButton>
-        </div>
-        <CardDescription>
-          <PrintDate date={workout.date} />
-        </CardDescription>
-      </CardHeader>
-      <CardContent></CardContent>
-      <CardFooter>
-        <Button variant="outline">
-          <Link href={`/workouts/${workout.id}`}>View Workout</Link>
-        </Button>
-      </CardFooter>
-    </Card>
-  );
-};
-
 const NoWorkouts = () => (
   <div className="w-full h-[100%] flex flex-col justify-center items-center">
-    <h1 className="text-2xl font-bold pb-1">No workouts yet </h1>
-    <p className="text-xs text-center pb-4 text-stone-200">
+    <h2 className="text-2xl font-bold">Welcome to your Workouts</h2>
+    <h3 className="text-lg font-medium pb-4">You don't have any workouts yet</h3>
+    <p className="text-xs text-center pb-4 text-stone-300">
       Click the button below to create your first workout
     </p>
     <NewWorkoutButton>

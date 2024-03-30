@@ -35,7 +35,6 @@ export const metadata = {
   appleMobileWebAppTitle: "Workouter",
   appleMobileWebAppStatusBarStyle: "default",
   applicationName: "Workouter",
-  themeColor: "#000000",
   msTileColor: "#000000",
   favicon: "/favicon.ico",
   appleTouchIcon: "/apple-touch-icon.png",

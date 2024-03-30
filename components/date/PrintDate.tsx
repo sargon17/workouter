@@ -1,3 +1,4 @@
+"use client";
 import { format } from "date-fns";
 
 export default function PrintDate({ date }: { date: string }) {
@@ -23,7 +24,7 @@ export default function PrintDate({ date }: { date: string }) {
 
   return (
     <div>
-      <span className="text-sm text-stone-500">{renderDate}</span>
+      <span className="text-sm text-stone-500 cursor-default">{renderDate}</span>
     </div>
   );
 }
