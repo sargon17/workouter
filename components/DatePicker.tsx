@@ -36,30 +36,26 @@ export function DatePicker({ field }: any) {
             </Button>
           </PopoverTrigger>
           <PopoverContent className="w-auto p-0">
-            <Calendar
-              mode="single"
-              selected={field.value}
-              onSelect={(e: any) => {
-                field.onChange(e);
-              }}
-              initialFocus
-              weekStartsOn={1}
-            />
+            <TheCalendar {...field} />
           </PopoverContent>
         </Popover>
       )}
 
-      {isMobile && (
-        <Calendar
-          mode="single"
-          selected={field.value}
-          onSelect={(e: any) => {
-            field.onChange(e);
-          }}
-          initialFocus
-          weekStartsOn={1}
-        />
-      )}
+      {isMobile && <TheCalendar {...field} />}
     </>
   );
 }
+
+const TheCalendar = (field: any) => {
+  return (
+    <Calendar
+      mode="single"
+      selected={field.value}
+      onSelect={(e: any) => {
+        field.onChange(e);
+      }}
+      initialFocus
+      weekStartsOn={1}
+    />
+  );
+};

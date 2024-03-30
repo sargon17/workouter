@@ -82,7 +82,7 @@ export default function NewWorkoutForm({ user }: { user: any }) {
                     {...field}
                   />
                 </FormControl>
-                <FormDescription>This is the workout title</FormDescription>
+                <FormDescription>Enter a title for the workout</FormDescription>
                 <FormMessage />
               </FormItem>
             )}
@@ -98,7 +98,7 @@ export default function NewWorkoutForm({ user }: { user: any }) {
                     <DatePicker field={field} />
                   </div>
                 </FormControl>
-                <FormDescription>This is the workout date</FormDescription>
+                <FormDescription>Select the date of the workout</FormDescription>
                 <FormMessage />
               </FormItem>
             )}
