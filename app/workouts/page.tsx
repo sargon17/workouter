@@ -13,7 +13,7 @@ export default async function ProtectedPage(
   { searchParams } = {
     searchParams: {
       t: "upcoming" as "upcoming" | "past",
-    },
+    } as { t: "upcoming" | "past" },
   }
 ) {
   const supabase = createClient();
