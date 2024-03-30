@@ -23,7 +23,7 @@ export default async function NewWorkoutButton({ children }: { children: React.R
 
   return (
     <Drawer>
-      <DrawerTrigger>{children || <Button>Add Workout</Button>}</DrawerTrigger>
+      <DrawerTrigger asChild>{children}</DrawerTrigger>
       <DrawerContent>
         <DrawerHeader>
           <DrawerTitle>Create a new Workout</DrawerTitle>
