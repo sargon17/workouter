@@ -9,13 +9,7 @@ import Header from "@/components/Header";
 import Body from "@/components/Body";
 import { Button } from "@/components/ui/button";
 
-export default async function ProtectedPage(
-  { searchParams } = {
-    searchParams: {
-      t: "upcoming" as "upcoming" | "past",
-    } as { t: "upcoming" | "past" },
-  }
-) {
+export default async function ProtectedPage({ searchParams }: { searchParams: { t: "upcoming" | "past" } }) {
   const supabase = createClient();
   const searchTimeline = searchParams.t;
 
