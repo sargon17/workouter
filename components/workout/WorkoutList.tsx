@@ -11,18 +11,21 @@ import { Button } from "@/components/ui/button";
 import NewWorkoutButton from "./NewWorkoutButton";
 
 import WorkoutListItem from "./WorkoutListItem";
+import Link from "next/link";
 
-export default async function WorkoutList() {
+export default async function WorkoutList({ isPast = false }: { isPast?: boolean }) {
   const supabase = createClient();
   const user = await getUser(supabase);
   if (!user) return null;
+
+  const filterDirection = isPast ? "lt" : "gte";
 
   let { data: workouts, error } = await supabase
     .from("workouts")
     .select("")
     .eq("user_id", user.id)
-    .order("date", { ascending: true })
-    .filter("date", "gte", new Date().toISOString().slice(0, 10)); // only show workouts from today onwards
+    .order("date", { ascending: !isPast })
+    .filter("date", filterDirection, new Date().toISOString().slice(0, 10));
 
   if (error) {
     console.error("error", error);
@@ -35,6 +38,10 @@ export default async function WorkoutList() {
 
   return (
     <div className="w-full h-full">
+      <div>
+        <Link href="/workouts">Next Workouts</Link>
+        <Link href="/workouts?t=past">Previous Workouts</Link>
+      </div>
       {workouts.length > 0 && (
         <>
           <div className="mb-4">
