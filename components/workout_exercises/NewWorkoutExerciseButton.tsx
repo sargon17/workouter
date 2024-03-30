@@ -27,7 +27,7 @@ export default async function NewWorkoutExerciseButton({
 
   return (
     <Drawer>
-      <DrawerTrigger>{children}</DrawerTrigger>
+      <DrawerTrigger asChild>{children}</DrawerTrigger>
       <DrawerContent>
         <DrawerHeader>
           <DrawerTitle>Add an Exercise</DrawerTitle>

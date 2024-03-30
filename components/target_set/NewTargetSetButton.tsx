@@ -28,7 +28,7 @@ export default async function NewTargetSetButton({
 
   return (
     <Drawer>
-      <DrawerTrigger>{children}</DrawerTrigger>
+      <DrawerTrigger asChild>{children}</DrawerTrigger>
       <DrawerContent>
         <DrawerHeader>
           <DrawerTitle>Add a new Target Set</DrawerTitle>

@@ -21,7 +21,7 @@ export default function NewExerciseButton({ children }: { children: React.ReactN
 
   return (
     <Drawer>
-      <DrawerTrigger>{children}</DrawerTrigger>
+      <DrawerTrigger asChild>{children}</DrawerTrigger>
       <DrawerContent>
         <DrawerHeader>
           <DrawerTitle>Create a new Exercise</DrawerTitle>
