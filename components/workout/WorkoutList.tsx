@@ -21,6 +21,8 @@ import PrintDate from "../date/PrintDate";
 
 import SingleWorkoutMoreButton from "./SingleWorkoutMoreButton";
 
+import WorkoutListItem from "./WorkoutListItem";
+
 export default async function WorkoutList() {
   const supabase = createClient();
   const user = await getUser(supabase);
@@ -50,54 +52,16 @@ export default async function WorkoutList() {
       <div className="flex flex-wrap gap-2">
         {workouts.length === 0 && <NoWorkouts />}
         {workouts.map((workout: any, i: number) => (
-          <WorkoutCard
+          <WorkoutListItem
             workout={workout as SingleWorkout}
             highlighted={i === 0}
+            key={workout.id}
           />
         ))}
       </div>
     </div>
   );
 }
-
-const WorkoutCard = ({ workout, highlighted = false }: { workout: SingleWorkout; highlighted?: boolean }) => {
-  return (
-    <Card
-      key={workout.id}
-      className={cn("w-full md:w-1/2 lg:w-1/3")}
-    >
-      <CardHeader>
-        <div className="flex justify-between items-center">
-          <div className="flex items-center gap-2">
-            <CardTitle>{workout.title}</CardTitle>
-            {highlighted && <Badge>Next</Badge>}
-          </div>
-          <SingleWorkoutMoreButton
-            id={workout.id}
-            title={workout.title}
-            date={workout.date}
-          >
-            <Button
-              size="icon"
-              variant="ghost"
-            >
-              <MoreHorizontal className="h-4 w-4" />
-            </Button>
-          </SingleWorkoutMoreButton>
-        </div>
-        <CardDescription>
-          <PrintDate date={workout.date} />
-        </CardDescription>
-      </CardHeader>
-      <CardContent></CardContent>
-      <CardFooter>
-        <Button variant="outline">
-          <Link href={`/workouts/${workout.id}`}>View Workout</Link>
-        </Button>
-      </CardFooter>
-    </Card>
-  );
-};
 
 const NoWorkouts = () => (
   <div className="w-full h-[100%] flex flex-col justify-center items-center">
