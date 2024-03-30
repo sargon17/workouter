@@ -9,6 +9,8 @@ import { Separator } from "@/components/ui/separator";
 
 import { SingleWorkout } from "@/types/workout";
 
+import StatusLabel from "../status/StatusLabel";
+
 export default function WorkoutListItem({
   workout,
   highlighted = false,
@@ -16,13 +18,25 @@ export default function WorkoutListItem({
   workout: SingleWorkout;
   highlighted?: boolean;
 }) {
+  const setsCount = countSets(workout);
+  const exercisesCount = countExercises(workout);
+
   return (
     <>
-      <div className={cn("w-full flex items-center justify-between px-4 py-2 dark:border-stone-900 ", {})}>
+      <div className={cn("w-full flex items-top justify-between px-4 py-2 dark:border-stone-900 ", {})}>
         <div>
-          <div className="">
-            <h2 className="text-lg font-bold">{workout.title}</h2>
-            <PrintDate date={workout.date} />
+          <div className="flex gap-2 items-center">
+            <h2 className="text-md font-bold">{workout.title}</h2>
+            {workout.workout_statuses && (
+              <StatusLabel
+                status={workout.workout_statuses?.name}
+                workout_id={workout.id}
+              />
+            )}
+          </div>
+          <PrintDate date={workout.date} />
+          <div className="text-sm text-stone-400">
+            {exercisesCount} exercises, {setsCount} sets
           </div>
         </div>
         <div className="flex gap-2">
@@ -49,3 +63,13 @@ export default function WorkoutListItem({
     </>
   );
 }
+
+const countSets = (workout: SingleWorkout) => {
+  return workout.workout_exercises.reduce((acc, curr) => {
+    return acc + curr.target_sets.length;
+  }, 0);
+};
+
+const countExercises = (workout: SingleWorkout) => {
+  return workout.workout_exercises.length;
+};
