@@ -26,7 +26,9 @@ export default function HomeHero() {
         <div className="relative z-10">
           <div className="flex justify-center items-center">
             <div className="w-min relative">
-              <h2 className="text-center mx-auto uppercase font-black text-stone-300 ">Workouter</h2>
+              <h2 className="text-sm md:text-base text-center mx-auto uppercase font-black text-stone-300 ">
+                Workouter
+              </h2>
               <div
                 className=" bg-teal-500/30 border border-teal-500 rounded-full w-min px-2 text-xs text-teal-200 font-semibold absolute top-0 right-0 backdrop-blur-sm backdrop-brightness-150 translate-x-1/2 -translate-y-1/3 rotate-12 "
                 style={{
@@ -41,7 +43,7 @@ export default function HomeHero() {
           <h3 className=" text-2xl md:text-3xl lg:text-6xl text-center font-bold max-w-[80%] mx-auto text-pretty text-transparent bg-clip-text bg-gradient-to-br from-stone-300 via-stone-50 to-stone-500">
             Log your workouts never been easier
           </h3>
-          <p className=" text-sm lg:text-lg text-center font-medium mt-4">
+          <p className=" text-sm lg:text-lg text-center font-medium mt-4 text-balance max-w-[80%] mx-auto">
             Track your progress, set goals, and more... now it's easy
           </p>
           <div className="flex justify-center mt-8">
