@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 
-import { Trash, Edit } from "lucide-react";
+import { Trash, Edit, Copy } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -25,6 +25,7 @@ import { Button } from "@/components/ui/button";
 
 import DeleteSetButton from "./DeleteSetButton";
 import EditSetForm from "./EditSetForm";
+import DuplicateSet from "./DuplicateSet";
 export default function SetItem({
   children,
   id,
@@ -41,9 +42,7 @@ export default function SetItem({
   return (
     <>
       <DropdownMenu>
-        <DropdownMenuTrigger>
-          <span>{children}</span>
-        </DropdownMenuTrigger>
+        <DropdownMenuTrigger>{children}</DropdownMenuTrigger>
         <DropdownMenuContent>
           <DropdownMenuLabel>Set Actions</DropdownMenuLabel>
           <DropdownMenuSeparator />
@@ -55,8 +54,16 @@ export default function SetItem({
             <Edit className="h-4 w-4 mr-2" />
             Edit
           </DropdownMenuItem>
+          <DropdownMenuItem>
+            <DuplicateSet set_id={id}>
+              <div className="flex ">
+                <Copy className="h-4 w-4 mr-2" />
+                Duplicate
+              </div>
+            </DuplicateSet>
+          </DropdownMenuItem>
           <DeleteSetButton set_id={id}>
-            <DropdownMenuItem className="text-red-500 dark:focus:bg-red-900 ">
+            <DropdownMenuItem className="text-rose-500 dark:focus:bg-rose-950 ">
               <Trash className="h-4 w-4 mr-2" />
               Delete
             </DropdownMenuItem>
