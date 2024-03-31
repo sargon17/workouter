@@ -36,6 +36,9 @@ const config = {
       fontFamily: {
         sans: ["var(--font-sans)", ...fontFamily.sans],
       },
+      dropShadow: {
+        glow: ["0 0px 2px rgba(255,255, 255, 0.8)", "0 0px 6px rgba(255, 255,255, 1)"],
+      },
     },
   },
   plugins: [require("tailwindcss-animate")],

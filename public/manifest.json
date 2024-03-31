@@ -1,6 +1,7 @@
 {
   "name": "Workouter",
   "short_name": "Workouter",
+  "version": "0.0.1",
   "icons": [
     {
       "src": "/icons/android-chrome-192x192.png",
