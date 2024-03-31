@@ -42,7 +42,7 @@ export default function HomeHero() {
             Log your workouts never been easier
           </h3>
           <p className=" text-sm lg:text-lg text-center font-medium mt-4">
-            Track your progress, set goals, and more
+            Track your progress, set goals, and more... now it's easy
           </p>
           <div className="flex justify-center mt-8">
             <Link href="/workouts">
