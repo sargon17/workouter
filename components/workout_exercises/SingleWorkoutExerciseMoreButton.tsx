@@ -31,9 +31,7 @@ export default function SingleWorkoutMoreButton({ children, id }: { children: Re
   return (
     <>
       <DropdownMenu>
-        <DropdownMenuTrigger>
-          <span>{children}</span>
-        </DropdownMenuTrigger>
+        <DropdownMenuTrigger asChild>{children}</DropdownMenuTrigger>
         <DropdownMenuContent>
           <DropdownMenuLabel>Workout Actions</DropdownMenuLabel>
           <DropdownMenuSeparator />

@@ -26,5 +26,5 @@ export default function DeleteTargetSetButton({
     }
   };
 
-  return <span onClick={handleDelete}>{children}</span>;
+  return <div onClick={handleDelete}>{children}</div>;
 }
