@@ -37,7 +37,7 @@ import { DrawerClose } from "../ui/drawer";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
 import NewExerciseButton from "../exercises/NewExerciseButton";
-import { getSuggestedSets } from "../sets/ExerciseSuggestedSets";
+import { ExerciseSuggestedSets } from "../sets/ExerciseSuggestedSets";
 import { set } from "date-fns";
 
 const FormSchema = z.object({
@@ -64,14 +64,7 @@ export function NewWorkoutExerciseForm({ workout_id, exercises }: { workout_id: 
   useEffect(() => {
     if (!form.getValues("exercise_id")) return;
     setIsWithSuggested(false);
-    setSuggested();
   }, [form.getValues("exercise_id")]);
-
-  const setSuggested = async () => {
-    const sets = await getSuggestedSets(form.getValues("exercise_id"), supabase);
-
-    setSuggestedSets(sets);
-  };
 
   async function onSubmit() {
     const { data, error } = await supabase
@@ -213,40 +206,15 @@ export function NewWorkoutExerciseForm({ workout_id, exercises }: { workout_id: 
           )}
         />
 
-        {suggestedSets.length > 0 && (
-          <div>
-            <div>
-              <h2 className="text-sm pb-2 relative text-nowrap">Suggested Sets</h2>
-            </div>
-            <div className="flex gap-2 flex-col sm:flex-row">
-              <ul className="flex gap-1 dark:bg-stone-800 p-1 rounded-md relative">
-                {suggestedSets.length > 0 &&
-                  suggestedSets.map((set: any) => (
-                    <li
-                      key={set.id}
-                      className="dark:bg-stone-950 rounded text-xs px-2 py-1 flex items-center w-full justify-center  "
-                    >
-                      {set.reps} x {set.weight}kg
-                    </li>
-                  ))}
-                {isWithSuggested && (
-                  <span className="w-[8px] h-[8px] rounded-full bg-lime-500 absolute top-0 right-0 translate-x-0.5 -translate-y-0.5"></span>
-                )}
-              </ul>
-              <Button
-                size="sm"
-                className="text-sm"
-                onClick={() => {
-                  setIsWithSuggested(!isWithSuggested);
-                }}
-                type="button"
-              >
-                {isWithSuggested ? <Minus className="h-4 w-4 mr-2" /> : <Plus className="h-4 w-4 mr-2" />}
-                {isWithSuggested ? "Remove" : "Add"} Sets
-              </Button>
-            </div>
-          </div>
-        )}
+        <ExerciseSuggestedSets
+          exercise_id={form.getValues("exercise_id")}
+          isWithSuggested={isWithSuggested}
+          updateSuggestedSets={setSuggestedSets}
+          suggestedSets={suggestedSets}
+          onButtonClick={() => {
+            setIsWithSuggested(!isWithSuggested);
+          }}
+        />
 
         <div className="flex justify-end gap-2">
           <DrawerClose>
