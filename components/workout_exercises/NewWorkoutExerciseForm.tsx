@@ -6,7 +6,7 @@ import { createClient } from "@/utils/supabase/client";
 import { useRouter } from "next/navigation";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ChevronsUpDown, Plus } from "lucide-react";
+import { ChevronsUpDown, Plus, Minus } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -218,15 +218,15 @@ export function NewWorkoutExerciseForm({ workout_id, exercises }: { workout_id: 
             <div>
               <h2 className="text-sm pb-2 relative text-nowrap">Suggested Sets</h2>
             </div>
-            <div className=" flex gap-4">
+            <div className="flex gap-2 flex-col sm:flex-row">
               <ul className="flex gap-1 dark:bg-stone-800 p-1 rounded-md relative">
                 {suggestedSets.length > 0 &&
                   suggestedSets.map((set: any) => (
                     <li
                       key={set.id}
-                      className="dark:bg-stone-950 rounded text-sm px-2 py-1 flex items-center "
+                      className="dark:bg-stone-950 rounded text-xs px-2 py-1 flex items-center w-full justify-center  "
                     >
-                      {set.reps} x {set.weight} kg
+                      {set.reps} x {set.weight}kg
                     </li>
                   ))}
                 {isWithSuggested && (
@@ -241,8 +241,8 @@ export function NewWorkoutExerciseForm({ workout_id, exercises }: { workout_id: 
                 }}
                 type="button"
               >
-                {" "}
-                {isWithSuggested ? "Remove" : "Add"} Suggested Sets
+                {isWithSuggested ? <Minus className="h-4 w-4 mr-2" /> : <Plus className="h-4 w-4 mr-2" />}
+                {isWithSuggested ? "Remove" : "Add"} Sets
               </Button>
             </div>
           </div>
@@ -258,7 +258,10 @@ export function NewWorkoutExerciseForm({ workout_id, exercises }: { workout_id: 
               Cancel
             </Button>
           </DrawerClose>
-          <Button type="submit">Submit</Button>
+          <Button type="submit">
+            <Plus className="h-4 w-4 mr-2" />
+            Add Exercise
+          </Button>
         </div>
       </form>
     </Form>
