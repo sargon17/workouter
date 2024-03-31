@@ -4,6 +4,7 @@ import Header from "@/components/Header";
 import Body from "@/components/Body";
 
 import HomeHero from "@/components/home/HomeHero";
+import HomeFeatures from "@/components/home/HomeFeatures";
 
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
@@ -16,6 +17,7 @@ export default async function Index() {
       </Header>
       <Body>
         <HomeHero />
+        <HomeFeatures />
       </Body>
     </div>
   );
