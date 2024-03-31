@@ -37,11 +37,7 @@ export default async function NewWorkoutExerciseButton({
           workout_id={workout_id}
           exercises={exercises}
         />
-        <DrawerFooter>
-          <DrawerClose>
-            <Button variant="outline">Cancel</Button>
-          </DrawerClose>
-        </DrawerFooter>
+        <DrawerFooter></DrawerFooter>
       </DrawerContent>
     </Drawer>
   );
