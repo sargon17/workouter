@@ -44,7 +44,7 @@ export default function TargetSetItem({
     <>
       <DropdownMenu>
         <DropdownMenuTrigger>
-          <span className="hover:text-stone-100">{children}</span>
+          <div className="hover:text-stone-100">{children}</div>
         </DropdownMenuTrigger>
         <DropdownMenuContent>
           <DropdownMenuLabel>Target Set Actions</DropdownMenuLabel>
