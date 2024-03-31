@@ -3,6 +3,8 @@ import { createClient } from "@/utils/supabase/server";
 import Header from "@/components/Header";
 import Body from "@/components/Body";
 
+import HomeHero from "@/components/home/HomeHero";
+
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 
@@ -12,6 +14,9 @@ export default async function Index() {
       <Header>
         <HeaderActionButton />
       </Header>
+      <Body>
+        <HomeHero />
+      </Body>
     </div>
   );
 }
