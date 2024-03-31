@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useEffect, use } from "react";
+import { useState, useRef, useEffect } from "react";
 
 import { createClient } from "@/utils/supabase/client";
 import { useRouter } from "next/navigation";
@@ -37,6 +37,8 @@ import { DrawerClose } from "../ui/drawer";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
 import NewExerciseButton from "../exercises/NewExerciseButton";
+import { getSuggestedSets } from "../sets/ExerciseSuggestedSets";
+import { set } from "date-fns";
 
 const FormSchema = z.object({
   exercise_id: z.number().int(),
@@ -45,9 +47,9 @@ const FormSchema = z.object({
 export function NewWorkoutExerciseForm({ workout_id, exercises }: { workout_id: string; exercises: any }) {
   const [isCommandOpen, setIsCommandOpen] = useState(false);
   const [suggestedSets, setSuggestedSets] = useState([]) as any;
+  const [isWithSuggested, setIsWithSuggested] = useState(false);
 
   const closeBtnRef = useRef(null);
-  let user: any;
 
   const supabase = createClient();
   const router = useRouter();
@@ -59,54 +61,14 @@ export function NewWorkoutExerciseForm({ workout_id, exercises }: { workout_id: 
     },
   });
 
-  // get current user
-  useEffect(() => {}, []);
-
-  const getUser = async (supabase: any) => {
-    user = await supabase.auth.getUser();
-  };
-
   useEffect(() => {
     if (!form.getValues("exercise_id")) return;
-    const exercise_id = form.getValues("exercise_id");
-
-    // get suggested sets for exercise
-    getSuggestedSets(exercise_id);
-
-    // find exercise by id and last workout_exercise by workout_id and exercise_id and get the last set
-
-    // get last set by workout_exercise_id
+    setIsWithSuggested(false);
+    setSuggested();
   }, [form.getValues("exercise_id")]);
 
-  const getSuggestedSets = async (exercise_id: number) => {
-    const {
-      data: { user },
-    } = (await supabase.auth.getUser()) as any;
-
-    const { data, error } = await supabase
-      .from("workout_exercises")
-      .select("id, workouts(user_id)")
-      .eq("exercise_id", exercise_id)
-      .eq("workouts.user_id", user.id)
-      .limit(1);
-
-    if (error) {
-      console.error("error", error);
-      return;
-    }
-
-    if (!data || data.length === 0) return;
-
-    const { data: sets, error: setsError } = await supabase
-      .from("sets")
-      .select("reps, weight")
-      .order("id", { ascending: true })
-      .eq("workout_exercise_id", data[0].id);
-
-    if (setsError) {
-      console.error("error", setsError);
-      return;
-    }
+  const setSuggested = async () => {
+    const sets = await getSuggestedSets(form.getValues("exercise_id"), supabase);
 
     setSuggestedSets(sets);
   };
@@ -123,6 +85,30 @@ export function NewWorkoutExerciseForm({ workout_id, exercises }: { workout_id: 
       return;
     } else {
       toast("Workout exercise created");
+
+      const workout_exercise_id = data[0].id;
+
+      if (isWithSuggested && workout_exercise_id && suggestedSets.length > 0) {
+        const { data, error } = await supabase
+          .from("target_sets")
+          .insert(
+            suggestedSets.map((set: any) => ({
+              target_reps: set.reps,
+              target_weight: set.weight,
+              workout_exercise_id: workout_exercise_id,
+            }))
+          )
+          .select();
+
+        if (error) {
+          console.error("error", error);
+          toast("Error creating suggested sets");
+          return;
+        } else {
+          toast("Suggested sets created");
+        }
+      }
+
       form.reset();
 
       if (closeBtnRef.current) {
@@ -229,13 +215,36 @@ export function NewWorkoutExerciseForm({ workout_id, exercises }: { workout_id: 
 
         {suggestedSets.length > 0 && (
           <div>
-            {suggestedSets.map((set: any) => (
-              <div key={set.id}>
-                <p>
-                  {set.reps} x {set.weight}kg
-                </p>
-              </div>
-            ))}
+            <div>
+              <h2 className="text-sm pb-2 relative text-nowrap">Suggested Sets</h2>
+            </div>
+            <div className=" flex gap-4">
+              <ul className="flex gap-1 dark:bg-stone-800 p-1 rounded-md relative">
+                {suggestedSets.length > 0 &&
+                  suggestedSets.map((set: any) => (
+                    <li
+                      key={set.id}
+                      className="dark:bg-stone-950 rounded text-sm px-2 py-1 flex items-center "
+                    >
+                      {set.reps} x {set.weight} kg
+                    </li>
+                  ))}
+                {isWithSuggested && (
+                  <span className="w-[8px] h-[8px] rounded-full bg-lime-500 absolute top-0 right-0 translate-x-0.5 -translate-y-0.5"></span>
+                )}
+              </ul>
+              <Button
+                size="sm"
+                className="text-sm"
+                onClick={() => {
+                  setIsWithSuggested(!isWithSuggested);
+                }}
+                type="button"
+              >
+                {" "}
+                {isWithSuggested ? "Remove" : "Add"} Suggested Sets
+              </Button>
+            </div>
           </div>
         )}
 
