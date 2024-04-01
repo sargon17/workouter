@@ -23,7 +23,7 @@ export default function WorkoutListItem({
 
   return (
     <>
-      <div className={cn("w-full flex items-top justify-between px-4 py-2 dark:border-stone-900 ", {})}>
+      <div className={cn("w-full flex items-top justify-between p-1 dark:border-stone-900 ", {})}>
         <div>
           <div className="flex gap-2 items-center">
             <h2 className="text-md font-bold">{workout.title}</h2>

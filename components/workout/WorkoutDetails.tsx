@@ -48,8 +48,6 @@ export default async function WorkoutDetails({ id }: WorkoutDetailsProps) {
     return null;
   }
 
-  console.log(workout);
-
   // let { data: sets, error } = await supabase.from("sets").select("id");
 
   return (

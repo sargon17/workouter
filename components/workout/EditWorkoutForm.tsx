@@ -49,8 +49,6 @@ export default function EditWorkoutForm({
   });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log("values", values);
-
     const { data, error } = await supabase
       .from("workouts")
       .update({ title: values.title, date: format(values.date, "yyyy-MM-dd") })
