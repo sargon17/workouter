@@ -5,7 +5,7 @@ import BackButton from "./BackButton";
 
 export default async function Header({ children }: { children: ReactNode }) {
   return (
-    <div className="flex justify-between items-center w-full p-4 border-b-2 dark:border-b-stone-800 dark:text-stone-50 mb-4 fixed top-0 left-0">
+    <div className="flex justify-between items-center w-full p-4 border-b dark:border-b-stone-900 dark:bg-stone-950/70 backdrop-blur-md dark:text-stone-50 fixed top-0 left-0 z-[10000]">
       <div className="w-full">
         <BackButton />
       </div>

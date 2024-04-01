@@ -6,7 +6,7 @@ import { toast } from "sonner";
 import { createClient } from "@/utils/supabase/server";
 import { SupabaseClient } from "@supabase/supabase-js";
 
-import { SingleWorkout } from "@/types/workout";
+import { SingleWorkout, StatusType } from "@/types/workout";
 import PrintDate from "../date/PrintDate";
 
 import { Card, CardHeader, CardTitle, CardFooter } from "../ui/card";
@@ -24,31 +24,44 @@ import SingleWorkoutMoreButton from "./SingleWorkoutMoreButton";
 
 import SingleWorkoutExerciseMoreButton from "../workout_exercises/SingleWorkoutExerciseMoreButton";
 
+import StatusLabel from "../status/StatusLabel";
+
 type WorkoutDetailsProps = {
   id: string;
+};
+
+type WorkoutDetailsResponse = {
+  id: string;
+  title: string;
+  date: string;
+  workout_statuses: StatusType | null;
+  workout_exercises: any[];
 };
 
 export default async function WorkoutDetails({ id }: WorkoutDetailsProps) {
   const supabase = createClient();
 
-  const workout: SingleWorkout = await getWorkoutById(id, supabase);
+  let workout: WorkoutDetailsResponse = await getWorkoutById(id, supabase);
 
-  let { data: workout_exercises, error } = await supabase
-    .from("workout_exercises")
-    .select("id, exercises(*), sets(*), target_sets(*)")
-    .eq("workout_id", id);
-
-  if (error) {
-    console.error("error", error);
-    toast("Error fetching workouts");
+  if (!workout) {
+    toast("Error fetching workout");
+    return null;
   }
 
   // let { data: sets, error } = await supabase.from("sets").select("id");
 
   return (
     <div>
-      <div className=" flex justify-start items-center gap-2">
-        <h1 className="text-2xl font-bold">{workout.title} Workout</h1>
+      <div className=" flex justify-between items-center gap-2">
+        <div>
+          <h1 className="text-2xl font-bold">{workout.title}</h1>
+          {workout.workout_statuses && (
+            <StatusLabel
+              status={workout.workout_statuses?.name}
+              workout_id={workout.id}
+            />
+          )}
+        </div>
         <SingleWorkoutMoreButton
           id={workout.id}
           title={workout.title}
@@ -64,8 +77,10 @@ export default async function WorkoutDetails({ id }: WorkoutDetailsProps) {
       </div>
       <PrintDate date={workout.date} />
       <div className="flex flex-wrap gap-2 py-4">
-        {workout_exercises &&
-          workout_exercises.map((workout_exercise: any) => <ExerciseCard exercise={workout_exercise} />)}
+        {workout.workout_exercises &&
+          workout.workout_exercises.map((workout_exercise: any) => (
+            <ExerciseCard exercise={workout_exercise} />
+          ))}
         <div className="w-full h-20 flex justify-center items-center">
           <NewWorkoutExerciseButton workout_id={id}>
             <Button>Add Exercise</Button>
@@ -77,8 +92,8 @@ export default async function WorkoutDetails({ id }: WorkoutDetailsProps) {
 }
 
 const ExerciseCard = ({ exercise }: { exercise: any }) => {
-  const sets = exercise.sets;
-  const target_sets = exercise.target_sets;
+  const sets = exercise.sets.sort((a: any, b: any) => a.id - b.id);
+  const target_sets = exercise.target_sets.sort((a: any, b: any) => a.id - b.id);
 
   return (
     <Card
@@ -156,11 +171,16 @@ const ExerciseCard = ({ exercise }: { exercise: any }) => {
 };
 
 const getWorkoutById = async (id: string, supabase: SupabaseClient) => {
-  const { data, error } = await supabase.from("workouts").select("*").eq("id", id);
+  let { data: workouts, error } = await supabase
+    .from("workouts")
+    .select(
+      "id, title, date, status_id, workout_exercises(*, target_sets(*), sets(*), exercises(title)), workout_statuses(name)"
+    )
+    .eq("id", id);
 
   if (error) {
     throw error;
   }
 
-  return data[0] as SingleWorkout;
+  return workouts && (workouts[0] as any);
 };

@@ -1,5 +1,4 @@
 "use client";
-
 import { createClient } from "@/utils/supabase/client";
 import { format } from "date-fns";
 
@@ -50,8 +49,6 @@ export default function EditWorkoutForm({
   });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log("values", values);
-
     const { data, error } = await supabase
       .from("workouts")
       .update({ title: values.title, date: format(values.date, "yyyy-MM-dd") })
@@ -78,7 +75,11 @@ export default function EditWorkoutForm({
           onSubmit={form.handleSubmit(onSubmit)}
           className="space-y-4"
         >
-          <div className="flex gap-2">
+          <div
+            className="
+          md:flex md:gap-2
+          "
+          >
             <FormField
               control={form.control}
               name="title"
@@ -116,7 +117,8 @@ export default function EditWorkoutForm({
               )}
             />
           </div>
-          <DrawerClose>
+          <DrawerClose className="flex justify-end gap-2 w-full">
+            <Button variant={"outline"}>Cancel</Button>
             <Button type="submit">Submit</Button>
           </DrawerClose>
         </form>

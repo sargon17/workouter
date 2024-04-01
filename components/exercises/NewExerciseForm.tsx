@@ -43,8 +43,6 @@ export default function EditTargetSetForm({}: {}) {
       .insert([{ ...values }])
       .select();
 
-    console.log("data", data);
-
     if (error) {
       console.error("error", error);
       toast("Error updating set");

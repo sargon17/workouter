@@ -32,7 +32,6 @@ export default async function NewSetButton({
       <DrawerContent>
         <DrawerHeader>
           <DrawerTitle>Record a Set</DrawerTitle>
-          {/* <DrawerDescription>This action cannot be undone.</DrawerDescription> */}
         </DrawerHeader>
         <NewSetForm workout_exercise_id={workout_exercise_id} />
         <DrawerFooter>

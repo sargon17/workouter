@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 
-import { Trash, Edit } from "lucide-react";
+import { Trash, Edit, Copy } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -25,6 +25,7 @@ import { Button } from "@/components/ui/button";
 
 import DeleteTargetSetButton from "./DeleteTargetSetButton";
 import EditTargetSetForm from "./EditTargetSetForm";
+import DuplicateTargetSet from "./DuplicateTargetSet";
 
 export default function TargetSetItem({
   children,
@@ -43,7 +44,7 @@ export default function TargetSetItem({
     <>
       <DropdownMenu>
         <DropdownMenuTrigger>
-          <span className="hover:text-stone-100">{children}</span>
+          <div className="hover:text-stone-100">{children}</div>
         </DropdownMenuTrigger>
         <DropdownMenuContent>
           <DropdownMenuLabel>Target Set Actions</DropdownMenuLabel>
@@ -56,8 +57,16 @@ export default function TargetSetItem({
             <Edit className="h-4 w-4 mr-2" />
             Edit
           </DropdownMenuItem>
+          <DropdownMenuItem>
+            <DuplicateTargetSet set_id={set_id}>
+              <div className="flex ">
+                <Copy className="h-4 w-4 mr-2" />
+                Duplicate
+              </div>
+            </DuplicateTargetSet>
+          </DropdownMenuItem>
           <DeleteTargetSetButton set_id={set_id}>
-            <DropdownMenuItem className="text-red-500 dark:focus:bg-red-900 ">
+            <DropdownMenuItem className="dark:text-rose-500 dark:focus:bg-rose-950">
               <Trash className="h-4 w-4 mr-2" />
               Delete
             </DropdownMenuItem>

@@ -41,9 +41,7 @@ export default function SingleWorkoutMoreButton({
   return (
     <>
       <DropdownMenu>
-        <DropdownMenuTrigger>
-          <span>{children}</span>
-        </DropdownMenuTrigger>
+        <DropdownMenuTrigger asChild>{children}</DropdownMenuTrigger>
         <DropdownMenuContent>
           <DropdownMenuLabel>Workout Actions</DropdownMenuLabel>
           <DropdownMenuSeparator />
@@ -84,9 +82,7 @@ export default function SingleWorkoutMoreButton({
               onClick={() => {
                 setIsDrawerOpen(false);
               }}
-            >
-              <Button variant="outline">Cancel</Button>
-            </DrawerClose>
+            ></DrawerClose>
           </DrawerFooter>
         </DrawerContent>
       </Drawer>
