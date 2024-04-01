@@ -43,6 +43,13 @@ export const metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
+      <head>
+        <link
+          rel="icon"
+          href="icons/favicon.ico"
+          sizes="any"
+        />
+      </head>
       <body
         className={cn(
           "min-h-screen bg-background font-sans antialiased dark:bg-stone-950 text-stone-50 overflow-hidden",

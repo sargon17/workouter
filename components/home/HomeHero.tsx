@@ -6,7 +6,7 @@ import { Button } from "../ui/button";
 import Link from "next/link";
 
 export default function HomeHero() {
-  const version = "v0.0.1";
+  const version = "v0.0.2";
 
   return (
     <div className="w-full h-[80lvh] flex justify-center">
