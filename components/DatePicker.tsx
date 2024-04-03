@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
 import { format } from "date-fns";
 import { Calendar as CalendarIcon } from "lucide-react";
@@ -8,54 +8,46 @@ import { Calendar as CalendarIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 
 export function DatePicker({ field }: any) {
-  const [isMobile, setIsMobile] = useState(false);
-
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      setIsMobile(window.innerWidth < 768);
-    }
-  }, []);
+  const [isOpen, setIsOpen] = useState(false);
 
   return (
     <>
-      {!isMobile && (
-        <Popover>
-          <PopoverTrigger asChild>
-            <Button
-              variant="outline"
-              className={cn(
-                "w-[280px] justify-start text-left font-normal",
-                !field.value && "text-muted-foreground"
-              )}
-            >
-              <CalendarIcon className="mr-2 h-4 w-4" />
-              {field.value ? format(field.value, "PPP") : <span>Pick a date</span>}
-            </Button>
-          </PopoverTrigger>
-          <PopoverContent className="w-auto p-0">
-            <TheCalendar {...field} />
-          </PopoverContent>
-        </Popover>
-      )}
+      {isMobile && (
+        <div>
+          <Button
+            variant="outline"
+            type="button"
+            className={cn(
+              "w-[280px] justify-start text-left font-normal",
+              !field.value && "text-muted-foreground"
+            )}
+            onClick={() => setIsOpen(!isOpen)}
+          >
+            <CalendarIcon className="mr-2 h-4 w-4" />
+            {field.value ? format(field.value, "PPP") : <span>Pick a date</span>}
+          </Button>
 
-      {isMobile && <TheCalendar {...field} />}
+          <div
+            className={cn("", {
+              hidden: !isOpen,
+              block: isOpen,
+            })}
+          >
+            <Calendar
+              mode="single"
+              selected={field.value}
+              onSelect={(e: any) => {
+                field.onChange(e);
+                setIsOpen(false);
+              }}
+              initialFocus
+              weekStartsOn={1}
+            />
+          </div>
+        </div>
+      )}
     </>
   );
 }
-
-const TheCalendar = (field: any) => {
-  return (
-    <Calendar
-      mode="single"
-      selected={field.value}
-      onSelect={(e: any) => {
-        field.onChange(e);
-      }}
-      initialFocus
-      weekStartsOn={1}
-    />
-  );
-};
