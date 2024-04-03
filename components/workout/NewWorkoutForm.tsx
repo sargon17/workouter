@@ -21,7 +21,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 import { useRouter } from "next/navigation";
-import { DrawerClose } from "../ui/drawer";
+import { DrawerClose, DrawerFooter } from "../ui/drawer";
 
 const formSchema = z.object({
   title: z.string().nonempty(),
@@ -103,9 +103,21 @@ export default function NewWorkoutForm({ user }: { user: any }) {
               </FormItem>
             )}
           />
-          <DrawerClose>
-            <Button type="submit">Submit</Button>
-          </DrawerClose>
+          <DrawerFooter>
+            <div className="flex w-full justify-end gap-2">
+              <DrawerClose>
+                <Button
+                  variant="outline"
+                  type="button"
+                >
+                  Cancel
+                </Button>
+              </DrawerClose>
+              <DrawerClose>
+                <Button type="submit">Submit</Button>
+              </DrawerClose>
+            </div>
+          </DrawerFooter>
         </form>
       </Form>
     </div>
