@@ -3,8 +3,10 @@ import { useState, useEffect } from "react";
 
 import { createClient } from "@/utils/supabase/client";
 
-import { Plus, Minus } from "lucide-react";
+import { Plus, Minus, Info } from "lucide-react";
 import { Button } from "@/components/ui/button";
+
+import { cn } from "@/lib/utils";
 
 function ExerciseSuggestedSets({
   exercise_id,
@@ -20,6 +22,8 @@ function ExerciseSuggestedSets({
   suggestedSets: any;
 }) {
   const supabase = createClient();
+
+  const [isInfoOpen, setIsInfoOpen] = useState(false);
 
   useEffect(() => {
     if (!exercise_id) return;
@@ -39,7 +43,25 @@ function ExerciseSuggestedSets({
   return (
     <div>
       <div>
-        <h2 className="text-sm pb-2 relative text-nowrap">Suggested Sets</h2>
+        <div className="flex items-baseline gap-2 mb-1 ">
+          <h2 className="text-sm relative text-nowrap">Suggested Sets</h2>
+          <div className="text-xs text-muted-foreground flex items-center mb-2 text-stone-500">
+            <span
+              className="underline cursor-pointer"
+              onClick={() => setIsInfoOpen(!isInfoOpen)}
+            >
+              What are these?
+            </span>
+          </div>
+        </div>
+        <span
+          className={cn("text-xs text-muted-foreground flex items-center mb-2 text-stone-500", {
+            hidden: isInfoOpen,
+          })}
+        >
+          Suggested sets are based on your previous workouts, click add to include them in your workout plan
+          by default.
+        </span>
       </div>
       <div className="flex gap-2 flex-col sm:flex-row">
         <ul className="flex gap-1 dark:bg-stone-800 p-1 rounded-md relative">
