@@ -78,11 +78,15 @@ const getSuggestedSets = async (exercise_id: number, supabase: any) => {
   } = (await supabase.auth.getUser()) as any;
 
   const { data, error } = await supabase
-    .from("workout_exercises")
-    .select("id, workouts(user_id)")
-    .eq("exercise_id", exercise_id)
-    .eq("workouts.user_id", user.id)
+    .from("workouts")
+    .select("id, title, workout_exercises(exercise_id, id)")
+    .eq("workout_exercises.exercise_id", exercise_id)
+    .eq("user_id", user.id)
+    .not("workout_exercises", "is", null)
+    .order("id", { ascending: false })
     .limit(1);
+
+  console.log(data);
 
   if (error) {
     console.error("error", error);
@@ -95,7 +99,7 @@ const getSuggestedSets = async (exercise_id: number, supabase: any) => {
     .from("sets")
     .select("reps, weight")
     .order("id", { ascending: true })
-    .eq("workout_exercise_id", data[0].id);
+    .eq("workout_exercise_id", data[0].workout_exercises[0].id);
 
   if (setsError) {
     console.error("error", setsError);
