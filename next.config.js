@@ -1,4 +1,5 @@
 /** @type {import('next').NextConfig} */
+const { version } = require("./package.json");
 
 const withPWA = require("next-pwa")({
   dest: "public",
@@ -10,6 +11,10 @@ const withPWA = require("next-pwa")({
 const nextConfig = withPWA({
   // Your Next.js configuration
   reactStrictMode: true,
+  publicRuntimeConfig: {
+    // Will be available on both server and client
+    version,
+  },
   // ...
 });
 
