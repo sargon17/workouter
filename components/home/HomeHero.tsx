@@ -5,8 +5,11 @@ import { ArrowRight } from "lucide-react";
 import { Button } from "../ui/button";
 import Link from "next/link";
 
+import getConfig from "next/config";
+
 export default function HomeHero() {
-  const version = "v0.0.2";
+  const { publicRuntimeConfig } = getConfig();
+  const version = publicRuntimeConfig.version;
 
   return (
     <div className="w-full h-[80lvh] flex justify-center">
