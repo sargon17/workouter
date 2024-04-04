@@ -56,7 +56,7 @@ export default function HomeHero() {
           </p>
           <div className="flex justify-center mt-8">
             <Link href="/workouts">
-              <Button className="flex gap-1 transition-all hover:gap-4 hover:translate-x-1.5 hover:origin-left">
+              <Button className="flex gap-1">
                 Start Progress Now
                 <ArrowRight
                   size={16}
