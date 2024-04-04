@@ -1,4 +1,5 @@
 import React from "react";
+import Image from "next/image";
 
 import { ArrowRight } from "lucide-react";
 
@@ -15,10 +16,14 @@ export default function HomeHero() {
     <div className="w-full h-[80lvh] flex justify-center">
       <div className=" w-full h-[80lvh] border border-stone-900 rounded-md flex justify-center items-center p-2 relative overflow-hidden">
         <div className="absolute inset-0 z-0">
-          <img
-            src="/images/hero_bg.png"
+          <Image
+            src="/images/hero_bg.jpg"
             alt="hero background"
-            className="w-full h-full object-cover z-0"
+            layout="fill"
+            objectFit="cover"
+            objectPosition="center"
+            quality={100}
+            priority
           />
           <div
             className="absolute inset-2 rounded bg-stone-950/50 backdrop-blur-md
