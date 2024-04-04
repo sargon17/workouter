@@ -18,5 +18,11 @@ interface PageProps {
 }
 
 export default function page({ params }: PageProps) {
-  return <WorkoutDetails id={params.id} />;
+  return (
+    <>
+      <Body>
+        <WorkoutDetails id={params.id} />;
+      </Body>
+    </>
+  );
 }

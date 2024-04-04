@@ -16,7 +16,7 @@ export default function layout({ children, params }: { children: React.ReactNode
           </Button>
         </NewWorkoutExerciseButton>
       </Header>
-      <Body>{children}</Body>
+      {children}
     </>
   );
 }
