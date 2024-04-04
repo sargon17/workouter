@@ -52,7 +52,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
       <body
         className={cn(
-          "min-h-screen bg-background font-sans antialiased dark:bg-stone-950 text-stone-50 overflow-hidden",
+          "min-h-screen bg-background font-sans antialiased bg-stone-950 text-stone-50 overflow-hidden",
           fontSans.variable
         )}
       >
