@@ -2,9 +2,9 @@
   "private": true,
   "version": "0.2.1",
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start"
+    "dev": "next dev --turbo",
+    "build": "next build --turbo",
+    "start": "next start --turbo"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.3.4",
