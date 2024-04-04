@@ -21,7 +21,7 @@ export default function page({ params }: PageProps) {
   return (
     <>
       <Body>
-        <WorkoutDetails id={params.id} />;
+        <WorkoutDetails id={params.id} />
       </Body>
     </>
   );
