@@ -51,6 +51,7 @@ export function DatePicker({ field }: any) {
                 }}
                 initialFocus
                 weekStartsOn={1}
+                disabled={{ before: new Date() }}
               />
               {/* <DayPicker
               mode="single"
