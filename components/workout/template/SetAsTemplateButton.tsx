@@ -59,11 +59,37 @@ export default function SetAsTemplateButton({ workout_id }: { workout_id: string
     router.refresh();
   };
 
+  const handleRemoveFromTemplates = async () => {
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+
+    if (!user) return;
+
+    try {
+      const { data, error } = await supabase
+        .from("template_workouts")
+        .delete()
+        .eq("workout_id", workout_id)
+        .eq("user_id", user.id)
+        .select();
+    } catch (error) {
+      toast.error("Error removing workout from templates");
+    }
+
+    toast.success("Workout removed from templates");
+    router.refresh();
+  };
+
   return (
     <div
       className="flex items-center"
       onClick={() => {
-        handleSetAsTemplate();
+        if (isTemplate) {
+          handleRemoveFromTemplates();
+        } else {
+          handleSetAsTemplate();
+        }
       }}
     >
       <LayoutGrid className="h-4 w-4 mr-2" />
