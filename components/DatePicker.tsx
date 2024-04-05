@@ -1,26 +1,14 @@
 "use client";
 
-import { useState } from "react";
-
 import { format } from "date-fns";
 import { Calendar as CalendarIcon } from "lucide-react";
-
-import { DayPicker } from "react-day-picker";
 
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 
-export function DatePicker({ field }: any) {
+export function DatePicker({ field }: { field: any }) {
   return (
     <>
       <Dialog>
@@ -45,7 +33,7 @@ export function DatePicker({ field }: any) {
             <div className="w-full flex justify-center items-center">
               <Calendar
                 mode="single"
-                selected={field.value}
+                selected={field.value ? new Date(field.value) : new Date()}
                 onSelect={(e: any) => {
                   field.onChange(e);
                 }}
