@@ -34,11 +34,6 @@ export default async function NewSetButton({
           <DrawerTitle>Record a Set</DrawerTitle>
         </DrawerHeader>
         <NewSetForm workout_exercise_id={workout_exercise_id} />
-        <DrawerFooter>
-          <DrawerClose>
-            <Button variant="outline">Cancel</Button>
-          </DrawerClose>
-        </DrawerFooter>
       </DrawerContent>
     </Drawer>
   );

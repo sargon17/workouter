@@ -15,37 +15,43 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 
-import { DrawerClose } from "@/components/ui/drawer";
+import { useEditTargetSet } from "./EditTargetSet.hooks";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { useRouter } from "next/navigation";
 
+import { DrawerFormFooter } from "../../DrawerFormFooter";
+import { useEffect, useRef } from "react";
+
 const formSchema = z.object({
   target_reps: z.number().int().positive(),
   target_weight: z.number().int().positive(),
 });
 
-export default function EditTargetSetForm({
-  set_id,
-  original_target_reps,
-  original_target_weight,
-}: {
-  set_id: any;
-  original_target_reps: number;
-  original_target_weight: number;
-}) {
+export default function EditTargetSetForm({ set_id }: { set_id: any }) {
   const supabase = createClient();
   const router = useRouter();
+
+  const { targetSetData } = useEditTargetSet(set_id);
+
+  const closeBtnRef = useRef<HTMLButtonElement>(null);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      target_reps: original_target_reps,
-      target_weight: original_target_weight,
+      target_reps: targetSetData?.target_reps,
+      target_weight: targetSetData?.target_weight,
     },
   });
+
+  useEffect(() => {
+    if (targetSetData) {
+      form.setValue("target_reps", targetSetData.target_reps);
+      form.setValue("target_weight", targetSetData.target_weight);
+    }
+  }, [targetSetData]);
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     const { data, error } = await supabase
@@ -61,6 +67,8 @@ export default function EditTargetSetForm({
     } else {
       toast("Target set updated successfully");
       form.reset();
+
+      closeBtnRef.current?.click();
 
       // refresh the page
       router.refresh();
@@ -89,7 +97,7 @@ export default function EditTargetSetForm({
                       onChange={(e) => {
                         form.setValue("target_reps", parseInt(e.target.value));
                       }}
-                      value={form.watch("target_reps")}
+                      value={field.value}
                     />
                   </FormControl>
                   <FormDescription>Target reps</FormDescription>
@@ -120,9 +128,7 @@ export default function EditTargetSetForm({
               )}
             />
           </div>
-          <DrawerClose>
-            <Button type="submit">Submit</Button>
-          </DrawerClose>
+          <DrawerFormFooter closeRef={closeBtnRef} />
         </form>
       </Form>
     </div>

@@ -86,15 +86,6 @@ export default function SetItem({
             original_reps={reps}
             original_weight={weight}
           />
-          <DrawerFooter>
-            <DrawerClose
-              onClick={() => {
-                setIsDrawerOpen(false);
-              }}
-            >
-              <Button variant="outline">Cancel</Button>
-            </DrawerClose>
-          </DrawerFooter>
         </DrawerContent>
       </Drawer>
     </>

@@ -22,8 +22,8 @@ import {
 } from "@/components/ui/drawer";
 import { Button } from "@/components/ui/button";
 
-import DeleteWorkoutButton from "./DeleteWorkoutButton";
-import EditWorkoutForm from "./EditWorkoutForm";
+import DeleteWorkoutButton from "./delete/DeleteWorkoutButton";
+import EditWorkoutForm from "./edit/EditWorkoutForm";
 
 export default function SingleWorkoutMoreButton({
   children,
@@ -77,13 +77,6 @@ export default function SingleWorkoutMoreButton({
             original_title={title}
             original_date={date}
           />
-          <DrawerFooter>
-            <DrawerClose
-              onClick={() => {
-                setIsDrawerOpen(false);
-              }}
-            ></DrawerClose>
-          </DrawerFooter>
         </DrawerContent>
       </Drawer>
     </>

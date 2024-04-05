@@ -15,7 +15,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 
-import { DrawerClose } from "@/components/ui/drawer";
+import { DrawerClose, DrawerFooter } from "@/components/ui/drawer";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -83,9 +83,25 @@ export default function EditTargetSetForm({}: {}) {
               )}
             />
           </div>
-          <DrawerClose>
-            <Button type="submit">Submit</Button>
-          </DrawerClose>
+          <DrawerFooter>
+            <div className="flex gap-2 justify-end">
+              <DrawerClose>
+                <Button
+                  type="button"
+                  variant={"ghost"}
+                  size={"sm"}
+                >
+                  Cancel
+                </Button>
+              </DrawerClose>
+              <Button
+                type="submit"
+                size={"sm"}
+              >
+                Create
+              </Button>
+            </div>
+          </DrawerFooter>
         </form>
       </Form>
     </div>

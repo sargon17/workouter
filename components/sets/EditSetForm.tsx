@@ -1,9 +1,9 @@
 "use client";
 
 import { createClient } from "@/utils/supabase/client";
+import { useRef } from "react";
 
 import { toast } from "sonner";
-import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
@@ -15,7 +15,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 
-import { DrawerClose } from "@/components/ui/drawer";
+import { DrawerFormFooter } from "../DrawerFormFooter";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -39,6 +39,8 @@ export default function EditTargetSetForm({
   const supabase = createClient();
   const router = useRouter();
 
+  const closeBtnRef = useRef<HTMLButtonElement>(null);
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -61,6 +63,8 @@ export default function EditTargetSetForm({
     } else {
       toast("Set updated successfully");
       form.reset();
+
+      closeBtnRef.current?.click();
 
       // refresh the page
       router.refresh();
@@ -120,9 +124,7 @@ export default function EditTargetSetForm({
               )}
             />
           </div>
-          <DrawerClose>
-            <Button type="submit">Submit</Button>
-          </DrawerClose>
+          <DrawerFormFooter closeRef={closeBtnRef} />
         </form>
       </Form>
     </div>

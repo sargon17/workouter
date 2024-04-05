@@ -1,6 +1,7 @@
 "use client";
 
 import { createClient } from "@/utils/supabase/client";
+import { useRef } from "react";
 
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
@@ -21,7 +22,8 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 import { useRouter } from "next/navigation";
-import { DrawerClose, DrawerFooter } from "../ui/drawer";
+
+import { DrawerFormFooter } from "../DrawerFormFooter";
 
 const formSchema = z.object({
   title: z.string().nonempty(),
@@ -31,6 +33,8 @@ const formSchema = z.object({
 export default function NewWorkoutForm({ user }: { user: any }) {
   const supabase = createClient();
   const router = useRouter();
+
+  const closeBtnRef = useRef<HTMLButtonElement>(null);
 
   if (!user) {
     throw new Error("User not found");
@@ -57,6 +61,8 @@ export default function NewWorkoutForm({ user }: { user: any }) {
     } else {
       toast("Workout created");
       form.reset();
+
+      closeBtnRef.current?.click();
 
       // refresh the page
       router.refresh();
@@ -103,21 +109,7 @@ export default function NewWorkoutForm({ user }: { user: any }) {
               </FormItem>
             )}
           />
-          <DrawerFooter>
-            <div className="flex w-full justify-end gap-2">
-              <DrawerClose>
-                <Button
-                  variant="outline"
-                  type="button"
-                >
-                  Cancel
-                </Button>
-              </DrawerClose>
-              <DrawerClose>
-                <Button type="submit">Submit</Button>
-              </DrawerClose>
-            </div>
-          </DrawerFooter>
+          <DrawerFormFooter closeRef={closeBtnRef} />
         </form>
       </Form>
     </div>

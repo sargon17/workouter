@@ -1,7 +1,3 @@
-"use client";
-
-import { useState } from "react";
-
 import { Trash, Edit, Copy } from "lucide-react";
 import {
   DropdownMenu,
@@ -12,34 +8,12 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-import {
-  Drawer,
-  DrawerClose,
-  DrawerContent,
-  DrawerFooter,
-  DrawerHeader,
-  DrawerTitle,
-  DrawerTrigger,
-} from "@/components/ui/drawer";
-import { Button } from "@/components/ui/button";
-
 import DeleteTargetSetButton from "./DeleteTargetSetButton";
-import EditTargetSetForm from "./EditTargetSetForm";
 import DuplicateTargetSet from "./DuplicateTargetSet";
 
-export default function TargetSetItem({
-  children,
-  set_id,
-  target_weight,
-  target_reps,
-}: {
-  children: React.ReactNode;
-  set_id: string;
-  target_weight: number;
-  target_reps: number;
-}) {
-  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+import EditTargetSetButton from "./edit/EditTargetSetButton";
 
+export default function TargetSetItem({ children, set_id }: { children: React.ReactNode; set_id: string }) {
   return (
     <>
       <DropdownMenu>
@@ -49,14 +23,12 @@ export default function TargetSetItem({
         <DropdownMenuContent>
           <DropdownMenuLabel>Target Set Actions</DropdownMenuLabel>
           <DropdownMenuSeparator />
-          <DropdownMenuItem
-            onClick={() => {
-              setIsDrawerOpen(true);
-            }}
-          >
-            <Edit className="h-4 w-4 mr-2" />
-            Edit
-          </DropdownMenuItem>
+          <EditTargetSetButton set_id={set_id}>
+            <div className="flex w-full items-center px-2 py-1 hover:bg-stone-800 transition-all cursor-pointer text-sm">
+              <Edit className="h-4 w-4 mr-2" />
+              Edit
+            </div>
+          </EditTargetSetButton>
           <DropdownMenuItem>
             <DuplicateTargetSet set_id={set_id}>
               <div className="flex ">
@@ -73,33 +45,6 @@ export default function TargetSetItem({
           </DeleteTargetSetButton>
         </DropdownMenuContent>
       </DropdownMenu>
-
-      <Drawer
-        open={isDrawerOpen}
-        onOpenChange={(state) => {
-          setIsDrawerOpen(state);
-        }}
-      >
-        <DrawerContent>
-          <DrawerHeader>
-            <DrawerTitle>Edit Target Set</DrawerTitle>
-          </DrawerHeader>
-          <EditTargetSetForm
-            set_id={set_id}
-            original_target_reps={target_reps}
-            original_target_weight={target_weight}
-          />
-          <DrawerFooter>
-            <DrawerClose
-              onClick={() => {
-                setIsDrawerOpen(false);
-              }}
-            >
-              <Button variant="outline">Cancel</Button>
-            </DrawerClose>
-          </DrawerFooter>
-        </DrawerContent>
-      </Drawer>
     </>
   );
 }
