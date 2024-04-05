@@ -8,9 +8,12 @@ import {
   DrawerHeader,
   DrawerTitle,
   DrawerTrigger,
+  DrawerDescription,
 } from "@/components/ui/drawer";
 
 import NewWorkoutForm from "./NewWorkoutForm";
+
+import CreateFromTemplate from "./template/CreateFromTemplate";
 
 import { getUser } from "@/lib/fetch";
 
@@ -26,9 +29,13 @@ export default async function NewWorkoutButton({ children }: { children: React.R
       <DrawerTrigger asChild>{children}</DrawerTrigger>
       <DrawerContent>
         <DrawerHeader>
-          <DrawerTitle>Create a new Workout</DrawerTitle>
-          {/* <DrawerDescription>This action cannot be undone.</DrawerDescription> */}
+          <DrawerTitle>Create a Workout</DrawerTitle>
+
+          <DrawerDescription>Create a workout from scratch or use a template.</DrawerDescription>
         </DrawerHeader>
+        <div className="w-full px-4 py-2">
+          <CreateFromTemplate />
+        </div>
         <NewWorkoutForm user={user} />
       </DrawerContent>
     </Drawer>
