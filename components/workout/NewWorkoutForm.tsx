@@ -88,7 +88,6 @@ export default function NewWorkoutForm({ user }: { user: any }) {
                     {...field}
                   />
                 </FormControl>
-                <FormDescription>Enter a title for the workout</FormDescription>
                 <FormMessage />
               </FormItem>
             )}
