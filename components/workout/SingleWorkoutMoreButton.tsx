@@ -1,5 +1,5 @@
 "use client";
-import { Trash, Edit } from "lucide-react";
+import { Trash, Edit, Copy, LayoutGrid } from "lucide-react";
 
 import { useState } from "react";
 import {
@@ -11,19 +11,12 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-import {
-  Drawer,
-  DrawerClose,
-  DrawerContent,
-  DrawerFooter,
-  DrawerHeader,
-  DrawerTitle,
-  DrawerTrigger,
-} from "@/components/ui/drawer";
-import { Button } from "@/components/ui/button";
+import { Drawer, DrawerContent, DrawerHeader, DrawerTitle } from "@/components/ui/drawer";
 
 import DeleteWorkoutButton from "./delete/DeleteWorkoutButton";
 import EditWorkoutForm from "./edit/EditWorkoutForm";
+import DuplicateWorkout from "./duplicate/DuplicateWorkout";
+import SetAsTemplateButton from "./template/SetAsTemplateButton";
 
 export default function SingleWorkoutMoreButton({
   children,
@@ -45,6 +38,10 @@ export default function SingleWorkoutMoreButton({
         <DropdownMenuContent>
           <DropdownMenuLabel>Workout Actions</DropdownMenuLabel>
           <DropdownMenuSeparator />
+          <DropdownMenuItem>
+            <SetAsTemplateButton workout_id={id} />
+          </DropdownMenuItem>
+
           <DropdownMenuItem
             onClick={() => {
               setIsDrawerOpen(true);
