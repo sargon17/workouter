@@ -15,7 +15,6 @@ import { Drawer, DrawerContent, DrawerHeader, DrawerTitle } from "@/components/u
 
 import DeleteWorkoutButton from "./delete/DeleteWorkoutButton";
 import EditWorkoutForm from "./edit/EditWorkoutForm";
-import DuplicateWorkout from "./duplicate/DuplicateWorkout";
 import SetAsTemplateButton from "./template/SetAsTemplateButton";
 
 export default function SingleWorkoutMoreButton({
