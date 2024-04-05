@@ -127,8 +127,6 @@ const ExerciseCard = ({ exercise }: { exercise: any }) => {
               <TargetSetItem
                 set_id={set.id}
                 key={set.id}
-                target_reps={set.target_reps}
-                target_weight={set.target_weight}
               >
                 {set.target_reps} x {set.target_weight}kg
               </TargetSetItem>
