@@ -1,6 +1,6 @@
 import React from "react";
 
-import { MoreHorizontal, Plus } from "lucide-react";
+import { MoreHorizontal, Plus, ArrowRight } from "lucide-react";
 import { toast } from "sonner";
 
 import { createClient } from "@/utils/supabase/server";
@@ -25,6 +25,8 @@ import SingleWorkoutMoreButton from "./SingleWorkoutMoreButton";
 import SingleWorkoutExerciseMoreButton from "../workout_exercises/SingleWorkoutExerciseMoreButton";
 
 import StatusLabel from "../status/StatusLabel";
+
+import Link from "next/link";
 
 type WorkoutDetailsProps = {
   id: string;
@@ -54,7 +56,21 @@ export default async function WorkoutDetails({ id }: WorkoutDetailsProps) {
     <div>
       <div className=" flex justify-between items-center gap-2">
         <div>
-          <h1 className="text-2xl font-bold">{workout.title}</h1>
+          <div className="flex justify-start items-center">
+            <h1 className="text-2xl font-bold">{workout.title}</h1>
+            <SingleWorkoutMoreButton
+              id={workout.id}
+              title={workout.title}
+              date={workout.date}
+            >
+              <Button
+                size="icon"
+                variant="ghost"
+              >
+                <MoreHorizontal className="h-4 w-4" />
+              </Button>
+            </SingleWorkoutMoreButton>
+          </div>
           {workout.workout_statuses && (
             <StatusLabel
               status={workout.workout_statuses?.name}
@@ -62,18 +78,15 @@ export default async function WorkoutDetails({ id }: WorkoutDetailsProps) {
             />
           )}
         </div>
-        <SingleWorkoutMoreButton
-          id={workout.id}
-          title={workout.title}
-          date={workout.date}
-        >
+        <Link href={`/concentration/${id}`}>
           <Button
-            size="icon"
-            variant="ghost"
+            size="sm"
+            variant="default"
           >
-            <MoreHorizontal className="h-4 w-4" />
+            Start
+            <ArrowRight className="h-4 w-4 ml-1" />
           </Button>
-        </SingleWorkoutMoreButton>
+        </Link>
       </div>
       <PrintDate date={workout.date} />
       <div className="flex flex-wrap gap-2 py-4">
