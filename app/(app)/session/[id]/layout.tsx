@@ -17,8 +17,8 @@ export default async function Layout({
     <>
       <Header
         backHref={`/workouts/${params.id}`}
-        title="concentration"
-        backText="Workout Details"
+        title="session"
+        backText="Details"
       />
       <Body>{children}</Body>
     </>

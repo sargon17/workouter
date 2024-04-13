@@ -10,7 +10,7 @@ export default function layout({ children, params }: { children: React.ReactNode
   return (
     <>
       <Header
-        title="Workout Details"
+        title="Details"
         backHref={`/workouts`}
         backText="Workouts"
         actionBtn={

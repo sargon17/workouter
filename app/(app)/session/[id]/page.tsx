@@ -3,7 +3,7 @@ import React from "react";
 import { createClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
 
-import Timer from "@/components/concentration/Timer";
+import Session from "@/components/session/Session";
 
 export default async function page({ params }: { params: { id: string } }) {
   const supabase = createClient();
@@ -18,7 +18,7 @@ export default async function page({ params }: { params: { id: string } }) {
 
   const { data: workoutData, error: workoutError } = await supabase
     .from("workouts")
-    .select("*, exercises:workout_exercises(*, exercise_data:exercises(title))")
+    .select("*, exercises:workout_exercises(*, exercise_data:exercises(title), target_sets(*), sets(*))")
     .eq("id", params.id)
     .single();
 
@@ -29,7 +29,7 @@ export default async function page({ params }: { params: { id: string } }) {
 
   return (
     <>
-      <Timer />
+      <Session workout={workoutData} />
     </>
   );
 }

@@ -78,7 +78,7 @@ export default async function WorkoutDetails({ id }: WorkoutDetailsProps) {
             />
           )}
         </div>
-        <Link href={`/concentration/${id}`}>
+        <Link href={`/session/${id}`}>
           <Button
             size="sm"
             variant="default"

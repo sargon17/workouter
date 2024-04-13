@@ -35,7 +35,7 @@ export default function Timer() {
       )}
     >
       <div></div>
-      <p className="text-6xl sm:text-7xl  md:text-9xl font-black ">{printTime()}</p>
+      <p className=" text-[14vw] font-black ">{printTime()}</p>
     </div>
   );
 }
