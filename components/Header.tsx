@@ -38,11 +38,11 @@ export default async function Header(props: HeaderProps) {
           </Link>
         )}
       </div>
-      {(props.titleVariant === "small" || props.titleVariant === undefined) && (
-        <div className=" columns-1 col-start-2 flex justify-center items-center">
-          <h1 className=" uppercase text-sm font-bold">{props.title ? props.title : "Workouter"}</h1>
-        </div>
-      )}
+
+      <div className=" columns-1 col-start-2 flex justify-center items-center">
+        <h1 className=" uppercase text-sm font-bold">{props.title ? props.title : "Workouter"}</h1>
+      </div>
+
       <div className="w-full flex items-center justify-end">{props.actionBtn ? props.actionBtn : null}</div>
     </div>
   );
