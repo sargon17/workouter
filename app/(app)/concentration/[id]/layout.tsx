@@ -19,7 +19,6 @@ export default async function Layout({
         backHref={`/workouts/${params.id}`}
         title="concentration"
         backText="Workout Details"
-        titleVariant={"small"}
       />
       <Body>{children}</Body>
     </>
