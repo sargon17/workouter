@@ -23,16 +23,20 @@ export default async function ProtectedPage({ searchParams }: { searchParams: { 
 
   return (
     <>
-      <Header>
-        <NewWorkoutButton>
-          <Button
-            size="icon"
-            variant="outline"
-          >
-            <Plus className="h-4 w-4" />
-          </Button>
-        </NewWorkoutButton>
-      </Header>
+      <Header
+        title="workouts"
+        backHref="/"
+        actionBtn={
+          <NewWorkoutButton>
+            <Button
+              size="icon"
+              variant="outline"
+            >
+              <Plus className="h-4 w-4" />
+            </Button>
+          </NewWorkoutButton>
+        }
+      />
       <Body>
         <WorkoutList isPast={searchTimeline === "past"} />
       </Body>

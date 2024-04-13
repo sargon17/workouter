@@ -9,13 +9,18 @@ import Body from "@/components/Body";
 export default function layout({ children, params }: { children: React.ReactNode; params: { id: string } }) {
   return (
     <>
-      <Header>
-        <NewWorkoutExerciseButton workout_id={params.id}>
-          <Button size="icon">
-            <Plus className="h-4 w-4" />
-          </Button>
-        </NewWorkoutExerciseButton>
-      </Header>
+      <Header
+        title="Workout Details"
+        backHref={`/workouts`}
+        backText="Workouts"
+        actionBtn={
+          <NewWorkoutExerciseButton workout_id={params.id}>
+            <Button size="icon">
+              <Plus className="h-4 w-4" />
+            </Button>
+          </NewWorkoutExerciseButton>
+        }
+      />
       {children}
     </>
   );

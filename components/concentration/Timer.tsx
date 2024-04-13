@@ -3,7 +3,7 @@ import React from "react";
 import { cn } from "@/lib/utils";
 
 export default function Timer() {
-  const [time, setTime] = React.useState(10);
+  const [time, setTime] = React.useState(60);
 
   React.useEffect(() => {
     const interval = setInterval(() => {
@@ -35,7 +35,7 @@ export default function Timer() {
       )}
     >
       <div></div>
-      <p className="text-4xl sm:text-7xl  md:text-9xl font-black ">{printTime()}</p>
+      <p className="text-6xl sm:text-7xl  md:text-9xl font-black ">{printTime()}</p>
     </div>
   );
 }

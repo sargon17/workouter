@@ -4,6 +4,8 @@ import Body from "@/components/Body";
 
 import { createClient } from "@/utils/supabase/server";
 
+import Header from "@/components/Header";
+
 export default async function Layout({
   children,
   params,
@@ -11,5 +13,15 @@ export default async function Layout({
   children: React.ReactNode;
   params: { id: string };
 }) {
-  return <Body>{children}</Body>;
+  return (
+    <>
+      <Header
+        backHref={`/workouts/${params.id}`}
+        title="concentration"
+        backText="Workout Details"
+        titleVariant={"small"}
+      />
+      <Body>{children}</Body>
+    </>
+  );
 }
