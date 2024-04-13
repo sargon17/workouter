@@ -43,8 +43,13 @@ export default function Session(props: Props) {
 
     props.workout.exercises.forEach((exercise, index) => {
       if (exercise.sets.length > 0) {
-        activeExercise = index;
-        activeSet = exercise.sets.length - 1;
+        if (exercise.sets.length < exercise.target_sets.length) {
+          activeExercise = index;
+          activeSet = exercise.sets.length;
+        } else if (exercise.sets.length === exercise.target_sets.length) {
+          activeExercise = index + 1;
+          activeSet = 0;
+        }
       }
     });
 
