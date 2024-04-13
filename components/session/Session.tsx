@@ -125,7 +125,7 @@ export default function Session(props: Props) {
           <Button className="w-full">Register Custom Set</Button>
           <Button
             onClick={() => handleNextSet()}
-            variant={"primary"}
+            variant={"default"}
             className="w-full bg-lime-600 hover:bg-lime-700 text-lime-50"
           >
             Register Set
