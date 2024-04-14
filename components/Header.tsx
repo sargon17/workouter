@@ -17,7 +17,7 @@ export default async function Header(props: HeaderProps) {
   return (
     <div
       className={cn(
-        "grid grid-cols-3 gap-1 w-full p-2 border-b dark:border-b-stone-900 dark:bg-stone-950/70 backdrop-blur-md dark:text-stone-50 fixed top-0 left-0 z-[10000] min-h-13",
+        "grid grid-cols-3 gap-1 w-full p-2 border-b dark:border-b-stone-900 dark:bg-stone-950/70 backdrop-blur-md dark:text-stone-50 fixed top-0 left-0 z-[10000] h-14 ",
         {
           "grid-rows-1": props.titleVariant === "small",
           "grid-rows-2": props.titleVariant === "large",
