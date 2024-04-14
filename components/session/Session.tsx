@@ -8,6 +8,7 @@ import Timer from "./Timer";
 import { useState, useEffect } from "react";
 
 import { Button } from "@/components/ui/button";
+import { convertToObject } from "typescript";
 
 interface Props {
   workout: {
@@ -35,6 +36,7 @@ export default function Session(props: Props) {
     workout_id: props.workout.id,
     currentExercise: 0,
     currentSet: 0,
+    isEnd: false,
   });
 
   useEffect(() => {
@@ -43,10 +45,10 @@ export default function Session(props: Props) {
 
     props.workout.exercises.forEach((exercise, index) => {
       if (exercise.sets.length > 0) {
+        activeExercise = index;
         if (exercise.sets.length < exercise.target_sets.length) {
-          activeExercise = index;
           activeSet = exercise.sets.length;
-        } else if (exercise.sets.length === exercise.target_sets.length) {
+        } else if (exercise.sets.length >= exercise.target_sets.length) {
           activeExercise = index + 1;
           activeSet = 0;
         }
@@ -63,35 +65,82 @@ export default function Session(props: Props) {
   const supabase = createClient();
 
   const saveSet = async () => {
-    const { data, error } = await supabase.from("sets").insert([
-      {
-        workout_exercise_id: props.workout.exercises[session.currentExercise].id,
-        reps: props.workout.exercises[session.currentExercise].target_sets[session.currentSet].target_reps,
-        weight:
-          props.workout.exercises[session.currentExercise].target_sets[session.currentSet].target_weight,
-      },
-    ]);
+    const { data, error } = await supabase
+      .from("sets")
+      .insert([
+        {
+          workout_exercise_id: props.workout.exercises[session.currentExercise].id,
+          reps: props.workout.exercises[session.currentExercise].target_sets[session.currentSet].target_reps,
+          weight:
+            props.workout.exercises[session.currentExercise].target_sets[session.currentSet].target_weight,
+        },
+      ])
+      .select();
 
     if (error) {
       toast("Error saving set");
+      throw error;
     }
 
     if (data) {
-      console.log(data);
-      toast("Set saved");
+      return data;
     }
   };
 
-  const handleNextSet = async () => {
-    if (session.currentSet < props.workout.exercises[session.currentExercise].target_sets.length - 1) {
-      setSession((prev) => ({ ...prev, currentSet: prev.currentSet + 1 }));
-      await saveSet();
-    } else if (session.currentExercise < props.workout.exercises.length - 1) {
-      setSession((prev) => ({ ...prev, currentExercise: prev.currentExercise + 1, currentSet: 0 }));
-      await saveSet();
-    } else {
-      console.log("Workout completed");
+  const handleRegisterSet = async () => {
+    const { nextSet, nextExercise, isLastSet } = getNextSet();
+
+    try {
+      const data = await saveSet();
+
+      if (isLastSet) {
+        toast("Workout completed");
+        return;
+      }
+
+      setSession((prev) => ({
+        ...prev,
+        currentSet: nextSet,
+        currentExercise: nextExercise,
+      }));
+      console.log(data);
+      toast("Set registered");
+    } catch (error) {
+      console.error(error);
+      toast("Error registering set");
     }
+
+    // if (session.currentSet < props.workout.exercises[session.currentExercise].target_sets.length - 1) {
+    //   await saveSet();
+    //   setSession((prev) => ({ ...prev, currentSet: prev.currentSet + 1 }));
+    // } else if (session.currentExercise < props.workout.exercises.length - 1) {
+    //   setSession((prev) => ({ ...prev, currentExercise: prev.currentExercise + 1, currentSet: 0 }));
+    //   await saveSet();
+    // } else {
+    //   console.log("Workout completed");
+    //   toast("Workout completed");
+    // }
+  };
+
+  const getNextSet = () => {
+    let nextSet = 0;
+    let nextExercise = session.currentExercise;
+    let isLastSet = false; // if the current set is the last set of the workout
+
+    if (session.currentSet < props.workout.exercises[session.currentExercise].target_sets.length - 1) {
+      nextSet = session.currentSet + 1;
+    }
+
+    if (session.currentSet === props.workout.exercises[session.currentExercise].target_sets.length - 1) {
+      if (session.currentExercise === props.workout.exercises.length - 1) {
+        isLastSet = true;
+        return { nextSet, nextExercise, isLastSet };
+      }
+      nextSet = 0;
+      nextExercise = session.currentExercise + 1;
+    }
+
+    return { nextSet, nextExercise, isLastSet };
   };
 
   return (
@@ -129,7 +178,7 @@ export default function Session(props: Props) {
         <div className=" flex w-full justify-start items-center gap-2 mt-4">
           <Button className="w-full">Register Custom Set</Button>
           <Button
-            onClick={() => handleNextSet()}
+            onClick={() => handleRegisterSet()}
             variant={"default"}
             className="w-full bg-lime-600 hover:bg-lime-700 text-lime-50"
           >
