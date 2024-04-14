@@ -109,17 +109,6 @@ export default function Session(props: Props) {
       console.error(error);
       toast("Error registering set");
     }
-
-    // if (session.currentSet < props.workout.exercises[session.currentExercise].target_sets.length - 1) {
-    //   await saveSet();
-    //   setSession((prev) => ({ ...prev, currentSet: prev.currentSet + 1 }));
-    // } else if (session.currentExercise < props.workout.exercises.length - 1) {
-    //   setSession((prev) => ({ ...prev, currentExercise: prev.currentExercise + 1, currentSet: 0 }));
-    //   await saveSet();
-    // } else {
-    //   console.log("Workout completed");
-    //   toast("Workout completed");
-    // }
   };
 
   const getNextSet = () => {
@@ -153,7 +142,9 @@ export default function Session(props: Props) {
           {props.workout.exercises.length - session.currentExercise - 1} exercises left
         </p>
       </div>
-      <Timer />
+
+      {/* reset the timer on session set change */}
+      <Timer key={session.currentSet} />
       <div className="border border-stone-900 rounded-xl p-2 mt-2">
         <h3 className="text-center font-bold text-lg p-2">
           Set {session.currentSet + 1} of{" "}
