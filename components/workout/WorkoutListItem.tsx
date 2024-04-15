@@ -52,11 +52,11 @@ export default function WorkoutListItem({
               <MoreHorizontal className="h-4 w-4" />
             </Button>
           </SingleWorkoutMoreButton>
-          <Button size={"icon"}>
-            <Link href={`/workouts/${workout.id}`}>
+          <Link href={`/workouts/${workout.id}`}>
+            <Button size={"icon"}>
               <ArrowRight className="h-4 w-4" />
-            </Link>
-          </Button>
+            </Button>
+          </Link>
         </div>
       </div>
       <Separator />

@@ -35,11 +35,6 @@ export default async function NewTargetSetButton({
           {/* <DrawerDescription>This action cannot be undone.</DrawerDescription> */}
         </DrawerHeader>
         <NewTargetSetForm workout_exercise_id={workout_exercise_id} />
-        <DrawerFooter>
-          <DrawerClose>
-            <Button variant="outline">Cancel</Button>
-          </DrawerClose>
-        </DrawerFooter>
       </DrawerContent>
     </Drawer>
   );

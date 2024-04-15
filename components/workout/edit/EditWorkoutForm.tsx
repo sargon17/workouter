@@ -1,9 +1,9 @@
 "use client";
+import { useRef } from "react";
 import { createClient } from "@/utils/supabase/client";
-import { format } from "date-fns";
 
-import { toast } from "sonner";
-import { Button } from "@/components/ui/button";
+import { handleSubmit } from "./EditWorkout";
+
 import {
   Form,
   FormControl,
@@ -14,14 +14,16 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { DatePicker } from "../DatePicker";
-
-import { DrawerClose } from "@/components/ui/drawer";
+import { DatePicker } from "../../DatePicker";
+import { toast } from "sonner";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { useRouter } from "next/navigation";
+import { format } from "date-fns";
+
+import { DrawerFormFooter } from "../../DrawerFormFooter";
 
 const formSchema = z.object({
   title: z.string().nonempty(),
@@ -35,37 +37,33 @@ export default function EditWorkoutForm({
 }: {
   id: any;
   original_title: string;
-  original_date: any;
+  original_date: Date;
 }) {
   const supabase = createClient();
   const router = useRouter();
+
+  const closeBtnRef = useRef<HTMLButtonElement>(null);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       title: original_title,
-      date: original_date,
+      date: new Date(original_date),
     },
   });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    const { data, error } = await supabase
-      .from("workouts")
-      .update({ title: values.title, date: format(values.date, "yyyy-MM-dd") })
-      .eq("id", id)
-      .select();
-
-    if (error) {
+    try {
+      const res = await handleSubmit({ values, id, supabase });
+      toast("Workout updated");
+    } catch (error) {
       console.error("error", error);
-      toast("Error updating Workout");
-      return;
-    } else {
-      toast("Workout updated successfully");
-      form.reset();
-
-      // refresh the page
-      router.refresh();
+      toast("Error updating workout");
     }
+
+    form.reset();
+    closeBtnRef.current?.click();
+    router.refresh();
   }
 
   return (
@@ -117,10 +115,7 @@ export default function EditWorkoutForm({
               )}
             />
           </div>
-          <DrawerClose className="flex justify-end gap-2 w-full">
-            <Button variant={"outline"}>Cancel</Button>
-            <Button type="submit">Submit</Button>
-          </DrawerClose>
+          <DrawerFormFooter closeRef={closeBtnRef} />
         </form>
       </Form>
     </div>

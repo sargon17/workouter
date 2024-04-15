@@ -14,6 +14,8 @@ import WorkoutListItem from "./WorkoutListItem";
 
 import { Tab, TabItem } from "@/components/Tab";
 
+import ReloadButton from "../ReloadButton";
+
 export default async function WorkoutList({ isPast = false }: { isPast?: boolean }) {
   const supabase = createClient();
   const user = await getUser(supabase);
@@ -41,26 +43,27 @@ export default async function WorkoutList({ isPast = false }: { isPast?: boolean
 
   return (
     <div className="w-full h-full">
+      <div className="flex justify-center mb-4">
+        <Tab>
+          <TabItem
+            href="/workouts"
+            active={!isPast}
+          >
+            Upcoming
+          </TabItem>
+          <TabItem
+            href="/workouts?t=past"
+            active={isPast}
+          >
+            Previous
+          </TabItem>
+        </Tab>
+      </div>
       {workouts.length > 0 && (
         <>
-          <div className="flex justify-center mb-4">
-            <Tab>
-              <TabItem
-                href="/workouts"
-                active={!isPast}
-              >
-                Upcoming
-              </TabItem>
-              <TabItem
-                href="/workouts?t=past"
-                active={isPast}
-              >
-                Previous
-              </TabItem>
-            </Tab>
-          </div>
-          <div className="mb-4">
+          <div className="mb-4 flex justify-start items-center gap-1">
             <h1 className=" text-xl font-bold">{isPast ? "Previous" : "Upcoming"} Workouts</h1>
+            <ReloadButton />
           </div>
           <div className="flex flex-wrap gap-2">
             {workouts.map((workout: any, i: number) => (

@@ -12,9 +12,10 @@ import Link from "next/link";
 export default async function Index() {
   return (
     <div className="w-full flex flex-col gap-20 items-center overflow-hidden">
-      <Header>
-        <HeaderActionButton />
-      </Header>
+      <Header
+        title="workouter"
+        actionBtn={<HeaderActionButton />}
+      />
       <Body>
         <HomeHero />
         <HomeFeatures />

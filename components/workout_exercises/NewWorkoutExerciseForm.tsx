@@ -21,24 +21,15 @@ import {
   CommandList,
   CommandSeparator,
 } from "@/components/ui/command";
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Form, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { toast } from "sonner";
-import { DrawerClose } from "../ui/drawer";
 
 import { ScrollArea } from "@/components/ui/scroll-area";
 
 import NewExerciseButton from "../exercises/NewExerciseButton";
 import { ExerciseSuggestedSets } from "../sets/ExerciseSuggestedSets";
-import { set } from "date-fns";
+
+import { DrawerFormFooter } from "../DrawerFormFooter";
 
 const FormSchema = z.object({
   exercise_id: z.number().int(),
@@ -49,7 +40,7 @@ export function NewWorkoutExerciseForm({ workout_id, exercises }: { workout_id: 
   const [suggestedSets, setSuggestedSets] = useState([]) as any;
   const [isWithSuggested, setIsWithSuggested] = useState(false);
 
-  const closeBtnRef = useRef(null);
+  const closeBtnRef = useRef<HTMLButtonElement>(null);
 
   const supabase = createClient();
   const router = useRouter();
@@ -104,10 +95,7 @@ export function NewWorkoutExerciseForm({ workout_id, exercises }: { workout_id: 
 
       form.reset();
 
-      if (closeBtnRef.current) {
-        const btn = closeBtnRef.current as HTMLButtonElement;
-        btn.click();
-      }
+      closeBtnRef.current?.click();
 
       router.refresh();
     }
@@ -154,21 +142,30 @@ export function NewWorkoutExerciseForm({ workout_id, exercises }: { workout_id: 
                 <CommandInput placeholder="Search exercise..." />
                 <CommandList className="overflow-x-hidden">
                   <CommandEmpty>
+                    <div>
+                      <p className="text-muted-foreground text-xs text-stone-500 w-[80%] mx-auto text-balance mb-4">
+                        Not seeing the exercise you want? Create a new one.
+                      </p>
+                    </div>
                     <NewExerciseButton>
-                      <Button>Create New Exercise</Button>
+                      <Button
+                        type="button"
+                        size={"sm"}
+                      >
+                        Create New Exercise
+                      </Button>
                     </NewExerciseButton>
                   </CommandEmpty>
                   <CommandGroup heading="Add new exercise">
                     <NewExerciseButton>
-                      <CommandItem
-                        className="
-                      flex items-center justify-start bg-stone-950
-                      gap-2 hover:bg-stone-900
-                      "
+                      <Button
+                        variant={"ghost"}
+                        size={"sm"}
+                        className="flex items-center gap-1 w-full justify-start text-left font-normal"
                       >
                         <Plus width={16} />
                         Create New Exercise
-                      </CommandItem>
+                      </Button>
                     </NewExerciseButton>
                   </CommandGroup>
                   <CommandSeparator />
@@ -215,22 +212,7 @@ export function NewWorkoutExerciseForm({ workout_id, exercises }: { workout_id: 
             setIsWithSuggested(!isWithSuggested);
           }}
         />
-
-        <div className="flex justify-end gap-2">
-          <DrawerClose>
-            <Button
-              variant="outline"
-              ref={closeBtnRef}
-              type="button"
-            >
-              Cancel
-            </Button>
-          </DrawerClose>
-          <Button type="submit">
-            <Plus className="h-4 w-4 mr-2" />
-            Add Exercise
-          </Button>
-        </div>
+        <DrawerFormFooter closeRef={closeBtnRef} />
       </form>
     </Form>
   );

@@ -7,9 +7,11 @@ import WIPpage from "@/components/WIPpage";
 export default function page() {
   return (
     <>
-      <Header>
-        <></>
-      </Header>
+      <Header
+        title="Stats"
+        backHref="/workouts"
+        backText="Workouts"
+      />
       <Body>
         <WIPpage />
       </Body>

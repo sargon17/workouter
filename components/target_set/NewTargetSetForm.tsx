@@ -1,9 +1,9 @@
 "use client";
-
+import { useRef } from "react";
 import { createClient } from "@/utils/supabase/client";
 
 import { toast } from "sonner";
-import { Button } from "@/components/ui/button";
+
 import {
   Form,
   FormControl,
@@ -22,6 +22,8 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { useRouter } from "next/navigation";
 
+import { DrawerFormFooter } from "../DrawerFormFooter";
+
 const formSchema = z.object({
   target_reps: z.number().int().positive(),
   target_weight: z.number().int().positive(),
@@ -30,6 +32,8 @@ const formSchema = z.object({
 export default function NewWorkoutForm({ workout_exercise_id }: { workout_exercise_id: any }) {
   const supabase = createClient();
   const router = useRouter();
+
+  const closeBtnRef = useRef<HTMLButtonElement>(null);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -52,6 +56,8 @@ export default function NewWorkoutForm({ workout_exercise_id }: { workout_exerci
     } else {
       toast("Workout created");
       form.reset();
+
+      closeBtnRef.current?.click();
 
       // refresh the page
       router.refresh();
@@ -109,9 +115,7 @@ export default function NewWorkoutForm({ workout_exercise_id }: { workout_exerci
               )}
             />
           </div>
-          <DrawerClose>
-            <Button type="submit">Submit</Button>
-          </DrawerClose>
+          <DrawerFormFooter closeRef={closeBtnRef} />
         </form>
       </Form>
     </div>

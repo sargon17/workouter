@@ -1,6 +1,6 @@
 import React from "react";
 
-import { MoreHorizontal, Plus } from "lucide-react";
+import { MoreHorizontal, Plus, ArrowRight } from "lucide-react";
 import { toast } from "sonner";
 
 import { createClient } from "@/utils/supabase/server";
@@ -25,6 +25,8 @@ import SingleWorkoutMoreButton from "./SingleWorkoutMoreButton";
 import SingleWorkoutExerciseMoreButton from "../workout_exercises/SingleWorkoutExerciseMoreButton";
 
 import StatusLabel from "../status/StatusLabel";
+
+import Link from "next/link";
 
 type WorkoutDetailsProps = {
   id: string;
@@ -54,7 +56,21 @@ export default async function WorkoutDetails({ id }: WorkoutDetailsProps) {
     <div>
       <div className=" flex justify-between items-center gap-2">
         <div>
-          <h1 className="text-2xl font-bold">{workout.title}</h1>
+          <div className="flex justify-start items-center">
+            <h1 className="text-2xl font-bold">{workout.title}</h1>
+            <SingleWorkoutMoreButton
+              id={workout.id}
+              title={workout.title}
+              date={workout.date}
+            >
+              <Button
+                size="icon"
+                variant="ghost"
+              >
+                <MoreHorizontal className="h-4 w-4" />
+              </Button>
+            </SingleWorkoutMoreButton>
+          </div>
           {workout.workout_statuses && (
             <StatusLabel
               status={workout.workout_statuses?.name}
@@ -62,24 +78,24 @@ export default async function WorkoutDetails({ id }: WorkoutDetailsProps) {
             />
           )}
         </div>
-        <SingleWorkoutMoreButton
-          id={workout.id}
-          title={workout.title}
-          date={workout.date}
-        >
+        <Link href={`/session/${id}`}>
           <Button
-            size="icon"
-            variant="ghost"
+            size="sm"
+            variant="default"
           >
-            <MoreHorizontal className="h-4 w-4" />
+            Start
+            <ArrowRight className="h-4 w-4 ml-1" />
           </Button>
-        </SingleWorkoutMoreButton>
+        </Link>
       </div>
       <PrintDate date={workout.date} />
-      <div className="flex flex-wrap gap-2 py-4">
+      <div className="flex flex-wrap gap-4 py-4">
         {workout.workout_exercises &&
-          workout.workout_exercises.map((workout_exercise: any) => (
-            <ExerciseCard exercise={workout_exercise} />
+          workout.workout_exercises.map((workout_exercise: any, index) => (
+            <ExerciseCard
+              exercise={workout_exercise}
+              index={index}
+            />
           ))}
         <div className="w-full h-20 flex justify-center items-center">
           <NewWorkoutExerciseButton workout_id={id}>
@@ -91,19 +107,21 @@ export default async function WorkoutDetails({ id }: WorkoutDetailsProps) {
   );
 }
 
-const ExerciseCard = ({ exercise }: { exercise: any }) => {
+const ExerciseCard = ({ exercise, index }: { exercise: any; index: number }) => {
   const sets = exercise.sets.sort((a: any, b: any) => a.id - b.id);
   const target_sets = exercise.target_sets.sort((a: any, b: any) => a.id - b.id);
 
   return (
-    <Card
+    <div
       key={exercise.id}
-      className="w-full md:w-1/2 lg:w-1/3 xl:w-1/4"
+      className="w-full border border-stone-900 p-2 rounded-xl"
     >
-      <CardHeader>
-        <div className="w-full flex justify-start items-center gap-2">
-          <CardTitle>{exercise.exercises.title}</CardTitle>
-
+      <div>
+        <div className="w-full flex justify-between items-center gap-2">
+          <h1 className="text-lg font-bold">
+            {/* <span className="text-xs text-stone-600 font-light">{index + 1}.</span> */}
+            {exercise.exercises.title}
+          </h1>
           <div>
             <SingleWorkoutExerciseMoreButton id={exercise.id}>
               <Button
@@ -115,8 +133,8 @@ const ExerciseCard = ({ exercise }: { exercise: any }) => {
             </SingleWorkoutExerciseMoreButton>
           </div>
         </div>
-        <div className="text-xs text-stone-400">
-          <p className=" font-semibold text-stone-300">
+        <div className="text-xs text-stone-500">
+          <p className=" text-stone-500">
             {target_sets.length}
             {target_sets.length === 1 ? " set" : " sets"}
           </p>
@@ -127,8 +145,6 @@ const ExerciseCard = ({ exercise }: { exercise: any }) => {
               <TargetSetItem
                 set_id={set.id}
                 key={set.id}
-                target_reps={set.target_reps}
-                target_weight={set.target_weight}
               >
                 {set.target_reps} x {set.target_weight}kg
               </TargetSetItem>
@@ -137,15 +153,16 @@ const ExerciseCard = ({ exercise }: { exercise: any }) => {
               <Button
                 variant="ghost"
                 size="sm"
+                className="h-6 w-6 flex justify-center items-center p-1"
               >
                 <Plus className="h-3 w-3" />
               </Button>
             </NewTargetSetButton>
           </div>
         </div>
-      </CardHeader>
-      <CardFooter>
-        <div className="flex flex-wrap gap-2 items-center">
+      </div>
+      <div>
+        <div className="flex flex-wrap gap-1 items-center mt-4 mb-2">
           {sets.map((set: any) => (
             <SetItem
               key={set.id}
@@ -153,20 +170,23 @@ const ExerciseCard = ({ exercise }: { exercise: any }) => {
               reps={set.reps}
               weight={set.weight}
             >
-              {set.reps} x {set.weight}kg
+              <span className="bg-stone-950 border border-stone-900 rounded-md p-2 text-stone-300 font-bold text-sm">
+                {set.reps} x {set.weight}kg
+              </span>
             </SetItem>
           ))}
           <NewSetButton workout_exercise_id={exercise.id}>
             <Button
               variant="ghost"
               size="sm"
+              className="h-6 w-6 flex justify-center items-center p-1"
             >
               <Plus className="h-3 w-3" />
             </Button>
           </NewSetButton>
         </div>
-      </CardFooter>
-    </Card>
+      </div>
+    </div>
   );
 };
 
