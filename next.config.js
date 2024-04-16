@@ -1,3 +1,4 @@
+const { withPayload } = require('@payloadcms/next/withPayload')
 /** @type {import('next').NextConfig} */
 const { version } = require("./package.json");
 
@@ -18,4 +19,4 @@ const nextConfig = withPWA({
   // ...
 });
 
-module.exports = nextConfig;
+module.exports = withPayload(nextConfig);
