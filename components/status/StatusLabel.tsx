@@ -35,7 +35,7 @@ export default async function StatusLabel({
   workout_id,
 }: {
   status: StatusType["name"];
-  workout_id: string;
+  workout_id?: string;
 }) {
   const supabase = createClient();
 
@@ -59,7 +59,7 @@ export default async function StatusLabel({
           {workout_statuses?.map((status: StatusType) => (
             <UpdateStatus
               key={status.id}
-              workout_id={workout_id}
+              workout_id={workout_id || ""}
               status_id={status.id}
             >
               <DropdownMenuItem>

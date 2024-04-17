@@ -18,6 +18,8 @@ export default function UpdateStatus({
   const router = useRouter();
 
   const updateStatus = async (status_id: StatusType["id"]) => {
+    if (workout_id === "") return;
+
     const { data, error } = await supabase
       .from("workouts")
       .update({ status_id: status_id })
