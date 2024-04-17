@@ -13,6 +13,8 @@ const fontSans = FontSans({
 
 const defaultUrl = process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "http://localhost:3000";
 
+import ReactSmoothScroll from "@/components/SmoothScroll";
+
 export const viewport: Viewport = {
   themeColor: "black",
   initialScale: 1,
@@ -53,14 +55,18 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           sizes="any"
         />
       </head>
-      <body
-        className={cn(
-          "min-h-screen bg-background font-sans antialiased bg-stone-950 text-stone-50 overflow-hidden",
-          fontSans.variable
-        )}
-      >
-        <main className="min-h-screen flex flex-col items-center">{children}</main>
-        <Toaster />
+      <body>
+        {/* <ReactSmoothScroll> */}
+        <div
+          className={cn(
+            "min-h-screen bg-background font-sans antialiased bg-stone-950 text-stone-50 overflow-hidden",
+            fontSans.variable
+          )}
+        >
+          <main className="min-h-screen flex flex-col items-center">{children}</main>
+          <Toaster />
+        </div>
+        {/* </ReactSmoothScroll> */}
       </body>
     </html>
   );

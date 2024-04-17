@@ -4,6 +4,7 @@ import Body from "@/components/Body";
 
 import configPromise from "@payload-config";
 import { getPayload } from "payload";
+import Image from "next/image";
 
 export default async function page() {
   const payload = await getPayload({
@@ -31,10 +32,12 @@ export default async function page() {
                     {releaseNote.title}
                   </h1>
                   {releaseNote.coverImage && (
-                    <img
+                    <Image
                       src={releaseNote.coverImage}
                       alt={releaseNote.title}
                       className="w-full h-96 object-cover rounded-xl mt-4"
+                      layout="responsive"
+                      quality={70}
                     />
                   )}
                   <div

@@ -8,6 +8,10 @@
   -ms-overflow-style: none;
 }
 
+html {
+  scroll-behavior: unset;
+}
+
 @layer components {
   .rich-text > * + * {
     @apply mt-4;
