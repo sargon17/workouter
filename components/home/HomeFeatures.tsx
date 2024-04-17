@@ -4,6 +4,8 @@ import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 import { Button } from "../ui/button";
 
+import { cn } from "@/lib/utils";
+
 export default function HomeFeatures() {
   return (
     <div className="w-full h-[200lvh] mt-32 max-w-screen-2xl mx-auto">
@@ -16,68 +18,59 @@ export default function HomeFeatures() {
           track your workouts and progress in the gym like a pro athlete.
         </p>
       </div>
-      <div className="grid gap-2 md:grid-cols-12 mt-8">
-        <div className=" col-span-4">
-          <Card>
-            <>
-              <div className="h-300px w-full">
-                <TimerFeature />
-              </div>
-              <div className="pt-2">
-                <h3 className="text-xl font-semibold">Timer</h3>
-                <p className=" text-pretty text-sm font-medium">
-                  Keep track of your workouts rest time with the built-in timer, never miss a set again
-                </p>
-              </div>
-            </>
-          </Card>
-        </div>
-        <div className="col-span-3">
-          <Card>
-            <>
-              <div className="h-300px w-full">
-                <TimerFeature />
-              </div>
-              <div className="pt-2">
-                <h3 className="text-xl font-semibold">Timer</h3>
-                <p className=" text-pretty text-sm font-medium">
-                  Keep track of your workouts rest time with the built-in timer, never miss a set again
-                </p>
-              </div>
-            </>
-          </Card>
-        </div>
-        <div className="col-span-5">
-          <Card>
-            <>
-              <div className="h-300px w-full">
-                <TimerFeature />
-              </div>
-              <div className="pt-2">
-                <h3 className="text-xl font-semibold">Timer</h3>
-                <p className=" text-pretty text-sm font-medium">
-                  Keep track of your workouts rest time with the built-in timer, never miss a set again
-                </p>
-              </div>
-            </>
-          </Card>
-        </div>
+      <div className="grid grid-cols-1 gap-2 md:grid-cols-12 mt-8">
+        <Card
+          title="Timer"
+          description="Keep track of your workouts rest time with the built-in timer, never miss a set again"
+          className=" md:col-span-4"
+        >
+          <TimerFeature />
+        </Card>
+        <Card
+          title="Timer"
+          description="Keep track of your workouts rest time with the built-in timer, never miss a set again"
+          className="md:col-span-3"
+        >
+          <TimerFeature />
+        </Card>
+
+        <Card
+          title="Timer"
+          description="Keep track of your workouts rest time with the built-in timer, never miss a set again"
+          className="md:col-span-5"
+        >
+          <TimerFeature />
+        </Card>
       </div>
     </div>
   );
 }
 
-const Card = (props: { children: React.ReactNode }) => {
+const Card = (props: {
+  children: React.ReactNode;
+  title: string;
+  description: string;
+  className?: string;
+}) => {
   return (
-    <div className=" h-full group w-full p-2 border border-stone-900 rounded-xl min-h-10 text-stone-100 hover:border-stone-800 transition-all ease-out duration-500">
+    <div
+      className={cn(
+        " h-full group w-full p-2 border border-stone-900 rounded-xl min-h-10 text-stone-100 hover:border-stone-800 transition-all ease-out duration-500",
+        props.className || ""
+      )}
+    >
       {props.children}
+      <div className="pt-2">
+        <h3 className="text-xl font-semibold">{props.title}</h3>
+        <p className=" text-pretty text-sm font-medium">{props.description}</p>
+      </div>
     </div>
   );
 };
 
 const TimerFeature = () => {
   return (
-    <div className="relative w-full h-full">
+    <div className="relative h-300px w-full">
       <div className="relative h-[250px] border border-lime-300/20 rounded overflow-hidden outline-dashed outline-2 outline-lime-300/0 outline-offset-8  group-hover:border-lime-300/50 group-hover:outline-offset-0 group-hover:outline-lime-300/20  transition-all ease-out duration-500">
         <svg
           className="h-full object-fill "

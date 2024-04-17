@@ -21,6 +21,11 @@ export const ReleaseNotes: CollectionConfig = {
       required: true,
     },
     {
+      name: "coverImage",
+      label: "Cover Image",
+      type: "text",
+    },
+    {
       name: "content",
       label: "Content",
       type: "richText",
