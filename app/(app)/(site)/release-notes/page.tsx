@@ -32,14 +32,19 @@ export default async function page() {
                     {releaseNote.title}
                   </h1>
                   {releaseNote.coverImage && (
-                    <Image
+                    // <Image
+                    //   src={releaseNote.coverImage}
+                    //   alt={releaseNote.title}
+                    //   className="w-full !h-96 object-cover rounded-xl mt-4"
+                    //   layout="responsive"
+                    //   width={2200}
+                    //   height={400}
+                    //   quality={100}
+                    // />
+                    <img
                       src={releaseNote.coverImage}
                       alt={releaseNote.title}
                       className="w-full !h-96 object-cover rounded-xl mt-4"
-                      layout="responsive"
-                      width={2200}
-                      height={400}
-                      quality={70}
                     />
                   )}
                   <div
