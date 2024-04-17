@@ -35,8 +35,10 @@ export default async function page() {
                     <Image
                       src={releaseNote.coverImage}
                       alt={releaseNote.title}
-                      className="w-full h-96 object-cover rounded-xl mt-4"
+                      className="w-full !h-96 object-cover rounded-xl mt-4"
                       layout="responsive"
+                      width={2200}
+                      height={400}
                       quality={70}
                     />
                   )}
