@@ -1,3 +1,4 @@
+const { withPayload } = require("@payloadcms/next/withPayload");
 /** @type {import('next').NextConfig} */
 const { version } = require("./package.json");
 
@@ -15,7 +16,10 @@ const nextConfig = withPWA({
     // Will be available on both server and client
     version,
   },
-  // ...
+
+  images: {
+    domains: ["images.unsplash.com", "cdn.midjourney.com"],
+  },
 });
 
-module.exports = nextConfig;
+module.exports = withPayload(nextConfig);

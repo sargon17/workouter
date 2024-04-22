@@ -13,7 +13,7 @@ export default function Settings() {
       <div className="mt-4">
         <h2 className="text-xl font-bold">General</h2>
         <div>
-          <Link href="/settings/changelogs">
+          <Link href="/release-notes">
             <Button
               variant={"ghost"}
               className="w-full flex items-center justify-start gap-2"
