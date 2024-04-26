@@ -14,8 +14,6 @@ export default async function page() {
     data: { user },
   } = await supabase.auth.getUser();
 
-  console.log(user?.user_metadata.email, process.env.ADMIN_MAIL);
-
   if (!user || user?.user_metadata.email !== process.env.ADMIN_MAIL) {
     return redirect("/login");
   }
