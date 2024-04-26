@@ -12,7 +12,7 @@ export default function ReloadButton() {
     <Button
       onClick={() => {
         router.refresh();
-        toast("Page reloading...");
+        toast.success("Page Refreshed");
       }}
       variant={"ghost"}
       size={"sm"}

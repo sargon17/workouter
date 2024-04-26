@@ -64,7 +64,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           )}
         >
           <main className="min-h-screen flex flex-col items-center">{children}</main>
-          <Toaster />
+          <Toaster position="top-right" />
         </div>
         {/* </ReactSmoothScroll> */}
       </body>
