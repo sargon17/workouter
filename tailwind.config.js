@@ -1,5 +1,8 @@
 /** @type {import('tailwindcss').Config} */
-module.exports = {
+
+import { withUt } from "uploadthing/tw";
+
+module.exports = withUt({
   darkMode: "selector",
   content: ["./app/**/*.{js,ts,jsx,tsx,mdx}", "./components/**/*.{js,ts,jsx,tsx,mdx}"],
   theme: {
@@ -34,4 +37,4 @@ module.exports = {
     },
   },
   plugins: [],
-};
+});

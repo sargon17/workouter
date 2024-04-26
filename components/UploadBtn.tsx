@@ -13,7 +13,7 @@ export default function UploadBtn() {
     <main className="">
       <div className="flex w-full justify-center items-center h-[300px] border border-blue-500 rounded-xl my-8 ">
         <UploadButton
-          className="bg-blue-500 text-white px-4 py-2 rounded-md"
+          className=" px-4 py-2 rounded-md"
           endpoint="imageUploader"
           onClientUploadComplete={(res) => {
             // Do something with the response
