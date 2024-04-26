@@ -6,6 +6,9 @@ import configPromise from "@payload-config";
 import { getPayload } from "payload";
 import Image from "next/image";
 
+// revalidation interval
+export const revalidate = 3600; // revalidate at most every hour
+
 export default async function page() {
   const payload = await getPayload({
     config: configPromise,
