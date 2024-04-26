@@ -7,10 +7,9 @@ import Timer from "./Timer";
 
 import { useState, useEffect } from "react";
 
-import { Button } from "@/components/ui/button";
-import { convertToObject } from "typescript";
-
 import { CurrentSet, CurrentSetHeader, CurrentSetBody, CurrentSetData, CurrentSetFooter } from "./CurrentSet";
+
+import FollowingSet from "./FollowingSet";
 
 type Props = {
   workout: {
@@ -33,10 +32,17 @@ type Props = {
   };
 };
 
+type Session = {
+  workout_id: string;
+  currentExercise: number;
+  currentSet: number;
+  isEnd: boolean;
+};
+
 type Set = Props["workout"]["exercises"][0]["sets"][0];
 
 export default function Session(props: Props) {
-  const [session, setSession] = useState({
+  const [session, setSession] = useState<Session>({
     workout_id: props.workout.id,
     currentExercise: 0,
     currentSet: 0,
@@ -189,6 +195,11 @@ export default function Session(props: Props) {
         </CurrentSetBody>
         <CurrentSetFooter onClick={handleRegisterSet}>Done</CurrentSetFooter>
       </CurrentSet>
+      <FollowingSet
+        session={session}
+        workout={props.workout}
+        key={"following_set_" + session.currentSet}
+      />
     </>
   );
 }
