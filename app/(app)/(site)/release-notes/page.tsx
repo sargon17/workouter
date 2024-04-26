@@ -6,10 +6,20 @@ import configPromise from "@payload-config";
 import { getPayload } from "payload";
 import Image from "next/image";
 
+import ReloadButton from "@/components/ReloadButton";
+
+import { createClient } from "@/utils/supabase/server";
+
 // revalidation interval
 export const revalidate = 3600; // revalidate at most every hour
 
 export default async function page() {
+  const supabase = createClient();
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
   const payload = await getPayload({
     config: configPromise,
   });
@@ -26,6 +36,7 @@ export default async function page() {
   return (
     <>
       <Body>
+        {user && user?.user_metadata.email === process.env.ADMIN_MAIL && <ReloadButton />}
         <div className=" max-w-screen-2xl mx-auto">
           <div className="">
             <div className="flex flex-col gap-48">
