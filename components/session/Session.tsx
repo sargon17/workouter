@@ -7,10 +7,11 @@ import Timer from "./Timer";
 
 import { useState, useEffect } from "react";
 
-import { Button } from "@/components/ui/button";
-import { convertToObject } from "typescript";
+import { CurrentSet, CurrentSetHeader, CurrentSetBody, CurrentSetData, CurrentSetFooter } from "./CurrentSet";
 
-interface Props {
+import FollowingSet from "./FollowingSet";
+
+type Props = {
   workout: {
     id: string;
     title: string;
@@ -29,15 +30,27 @@ interface Props {
       }[];
     }[];
   };
-}
+};
+
+type Session = {
+  workout_id: string;
+  currentExercise: number;
+  currentSet: number;
+  isEnd: boolean;
+};
+
+type Set = Props["workout"]["exercises"][0]["sets"][0];
 
 export default function Session(props: Props) {
-  const [session, setSession] = useState({
+  const [session, setSession] = useState<Session>({
     workout_id: props.workout.id,
     currentExercise: 0,
     currentSet: 0,
     isEnd: false,
   });
+
+  const [setData, setSetData] = useState<Set | null>(null);
+  const supabase = createClient();
 
   useEffect(() => {
     let activeExercise = 0;
@@ -62,17 +75,27 @@ export default function Session(props: Props) {
     }));
   }, []);
 
-  const supabase = createClient();
+  useEffect(() => {
+    const set = props.workout.exercises[session.currentExercise].target_sets[session.currentSet];
+    modifySet({ reps: set.target_reps, weight: set.target_weight });
+  }, [session]);
+
+  const modifySet = (set: Set) => {
+    setSetData(set);
+  };
 
   const saveSet = async () => {
+    if (!setData) {
+      throw new Error("No set data to save");
+    }
+
     const { data, error } = await supabase
       .from("sets")
       .insert([
         {
           workout_exercise_id: props.workout.exercises[session.currentExercise].id,
-          reps: props.workout.exercises[session.currentExercise].target_sets[session.currentSet].target_reps,
-          weight:
-            props.workout.exercises[session.currentExercise].target_sets[session.currentSet].target_weight,
+          reps: setData.reps,
+          weight: setData.weight,
         },
       ])
       .select();
@@ -103,7 +126,7 @@ export default function Session(props: Props) {
         currentSet: nextSet,
         currentExercise: nextExercise,
       }));
-      console.log(data);
+
       toast("Set registered");
     } catch (error) {
       console.error(error);
@@ -143,40 +166,40 @@ export default function Session(props: Props) {
         </p>
       </div>
 
-      {/* reset the timer on session set change */}
       <Timer key={session.currentSet} />
-      <div className="border border-stone-900 rounded-xl p-2 mt-2">
-        <h3 className="text-center font-bold text-lg p-2">
+      <CurrentSet>
+        <CurrentSetHeader>
           Set {session.currentSet + 1} of{" "}
           {props.workout.exercises[session.currentExercise].target_sets.length}
-        </h3>
-        <div className="">
-          <div className="flex justify-center items-center gap-2 font-black">
-            <p className=" text-4xl font-black flex flex-col justify-center items-center p-4 bg-stone-900 rounded-md w-1/3">
-              {props.workout.exercises[session.currentExercise].target_sets[session.currentSet]?.target_reps}
-              <span className="text-xs font-normal text-stone-500">reps</span>
-            </p>
-            x{" "}
-            <p className=" text-4xl font-black flex flex-col justify-center items-center p-4 bg-stone-900 rounded-md w-1/3">
-              {
-                props.workout.exercises[session.currentExercise].target_sets[session.currentSet]
-                  ?.target_weight
-              }
-              <span className="text-xs font-normal text-stone-500">kg</span>
-            </p>
-          </div>
-        </div>
-        <div className=" flex w-full justify-start items-center gap-2 mt-4">
-          <Button className="w-full">Register Custom Set</Button>
-          <Button
-            onClick={() => handleRegisterSet()}
-            variant={"default"}
-            className="w-full bg-lime-600 hover:bg-lime-700 text-lime-50"
-          >
-            Register Set
-          </Button>
-        </div>
-      </div>
+        </CurrentSetHeader>
+        <CurrentSetBody>
+          {setData && (
+            <>
+              <CurrentSetData
+                label="reps"
+                value={setData.reps}
+                onChange={(value: number) => {
+                  modifySet({ ...setData, reps: value });
+                }}
+              ></CurrentSetData>
+              x
+              <CurrentSetData
+                label="kg"
+                value={setData.weight}
+                onChange={(value: number) => {
+                  modifySet({ ...setData, weight: value });
+                }}
+              ></CurrentSetData>
+            </>
+          )}
+        </CurrentSetBody>
+        <CurrentSetFooter onClick={handleRegisterSet}>Done</CurrentSetFooter>
+      </CurrentSet>
+      <FollowingSet
+        session={session}
+        workout={props.workout}
+        key={"following_set_" + session.currentSet}
+      />
     </>
   );
 }
