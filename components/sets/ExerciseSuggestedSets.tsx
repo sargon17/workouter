@@ -101,12 +101,12 @@ const getSuggestedSets = async (exercise_id: number, supabase: any) => {
 
   const { data, error } = await supabase
     .from("workouts")
-    .select("id, title, workout_exercises(exercise_id, id)")
+    .select("id, title, workout_exercises(exercise_id, id, sets(*))")
     .eq("workout_exercises.exercise_id", exercise_id)
     .eq("user_id", user.id)
     .not("workout_exercises", "is", null)
-    .order("id", { ascending: false })
-    .limit(1);
+    .not("workout_exercises.sets", "is", null)
+    .order("id", { ascending: false });
 
   console.log(data);
 
@@ -117,18 +117,7 @@ const getSuggestedSets = async (exercise_id: number, supabase: any) => {
 
   if (!data || data.length === 0) return [];
 
-  const { data: sets, error: setsError } = await supabase
-    .from("sets")
-    .select("reps, weight")
-    .order("id", { ascending: true })
-    .eq("workout_exercise_id", data[0].workout_exercises[0].id);
-
-  if (setsError) {
-    console.error("error", setsError);
-    return [];
-  }
-
-  return sets;
+  return data[0].workout_exercises[0].sets;
 };
 
 export { ExerciseSuggestedSets, getSuggestedSets };
