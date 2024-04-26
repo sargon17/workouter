@@ -172,7 +172,7 @@ export default function Session(props: Props) {
               <CurrentSetData
                 label="reps"
                 value={setData.reps}
-                onChange={(value: Pick<Set, "reps">) => {
+                onChange={(value: number) => {
                   modifySet({ ...setData, reps: value });
                 }}
               ></CurrentSetData>
@@ -180,7 +180,7 @@ export default function Session(props: Props) {
               <CurrentSetData
                 label="kg"
                 value={setData.weight}
-                onChange={(value: Pick<Set, "weight">) => {
+                onChange={(value: number) => {
                   modifySet({ ...setData, weight: value });
                 }}
               ></CurrentSetData>
