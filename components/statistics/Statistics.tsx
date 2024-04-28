@@ -232,7 +232,6 @@ const Chart = (props: ChartProps) => {
           <XAxis
             dataKey="date"
             interval={"equidistantPreserveStart"}
-            tickFormatter={(value) => format(new Date(value), "dd MMM")}
             tickSize={10}
             tickMargin={10}
             domain={["dataMin", "dataMax"]}
