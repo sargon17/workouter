@@ -11,7 +11,7 @@ export default function page() {
         backHref="/workouts/templates"
       />
       <Body>
-        <TemplatesPage />
+        <p>This is the templates page.</p>
       </Body>
     </>
   );
