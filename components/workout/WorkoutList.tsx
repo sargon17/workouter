@@ -69,7 +69,6 @@ export default async function WorkoutList({ isPast = false }: { isPast?: boolean
             {workouts.map((workout: any, i: number) => (
               <WorkoutListItem
                 workout={workout as SingleWorkout}
-                highlighted={i === 0}
                 key={workout.id}
               />
             ))}
