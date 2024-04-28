@@ -20,9 +20,10 @@ export default async function CreateFromTemplate() {
 
   // get user's templates
   const { data, error } = await supabase
-    .from("template_workouts")
-    .select("*, workouts(* , workout_exercises(*, target_sets(*)))")
-    .eq("user_id", user.id);
+    .from("workouts")
+    .select("*, workout_exercises(*, target_sets(*))")
+    .eq("user_id", user.id)
+    .eq("is_template", true);
 
   if (error) {
     throw new Error("Error getting templates");
