@@ -56,7 +56,7 @@ function ExerciseSuggestedSets({
         </div>
         <span
           className={cn("text-xs text-muted-foreground flex items-center mb-2 text-stone-500", {
-            hidden: isInfoOpen,
+            hidden: !isInfoOpen,
           })}
         >
           Suggested sets are based on your previous workouts, click add to include them in your workout plan

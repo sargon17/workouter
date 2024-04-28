@@ -4,6 +4,8 @@ import Header from "@/components/Header";
 import Body from "@/components/Body";
 import WIPpage from "@/components/WIPpage";
 
+import Statistics from "@/components/statistics/Statistics";
+
 export default function page() {
   return (
     <>
@@ -13,7 +15,7 @@ export default function page() {
         backText="Workouts"
       />
       <Body>
-        <WIPpage />
+        <Statistics />
       </Body>
     </>
   );
