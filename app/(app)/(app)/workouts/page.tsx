@@ -9,6 +9,8 @@ import Header from "@/components/Header";
 import Body from "@/components/Body";
 import { Button } from "@/components/ui/button";
 
+import Link from "next/link";
+
 export default async function ProtectedPage({ searchParams }: { searchParams: { t: "upcoming" | "past" } }) {
   const supabase = createClient();
   const searchTimeline = searchParams.t;
@@ -38,6 +40,7 @@ export default async function ProtectedPage({ searchParams }: { searchParams: { 
         }
       />
       <Body>
+        <Link href="/workouts/templates"> Templates </Link>
         <WorkoutList isPast={searchTimeline === "past"} />
       </Body>
     </>
