@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 
 import { createClient } from "@/utils/supabase/client";
+import { useRouter } from "next/router";
 
 import { StepCard, StepBody, StepFooter, StepHeader, Stepper } from "@/components/Steps";
 
@@ -19,7 +20,8 @@ import {
 } from "@/components/ui/select";
 
 import { cn } from "@/lib/utils";
-import { on } from "events";
+
+import { toast } from "sonner";
 
 type WorkoutType = {
   id: number | null;
@@ -47,10 +49,11 @@ export default function TemplateCreatePage() {
     description: "",
   });
 
-  const [workoutTypes, setWorkoutTypes] = useState([]);
-  const [bodyParts, setBodyParts] = useState([]);
+  const [workoutTypes, setWorkoutTypes] = useState<WorkoutType[]>([]);
+  const [bodyParts, setBodyParts] = useState<BodyPart[]>([]);
 
   const supabase = createClient();
+  const router = useRouter();
 
   const handleNextStep = () => {
     setStep((prev) => prev + 1);
@@ -59,13 +62,14 @@ export default function TemplateCreatePage() {
   const getWorkoutTypes = async () => {
     const { data, error } = await supabase.from("workout_types").select("*");
     if (error) return console.error("error", error);
-    setWorkoutTypes(data);
+
+    setWorkoutTypes(data as WorkoutType[]);
   };
 
   const getBodyParts = async () => {
     const { data, error } = await supabase.from("body_parts").select("*");
     if (error) return console.error("error", error);
-    setBodyParts(data);
+    setBodyParts(data as BodyPart[]);
   };
 
   const handleBodyPartChange = (value: number | null) => {
@@ -96,6 +100,65 @@ export default function TemplateCreatePage() {
       ...prev,
       title,
     }));
+  };
+
+  const createTemplate = async () => {
+    if (!input.title || !input.body_parts_id || !input.workout_type_id) return;
+
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+
+    if (!user) return console.error("No user found");
+
+    const { data, error } = await supabase
+      .from("workouts")
+      .insert([
+        {
+          title: input.title,
+          //   description: input.description,
+          date: null,
+          user_id: user.id,
+          is_template: true,
+          type_id: input.workout_type_id,
+        },
+      ])
+      .select();
+
+    if (error) {
+      toast.error("Error creating workout template");
+      throw new Error("Error creating workout template");
+    }
+
+    if (!data) {
+      toast.error("Something went wrong, please try again.");
+      throw new Error("No data returned");
+    }
+
+    const workout_id = data[0].id;
+
+    const { data: bodyPartData, error: bodyPartError } = await supabase
+      .from("workout_body_parts")
+      .insert(
+        input.body_parts_id.map((body_part_id) => ({
+          workout_id,
+          body_part_id,
+        }))
+      )
+      .select();
+
+    if (bodyPartError) {
+      toast.error("Error creating workout body parts");
+      throw new Error("Error creating workout body parts");
+    }
+
+    if (!bodyPartData) {
+      toast.error("Something went wrong, please try again.");
+      throw new Error("No data returned");
+    }
+
+    toast.success("Workout template created successfully");
+    router.push(`/templates/${workout_id}`);
   };
 
   useEffect(() => {
@@ -141,7 +204,7 @@ export default function TemplateCreatePage() {
             description={input.description}
             onTitleChange={(value) => setInput({ ...input, title: value })}
             onDescriptionChange={(value) => setInput({ ...input, description: value })}
-            onNext={handleNextStep}
+            onNext={createTemplate}
           />
         )}
       </div>
@@ -216,7 +279,9 @@ const Step2 = (props: step2Props) => {
               <Chips
                 key={bodyPart.id}
                 onClick={() => props.onChange(bodyPart.id)}
-                active={props.value.includes(bodyPart.id)}
+                active={
+                  Array.isArray(props.value) ? props.value.includes(bodyPart.id) : props.value === bodyPart.id
+                }
               >
                 {bodyPart.name}
               </Chips>
