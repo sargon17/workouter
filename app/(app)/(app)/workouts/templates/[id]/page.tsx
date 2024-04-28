@@ -1,3 +1,18 @@
+import TemplatesPage from "@/components/templates/containers/TemplatesPage";
+
+import Body from "@/components/Body";
+import Header from "@/components/Header";
+
 export default function page() {
-  return <div>hello buddy how are you doin?</div>;
+  return (
+    <>
+      <Header
+        title="template"
+        backHref="/workouts/templates"
+      />
+      <Body>
+        <TemplatesPage />
+      </Body>
+    </>
+  );
 }

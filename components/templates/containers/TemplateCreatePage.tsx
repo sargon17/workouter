@@ -158,7 +158,7 @@ export default function TemplateCreatePage() {
     }
 
     toast.success("Workout template created successfully");
-    router.push(`/templates/${workout_id}`);
+    router.push(`/workouts/templates/${workout_id}`);
   };
 
   useEffect(() => {
@@ -174,7 +174,7 @@ export default function TemplateCreatePage() {
 
   return (
     <div className="flex flex-col justify-center items-center h-[80vh]">
-      <div className="relative w-full">
+      <div className="relative w-full flex justify-center">
         <div className=" absolute -top-10 left-1/2 -translate-x-1/2">
           <Stepper
             steps={3}

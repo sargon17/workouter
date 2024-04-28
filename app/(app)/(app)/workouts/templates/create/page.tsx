@@ -10,7 +10,7 @@ export default function page() {
     <>
       <Header
         title="templates"
-        backHref="/workouts"
+        backHref="/workouts/templates"
       />
       <Body>
         <TemplateCreatePage />
