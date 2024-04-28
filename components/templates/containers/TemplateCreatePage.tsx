@@ -105,7 +105,7 @@ export default function TemplateCreatePage(props: TemplateCreatePageProps) {
       .insert([
         {
           title: input.title,
-          //   description: input.description,
+          description: input.description,
           date: null,
           user_id: user.id,
           is_template: true,
