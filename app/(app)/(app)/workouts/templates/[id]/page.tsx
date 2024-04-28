@@ -1,9 +1,30 @@
-import TemplatesPage from "@/components/templates/containers/TemplatesPage";
+import TemplateSinglePage from "@/components/templates/containers/TemplateSinglePage";
 
 import Body from "@/components/Body";
 import Header from "@/components/Header";
 
-export default function page() {
+import { createClient } from "@/utils/supabase/server";
+
+export default async function page(props: { params: { id: string } }) {
+  console.log(props.params.id);
+  const supabase = createClient();
+
+  // get template data
+
+  let { data: workout, error } = await supabase
+    .from("workouts")
+    .select(
+      "id, title, date, workout_exercises(*, target_sets(*), exercises(title)), workout_types(name, id), workout_body_parts( body_parts(name, id)), description"
+    )
+    .eq("id", props.params.id)
+    .single();
+
+  if (error) {
+    throw error;
+  }
+
+  console.log(workout);
+
   return (
     <>
       <Header
@@ -11,7 +32,7 @@ export default function page() {
         backHref="/workouts/templates"
       />
       <Body>
-        <p>This is the templates page.</p>
+        <TemplateSinglePage workout={workout} />
       </Body>
     </>
   );

@@ -101,7 +101,7 @@ function CurrentSetDataItem(props: Pick<SetDataProps, "label" | "value">) {
 function SetDataAdvancedEditor(props: SetDataAdvancedEditorProps) {
   return (
     <Drawer activeSnapPoint={"50%"}>
-      <DrawerTrigger>{props.children}</DrawerTrigger>
+      <DrawerTrigger className="w-full">{props.children}</DrawerTrigger>
       <DrawerContent>
         <DrawerHeader>
           <DrawerTitle>Advanced {props.label} Edit</DrawerTitle>
@@ -187,4 +187,11 @@ function CurrentSetFooter(props: FooterProps) {
   );
 }
 
-export { CurrentSet, CurrentSetHeader, CurrentSetBody, CurrentSetData, CurrentSetFooter };
+export {
+  CurrentSet,
+  CurrentSetHeader,
+  CurrentSetBody,
+  CurrentSetData,
+  CurrentSetFooter,
+  SetDataAdvancedEditor,
+};
