@@ -40,7 +40,11 @@ type Input = {
   description: string;
 };
 
-export default function TemplateCreatePage() {
+type TemplateCreatePageProps = {
+  workoutTypes: WorkoutType[];
+  bodyParts: BodyPart[];
+};
+export default function TemplateCreatePage(props: TemplateCreatePageProps) {
   const [step, setStep] = useState(1);
   const [input, setInput] = useState<Input>({
     workout_type_id: null,
@@ -49,29 +53,12 @@ export default function TemplateCreatePage() {
     description: "",
   });
 
-  const [workoutTypes, setWorkoutTypes] = useState<WorkoutType[]>([]);
-  const [bodyParts, setBodyParts] = useState<BodyPart[]>([]);
-
   const supabase = createClient();
   const router = useRouter();
 
   const handleNextStep = () => {
     setStep((prev) => prev + 1);
   };
-
-  const getWorkoutTypes = async () => {
-    const { data, error } = await supabase.from("workout_types").select("*");
-    if (error) return console.error("error", error);
-
-    setWorkoutTypes(data as WorkoutType[]);
-  };
-
-  const getBodyParts = async () => {
-    const { data, error } = await supabase.from("body_parts").select("*");
-    if (error) return console.error("error", error);
-    setBodyParts(data as BodyPart[]);
-  };
-
   const handleBodyPartChange = (value: number | null) => {
     // if value is already in the array, remove it
     if (input.body_parts_id.includes(value)) {
@@ -88,11 +75,13 @@ export default function TemplateCreatePage() {
   };
 
   const createAutoTitle = () => {
-    const wType: any = workoutTypes.find(
+    const wType: any = props.workoutTypes.find(
       (workoutType: WorkoutType) => workoutType.id === input.workout_type_id
     );
 
-    const bParts: any = bodyParts.filter((bodyPart: BodyPart) => input.body_parts_id.includes(bodyPart.id));
+    const bParts: any = props.bodyParts.filter((bodyPart: BodyPart) =>
+      input.body_parts_id.includes(bodyPart.id)
+    );
 
     const title = `${bParts.map((bodyPart: BodyPart) => bodyPart.name).join(" & ")} ${wType.name} workout`;
 
@@ -162,11 +151,6 @@ export default function TemplateCreatePage() {
   };
 
   useEffect(() => {
-    getWorkoutTypes();
-    getBodyParts();
-  }, []);
-
-  useEffect(() => {
     if (input.workout_type_id && input.body_parts_id.length > 0) {
       createAutoTitle();
     }
@@ -184,7 +168,7 @@ export default function TemplateCreatePage() {
         </div>
         {step === 1 && (
           <Step1
-            workoutTypes={workoutTypes}
+            workoutTypes={props.workoutTypes}
             value={input.workout_type_id}
             onChange={(value) => setInput({ ...input, workout_type_id: value })}
             onNext={handleNextStep}
@@ -192,7 +176,7 @@ export default function TemplateCreatePage() {
         )}
         {step === 2 && (
           <Step2
-            bodyParts={bodyParts}
+            bodyParts={props.bodyParts}
             value={input.body_parts_id}
             onChange={(value) => handleBodyPartChange(value)}
             onNext={handleNextStep}
