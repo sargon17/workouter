@@ -4,6 +4,8 @@ import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 import { Button } from "../ui/button";
 
+import VibrateButton from "./VibrateButton";
+
 import { cn } from "@/lib/utils";
 
 export default function HomeFeatures() {
@@ -67,6 +69,7 @@ export default function HomeFeatures() {
           <TimerFeature />
         </Card>
       </div>
+      <VibrateButton />
     </div>
   );
 }
@@ -122,15 +125,6 @@ const Card = (props: {
           {props.description}
         </p>
       </div>
-      <Button
-        variant="secondary"
-        className="absolute bottom-2 right-2"
-        onClick={() => {
-          navigator.vibrate([200, 800, 200, 800, 200, 800, 200, 800, 200, 800]);
-        }}
-      >
-        Vibrate
-      </Button>
     </div>
   );
 };
