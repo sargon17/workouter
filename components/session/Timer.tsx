@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useEffect } from "react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Pause, Play, SkipForward, TimerReset } from "lucide-react";
@@ -55,6 +55,16 @@ export default function Timer() {
       time: 0,
     }));
   };
+
+  useEffect(() => {
+    if (timer.time >= 5) {
+      navigator.vibrate([200, 800, 200, 800, 200, 800, 200, 800, 200, 800]);
+    } else if (timer.time > 0) {
+      navigator.vibrate([1000]);
+    } else {
+      navigator.vibrate(0);
+    }
+  }, [timer.time]);
 
   return (
     <div
