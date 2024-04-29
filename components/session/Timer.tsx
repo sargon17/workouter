@@ -56,15 +56,15 @@ export default function Timer() {
     }));
   };
 
-  useEffect(() => {
-    if (timer.time >= 5) {
-      navigator.vibrate([200, 800, 200, 800, 200, 800, 200, 800, 200, 800]);
-    } else if (timer.time > 0) {
-      navigator.vibrate([1000]);
-    } else {
-      navigator.vibrate(0);
-    }
-  }, [timer.time]);
+  // useEffect(() => {
+  //   if (timer.time >= 5) {
+  //     navigator.vibrate([200, 800, 200, 800, 200, 800, 200, 800, 200, 800]);
+  //   } else if (timer.time > 0) {
+  //     navigator.vibrate([1000]);
+  //   } else {
+  //     navigator.vibrate(0);
+  //   }
+  // }, [timer.time]);
 
   return (
     <div
