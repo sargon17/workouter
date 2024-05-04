@@ -15,6 +15,11 @@ import { Button } from "@/components/ui/button";
 type TemplateSinglePageProps = {
   workout: any;
 };
+
+const body_parts_ids = (body_parts: any) => {
+  return body_parts.map((bp: any) => bp.body_parts.id);
+};
+
 export default function TemplateSinglePage(props: TemplateSinglePageProps) {
   return (
     <div className="pt-4">
@@ -41,7 +46,10 @@ export default function TemplateSinglePage(props: TemplateSinglePageProps) {
               </ExerciseCard>
             ))}
             <ExerciseActions>
-              <NewWorkoutExerciseButton workout_id={props.workout.id}>
+              <NewWorkoutExerciseButton
+                workout_id={props.workout.id}
+                body_parts={body_parts_ids(props.workout.workout_body_parts)}
+              >
                 <Button
                   size="sm"
                   variant="default"
@@ -53,7 +61,10 @@ export default function TemplateSinglePage(props: TemplateSinglePageProps) {
           </ExerciseCardsList>
         ) : (
           <NoExercises>
-            <NewWorkoutExerciseButton workout_id={props.workout.id}>
+            <NewWorkoutExerciseButton
+              workout_id={props.workout.id}
+              body_parts={body_parts_ids(props.workout.workout_body_parts)}
+            >
               <Button
                 size="sm"
                 variant="default"

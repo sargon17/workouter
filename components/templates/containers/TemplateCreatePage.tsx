@@ -9,6 +9,8 @@ import { useRouter } from "next/navigation";
 
 import { StepCard, StepBody, StepFooter, StepHeader, Stepper } from "@/components/Steps";
 
+import { Chip, handleColor } from "@/components/Chip";
+
 import {
   Select,
   SelectContent,
@@ -260,15 +262,16 @@ const Step2 = (props: step2Props) => {
         <div className=" flex flex-wrap gap-1">
           {props.bodyParts.map((bodyPart: BodyPart) => {
             return (
-              <Chips
+              <Chip
                 key={bodyPart.id}
                 onClick={() => props.onChange(bodyPart.id)}
-                active={
+                color={handleColor({ id: bodyPart.id || 1 })}
+                isActive={
                   Array.isArray(props.value) ? props.value.includes(bodyPart.id) : props.value === bodyPart.id
                 }
               >
                 {bodyPart.name}
-              </Chips>
+              </Chip>
             );
           })}
         </div>
@@ -312,26 +315,5 @@ const Step3 = (props: step3Props) => {
       </StepBody>
       <StepFooter onNext={() => props.onNext()} />
     </StepCard>
-  );
-};
-
-type ChipsProps = {
-  children: React.ReactNode;
-  active?: boolean;
-  onClick?: () => void;
-};
-const Chips = (props: ChipsProps) => {
-  return (
-    <div
-      onClick={props.onClick}
-      className={cn(
-        "border rounded-3xl px-3 py-1  font-bold text-xs bg-stone-950 border-stone-800 text-stone-400 cursor-pointer transition-all duration-300 ease-in-out",
-        {
-          "border-lime-500/50 bg-lime-500/20 text-lime-300": props.active,
-        }
-      )}
-    >
-      {props.children}
-    </div>
   );
 };

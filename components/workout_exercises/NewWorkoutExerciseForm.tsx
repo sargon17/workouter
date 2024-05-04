@@ -12,16 +12,8 @@ import { z } from "zod";
 
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-  CommandList,
-  CommandSeparator,
-} from "@/components/ui/command";
-import { Form, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { Input } from "../ui/input";
+
 import { toast } from "sonner";
 
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -31,12 +23,29 @@ import { ExerciseSuggestedSets } from "../sets/ExerciseSuggestedSets";
 
 import { DrawerFormFooter } from "../DrawerFormFooter";
 
-const FormSchema = z.object({
-  exercise_id: z.number().int(),
-});
+import { Chip, handleColor } from "../Chip";
 
-export function NewWorkoutExerciseForm({ workout_id, exercises }: { workout_id: string; exercises: any }) {
-  const [isCommandOpen, setIsCommandOpen] = useState(false);
+type Exercise = {
+  id: number;
+  title: string;
+  body_part_id: number;
+  body_parts: {
+    id: number;
+    name: string;
+  };
+};
+
+type NewWorkoutExerciseFormProps = {
+  workout_id: string;
+  exercises: Exercise[];
+};
+
+export function NewWorkoutExerciseForm(props: NewWorkoutExerciseFormProps) {
+  const [inputValue, setInputValue] = useState<string>("");
+  const [filteredExercises, setFilteredExercises] = useState<any>(props.exercises);
+  const [selectedExercise, setSelectedExercise] = useState<Exercise | null>(null);
+
+  // const [isCommandOpen, setIsCommandOpen] = useState(true);
   const [suggestedSets, setSuggestedSets] = useState([]) as any;
   const [isWithSuggested, setIsWithSuggested] = useState(false);
 
@@ -45,175 +54,153 @@ export function NewWorkoutExerciseForm({ workout_id, exercises }: { workout_id: 
   const supabase = createClient();
   const router = useRouter();
 
-  const form = useForm<z.infer<typeof FormSchema>>({
-    resolver: zodResolver(FormSchema),
-    defaultValues: {
-      exercise_id: undefined,
-    },
-  });
+  async function handleSubmit() {
+    if (!selectedExercise) {
+      toast.error("Please select an exercise");
+      return;
+    }
 
-  useEffect(() => {
-    if (!form.getValues("exercise_id")) return;
-    setIsWithSuggested(false);
-  }, [form.getValues("exercise_id")]);
-
-  async function onSubmit() {
     const { data, error } = await supabase
       .from("workout_exercises")
-      .insert([{ workout_id, exercise_id: form.getValues("exercise_id") }])
+      .insert([{ workout_id: props.workout_id, exercise_id: selectedExercise?.id }])
       .select();
 
     if (error) {
       console.error("error", error);
-      toast("Error creating workout exercise");
+      toast.error("Error creating workout exercise");
       return;
-    } else {
-      toast("Workout exercise created");
-
-      const workout_exercise_id = data[0].id;
-
-      if (isWithSuggested && workout_exercise_id && suggestedSets.length > 0) {
-        const { data, error } = await supabase
-          .from("target_sets")
-          .insert(
-            suggestedSets.map((set: any) => ({
-              target_reps: set.reps,
-              target_weight: set.weight,
-              workout_exercise_id: workout_exercise_id,
-            }))
-          )
-          .select();
-
-        if (error) {
-          console.error("error", error);
-          toast("Error creating suggested sets");
-          return;
-        } else {
-          toast("Suggested sets created");
-        }
-      }
-
-      form.reset();
-
-      closeBtnRef.current?.click();
-
-      router.refresh();
     }
+
+    const workout_exercise_id = data[0].id;
+
+    if (isWithSuggested && workout_exercise_id && suggestedSets.length > 0) {
+      const { data, error } = await supabase
+        .from("target_sets")
+        .insert(
+          suggestedSets.map((set: any) => ({
+            target_reps: set.reps,
+            target_weight: set.weight,
+            workout_exercise_id: workout_exercise_id,
+          }))
+        )
+        .select();
+
+      if (error) {
+        console.error("error", error);
+        toast.error("Error creating suggested sets");
+        return;
+      }
+    }
+
+    toast.success("Workout exercise created successfully");
+    closeBtnRef.current?.click();
+    router.refresh();
   }
 
-  if (!exercises) {
+  const handleFilter = (value: string) => {
+    setInputValue(value);
+
+    setFilteredExercises(
+      props.exercises.filter((exercise: Exercise) =>
+        exercise.title.toLowerCase().includes(value.toLowerCase())
+      )
+    );
+  };
+
+  const handleItemClick = (exercise: Exercise) => {
+    setSelectedExercise(exercise);
+  };
+
+  if (!props.exercises) {
     return <div>Loading...</div>;
   }
 
   return (
-    <Form {...form}>
-      <form
-        onSubmit={form.handleSubmit(onSubmit)}
-        className="space-y-6 p-4"
-      >
-        <FormField
-          control={form.control}
-          name="exercise_id"
-          render={({ field }) => (
-            <FormItem className="flex flex-col">
-              <FormLabel>Exercise</FormLabel>
-              {/* <FormControl> */}
-              <Button
-                variant="outline"
-                className={cn("w-full justify-between", !field.value && "text-muted-foreground")}
-                onClick={(e) => {
-                  e.preventDefault();
-                  e.stopPropagation();
-                  setIsCommandOpen(!isCommandOpen);
-                }}
-              >
-                {field.value
-                  ? exercises.find((exercise: any) => exercise.id === field.value)?.title
-                  : "Select a exercise..."}
-                <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-              </Button>
-              {/* </FormControl> */}
-              <Command
-                className={cn(
-                  "z-10 w-full max-h-[400px] overflow-x-hidden overflow-y-auto bg-stone-950 rounded-lg shadow-md border border-stone-900",
-                  isCommandOpen ? "block" : "hidden"
-                )}
-              >
-                <CommandInput placeholder="Search exercise..." />
-                <CommandList className="overflow-x-hidden">
-                  <CommandEmpty>
-                    <div>
-                      <p className="text-muted-foreground text-xs text-stone-500 w-[80%] mx-auto text-balance mb-4">
-                        Not seeing the exercise you want? Create a new one.
-                      </p>
-                    </div>
-                    <NewExerciseButton>
-                      <Button
-                        type="button"
-                        size={"sm"}
-                      >
-                        Create New Exercise
-                      </Button>
-                    </NewExerciseButton>
-                  </CommandEmpty>
-                  <CommandGroup heading="Add new exercise">
-                    <NewExerciseButton>
-                      <Button
-                        variant={"ghost"}
-                        size={"sm"}
-                        className="flex items-center gap-1 w-full justify-start text-left font-normal"
-                      >
-                        <Plus width={16} />
-                        Create New Exercise
-                      </Button>
-                    </NewExerciseButton>
-                  </CommandGroup>
-                  <CommandSeparator />
+    <div className=" px-4">
+      {!selectedExercise ? (
+        <>
+          <Input
+            type="text"
+            placeholder="Search for an exercise..."
+            onChange={(e) => {
+              handleFilter(e.target.value);
+            }}
+            value={inputValue}
+            autoFocus
+          />
 
-                  <CommandGroup
-                    heading="Exercises"
-                    className="overflow-x-hidden overflow-y-auto"
+          <div className="mt-2">
+            {filteredExercises.length !== 0 ? (
+              <ScrollArea className="flex flex-col gap-2 h-[60vh]">
+                {filteredExercises.map((exercise: Exercise) => (
+                  <div
+                    key={exercise.id}
+                    className="pl-2 py-2 text-stone-400 cursor-pointer hover:bg-stone-900 hover:text-stone-100 transition-all duration-300 ease-in-out rounded-md"
+                    onClick={() => handleItemClick(exercise)}
                   >
-                    <ScrollArea className="h-[200px] w-[full] pointer-events-auto">
-                      {exercises.map((exercise: any) => (
-                        <div
-                          key={exercise.id}
-                          onClick={() => {
-                            form.setValue("exercise_id", exercise.id);
-                            setIsCommandOpen(false);
-                          }}
-                        >
-                          <CommandItem
-                            value={exercise.title}
-                            className={cn(
-                              "flex items-center justify-between bg-stone-950 hover:bg-stone-800",
-                              field.value === exercise.id && "bg-stone-800"
-                            )}
-                          >
-                            {exercise.title}
-                          </CommandItem>
-                        </div>
-                      ))}
-                    </ScrollArea>
-                  </CommandGroup>
-                </CommandList>
-              </Command>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <ExerciseSuggestedSets
-          exercise_id={form.getValues("exercise_id")}
-          isWithSuggested={isWithSuggested}
-          updateSuggestedSets={setSuggestedSets}
-          suggestedSets={suggestedSets}
-          onButtonClick={() => {
-            setIsWithSuggested(!isWithSuggested);
-          }}
-        />
-        <DrawerFormFooter closeRef={closeBtnRef} />
-      </form>
-    </Form>
+                    <div className="flex justify-start items-center gap-2">
+                      <h3 className="">{exercise.title}</h3>
+                      <Chip
+                        isActive
+                        color={handleColor({ id: exercise.body_part_id })}
+                        size="xs"
+                      >
+                        {exercise.body_parts.name}
+                      </Chip>
+                    </div>
+                  </div>
+                ))}
+              </ScrollArea>
+            ) : (
+              <div className="h-[60vh] flex justify-center items-center flex-col">
+                <p className="text-center text-xs text-stone-500">
+                  Nothing you really like? Try creating a new exercise
+                </p>
+                <NewExerciseButton>
+                  <Button
+                    variant="default"
+                    size="sm"
+                    className="mt-2"
+                  >
+                    Create New Exercise
+                  </Button>
+                </NewExerciseButton>
+              </div>
+            )}
+          </div>
+        </>
+      ) : (
+        <div>
+          <div className=" mb-8">
+            <div className="flex items-center gap-2 mb-2">
+              <h2 className=" text-2xl font-bold">{selectedExercise.title}</h2>
+              <Chip
+                isActive
+                color={handleColor({ id: selectedExercise.body_part_id })}
+                size="xs"
+              >
+                {selectedExercise.body_parts.name}
+              </Chip>
+            </div>
+            <p className=" text-stone-400 text-sm">
+              Plan your sets and reps for this exercise. You can also add suggested sets for this
+            </p>
+          </div>
+          <ExerciseSuggestedSets
+            exercise_id={selectedExercise.id}
+            isWithSuggested={isWithSuggested}
+            updateSuggestedSets={setSuggestedSets}
+            suggestedSets={suggestedSets}
+            onButtonClick={() => {
+              setIsWithSuggested(!isWithSuggested);
+            }}
+          />
+        </div>
+      )}
+      <DrawerFormFooter
+        closeRef={closeBtnRef}
+        onSubmit={handleSubmit}
+      />
+    </div>
   );
 }

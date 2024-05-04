@@ -1,7 +1,13 @@
 import { Button } from "@/components/ui/button";
 import { DrawerClose, DrawerFooter } from "@/components/ui/drawer";
 
-function DrawerFormFooter({ closeRef }: { closeRef: React.RefObject<HTMLButtonElement> }) {
+function DrawerFormFooter({
+  closeRef,
+  onSubmit,
+}: {
+  closeRef: React.RefObject<HTMLButtonElement>;
+  onSubmit?: () => void;
+}) {
   return (
     <DrawerFooter>
       <div className="flex gap-2 justify-end">
@@ -18,6 +24,7 @@ function DrawerFormFooter({ closeRef }: { closeRef: React.RefObject<HTMLButtonEl
         <Button
           type="submit"
           size={"sm"}
+          onClick={onSubmit}
         >
           Submit
         </Button>
