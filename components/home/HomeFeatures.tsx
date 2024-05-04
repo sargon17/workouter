@@ -4,8 +4,6 @@ import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 import { Button } from "../ui/button";
 
-import VibrateButton from "./VibrateButton";
-
 import { cn } from "@/lib/utils";
 
 export default function HomeFeatures() {
@@ -69,7 +67,6 @@ export default function HomeFeatures() {
           <TimerFeature />
         </Card>
       </div>
-      <VibrateButton />
     </div>
   );
 }

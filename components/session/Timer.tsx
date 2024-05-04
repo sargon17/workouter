@@ -58,9 +58,7 @@ export default function Timer() {
 
   // useEffect(() => {
   //   if (timer.time >= 5) {
-  //     navigator.vibrate([200, 800, 200, 800, 200, 800, 200, 800, 200, 800]);
-  //   } else if (timer.time > 0) {
-  //     navigator.vibrate([1000]);
+  //     navigator.vibrate([200, 800, 200]);
   //   } else {
   //     navigator.vibrate(0);
   //   }
