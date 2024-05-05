@@ -37,10 +37,6 @@ export default function SingleWorkoutMoreButton({
         <DropdownMenuContent>
           <DropdownMenuLabel>Workout Actions</DropdownMenuLabel>
           <DropdownMenuSeparator />
-          <DropdownMenuItem>
-            <SetAsTemplateButton workout_id={id} />
-          </DropdownMenuItem>
-
           <DropdownMenuItem
             onClick={() => {
               setIsDrawerOpen(true);

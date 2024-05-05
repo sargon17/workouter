@@ -54,10 +54,10 @@ export default async function WorkoutDetails({ id }: WorkoutDetailsProps) {
 
   return (
     <div>
-      <div className=" flex justify-between items-center gap-2">
+      <div className=" flex justify-between items-start gap-2">
         <div>
-          <div className="flex justify-start items-center">
-            <h1 className="text-2xl font-bold">{workout.title}</h1>
+          <div className="flex justify-between items-start">
+            <h1 className="text-2xl font-bold capitalize text-balance">{workout.title}</h1>
             <SingleWorkoutMoreButton
               id={workout.id}
               title={workout.title}
@@ -78,15 +78,6 @@ export default async function WorkoutDetails({ id }: WorkoutDetailsProps) {
             />
           )}
         </div>
-        <Link href={`/session/${id}`}>
-          <Button
-            size="sm"
-            variant="default"
-          >
-            Start
-            <ArrowRight className="h-4 w-4 ml-1" />
-          </Button>
-        </Link>
       </div>
       <PrintDate date={workout.date} />
       <div className="flex flex-wrap gap-4 py-4">
@@ -97,11 +88,6 @@ export default async function WorkoutDetails({ id }: WorkoutDetailsProps) {
               index={index}
             />
           ))}
-        <div className="w-full h-20 flex justify-center items-center">
-          <NewWorkoutExerciseButton workout_id={id}>
-            <Button>Add Exercise</Button>
-          </NewWorkoutExerciseButton>
-        </div>
       </div>
     </div>
   );

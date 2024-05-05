@@ -38,6 +38,7 @@ export default async function CreateFromTemplate() {
   return (
     <div>
       <Dialog>
+        <p className="text-xs text-stone-500 pb-1">Create a workout from a template you've saved.</p>
         <DialogTrigger asChild>
           <Button
             type="button"
@@ -51,21 +52,18 @@ export default async function CreateFromTemplate() {
           <DialogHeader>
             <DialogTitle>Select a template</DialogTitle>
           </DialogHeader>
-          <div className="">
-            <TemplateList>
-              {data.map((template: any) => (
-                <TemplateItem
-                  key={template.id}
-                  workout={template}
-                >
-                  <UseTemplateButton template={template} />
-                </TemplateItem>
-              ))}
-            </TemplateList>
-          </div>
+          <TemplateList>
+            {data.map((template: any) => (
+              <TemplateItem
+                key={template.id}
+                workout={template}
+              >
+                <UseTemplateButton template={template} />
+              </TemplateItem>
+            ))}
+          </TemplateList>
         </DialogContent>
       </Dialog>
-      <p className="text-xs text-stone-500 pt-1">Create a workout from a template you've saved.</p>
     </div>
   );
 }
