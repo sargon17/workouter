@@ -9,6 +9,7 @@ import { toast } from "sonner";
 import { LayoutGroup, AnimatePresence } from "framer-motion";
 
 import { ExerciseCard, ExerciseCardBody, ExerciseCardHeader, ExerciseCardsList } from "./ExerciseCards";
+import { set } from "date-fns";
 
 type TemplateExercisesListProps = {
   workout_exercises: any;
@@ -111,6 +112,7 @@ export default function TemplateExercisesList(props: TemplateExercisesListProps)
     }
 
     toast.success("Exercises reordered successfully");
+    setWorkoutExercises(updated);
   };
 
   useEffect(() => {
