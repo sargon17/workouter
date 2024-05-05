@@ -108,8 +108,6 @@ const getSuggestedSets = async (exercise_id: number, supabase: any) => {
     .not("workout_exercises.sets", "is", null)
     .order("id", { ascending: false });
 
-  console.log(data);
-
   if (error) {
     console.error("error", error);
     return [];

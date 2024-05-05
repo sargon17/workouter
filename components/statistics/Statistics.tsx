@@ -61,7 +61,6 @@ export default function Statistics() {
   };
 
   const getChartData = async () => {
-    console.log("selectedExercise", selectedExercise);
     const user = await getUser();
 
     const { data, error } = await supabase

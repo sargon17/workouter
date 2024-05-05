@@ -6,7 +6,6 @@ import Header from "@/components/Header";
 import { createClient } from "@/utils/supabase/server";
 
 export default async function page(props: { params: { id: string } }) {
-  console.log(props.params.id);
   const supabase = createClient();
 
   // get template data
@@ -22,8 +21,6 @@ export default async function page(props: { params: { id: string } }) {
   if (error) {
     throw error;
   }
-
-  console.log(workout);
 
   return (
     <>

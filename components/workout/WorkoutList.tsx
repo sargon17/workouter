@@ -16,21 +16,21 @@ import { Tab, TabItem } from "@/components/Tab";
 
 import ReloadButton from "../ReloadButton";
 
-export default async function WorkoutList({ isPast = false }: { isPast?: boolean }) {
+type Props = {
+  date: string;
+};
+
+export default async function WorkoutList(props: Props) {
   const supabase = createClient();
   const user = await getUser(supabase);
   if (!user) return null;
-
-  const filterDirection = isPast ? "lt" : "gte";
 
   let { data: workouts, error } = await supabase
     .from("workouts")
     .select(
       "id, title, date, status_id, workout_exercises(exercise_id, target_sets(*)), workout_statuses(name)"
     )
-    .eq("user_id", user.id)
-    .order("date", { ascending: !isPast })
-    .filter("date", filterDirection, new Date().toISOString().slice(0, 10));
+    .eq("user_id", user.id);
 
   if (error) {
     console.error("error", error);
@@ -44,7 +44,7 @@ export default async function WorkoutList({ isPast = false }: { isPast?: boolean
   return (
     <div className="w-full h-full">
       <div className="flex justify-center mb-4">
-        <Tab>
+        {/* <Tab>
           <TabItem
             href="/workouts"
             active={!isPast}
@@ -57,12 +57,12 @@ export default async function WorkoutList({ isPast = false }: { isPast?: boolean
           >
             Previous
           </TabItem>
-        </Tab>
+        </Tab> */}
       </div>
       {workouts.length > 0 && (
         <>
           <div className="mb-4 flex justify-start items-center gap-1">
-            <h1 className=" text-xl font-bold">{isPast ? "Previous" : "Upcoming"} Workouts</h1>
+            {/* <h1 className=" text-xl font-bold">{isPast ? "Previous" : "Upcoming"} Workouts</h1> */}
             <ReloadButton />
           </div>
           <div className="flex flex-wrap gap-2">

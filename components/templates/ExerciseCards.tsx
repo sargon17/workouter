@@ -147,8 +147,6 @@ const ExerciseCardBody = (props: ExerciseCardBodyProps) => {
       .select("*")
       .single();
 
-    console.log(data);
-
     if (data) {
       setTargetSets([...targetSets, data]);
     }

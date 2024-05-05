@@ -41,13 +41,6 @@ export default function FollowingSet(props: Props) {
     ) {
       return <span>This is the last one</span>;
     }
-
-    console.log(
-      props.session.currentSet + 1,
-      props.workout.exercises[props.session.currentExercise].target_sets.length,
-      props.session.currentSet + 1 ==
-        props.workout.exercises[props.session.currentExercise].target_sets.length
-    );
     if (
       props.session.currentSet + 1 ===
       props.workout.exercises[props.session.currentExercise].target_sets.length

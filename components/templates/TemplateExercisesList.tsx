@@ -102,7 +102,6 @@ export default function TemplateExercisesList(props: TemplateExercisesListProps)
         order: exercise.order,
       };
     });
-    console.log(UpdatedToSupabase);
 
     const { data, error } = await supabase.from("workout_exercises").upsert(UpdatedToSupabase);
 

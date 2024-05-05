@@ -42,7 +42,6 @@ export default function Timer() {
   };
 
   const pauseTimer = () => {
-    console.log("pause");
     setTimer((prev) => ({
       ...prev,
       isPaused: !prev.isPaused,

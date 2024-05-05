@@ -86,10 +86,6 @@ export default function EditTargetSetForm({}: {}) {
     }
   }
 
-  useEffect(() => {
-    console.log("form", form.getValues("body_part_id"));
-  }, [form]);
-
   return (
     <div className="p-4">
       <Form {...form}>

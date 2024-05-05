@@ -11,9 +11,11 @@ import { Button } from "@/components/ui/button";
 
 import Link from "next/link";
 
-export default async function ProtectedPage({ searchParams }: { searchParams: { t: "upcoming" | "past" } }) {
+export default async function ProtectedPage({ searchParams }: { searchParams: { date: string } }) {
   const supabase = createClient();
-  const searchTimeline = searchParams.t;
+  const searchDate = searchParams.date || new Date().toISOString().split("T")[0];
+
+  console.log("searchDate", searchDate);
 
   const {
     data: { user },
@@ -41,7 +43,7 @@ export default async function ProtectedPage({ searchParams }: { searchParams: { 
       />
       <Body>
         <Link href="/workouts/templates"> Templates </Link>
-        <WorkoutList isPast={searchTimeline === "past"} />
+        <WorkoutList date={searchDate} />
       </Body>
     </>
   );

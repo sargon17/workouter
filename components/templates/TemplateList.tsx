@@ -12,7 +12,6 @@ type TemplateItemProps = {
 };
 
 const TemplateItem = (props: TemplateItemProps) => {
-  console.log(props.workout);
   return (
     <div className="flex justify-between items-start gap-4  p-2 border border-stone-800 bg-stone-900 rounded-xl">
       <div>
