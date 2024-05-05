@@ -17,7 +17,7 @@ import { getUser } from "@/lib/fetch";
 export default async function NewWorkoutExerciseButton(props: {
   children: React.ReactNode;
   workout_id: string;
-  body_parts: number[];
+  body_parts?: number[];
 }) {
   const supabase = createClient();
 
@@ -26,7 +26,7 @@ export default async function NewWorkoutExerciseButton(props: {
   let { data: exercises, error } = await supabase
     .from("exercises")
     .select("id, title, body_part_id, body_parts(*)")
-    .in("body_part_id", props.body_parts);
+    .in("body_part_id", props.body_parts || []);
 
   return (
     <Drawer>
