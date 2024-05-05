@@ -6,6 +6,8 @@ import { useRouter } from "next/navigation";
 
 import { toast } from "sonner";
 
+import { motion, LayoutGroup } from "framer-motion";
+
 import { ExerciseCard, ExerciseCardBody, ExerciseCardHeader, ExerciseCardsList } from "./ExerciseCards";
 
 type TemplateExercisesListProps = {
@@ -62,22 +64,27 @@ export default function TemplateExercisesList(props: TemplateExercisesListProps)
   };
 
   return (
-    <ExerciseCardsList>
-      {workout_exercises.map((exercise: any) => (
-        <ExerciseCard key={exercise.id}>
-          <ExerciseCardHeader
-            title={exercise.exercises.title}
-            subtitle={""}
-            workout_exercise_id={exercise.id}
-            onReorder={handleExercisesReorder}
-            index={exercise.order}
-          />
-          <ExerciseCardBody
-            target_sets={exercise.target_sets}
-            workout_exercise_id={exercise.id}
-          ></ExerciseCardBody>
-        </ExerciseCard>
-      ))}
-    </ExerciseCardsList>
+    <LayoutGroup>
+      <ExerciseCardsList>
+        {workout_exercises.map((exercise: any) => (
+          <ExerciseCard
+            key={exercise.id}
+            layoutId={exercise.id + "exercise-card"}
+          >
+            <ExerciseCardHeader
+              title={exercise.exercises.title}
+              subtitle={""}
+              workout_exercise_id={exercise.id}
+              onReorder={handleExercisesReorder}
+              index={exercise.order}
+            />
+            <ExerciseCardBody
+              target_sets={exercise.target_sets}
+              workout_exercise_id={exercise.id}
+            ></ExerciseCardBody>
+          </ExerciseCard>
+        ))}
+      </ExerciseCardsList>
+    </LayoutGroup>
   );
 }

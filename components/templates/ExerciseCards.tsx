@@ -1,5 +1,7 @@
 "use client";
 
+import { motion } from "framer-motion";
+
 import { createClient } from "@/utils/supabase/client";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
@@ -26,6 +28,7 @@ type ExerciseCardsListProps = {
 
 type ExerciseCardProps = {
   children: React.ReactNode | React.ReactNode[];
+  layoutId?: string;
 };
 
 type ExerciseCardHeaderProps = {
@@ -63,7 +66,14 @@ const ExerciseCardsList = (props: ExerciseCardsListProps) => {
 };
 
 const ExerciseCard = (props: ExerciseCardProps) => {
-  return <div className="w-full bg-stone-900 border border-stone-800 rounded-xl p-3">{props.children}</div>;
+  return (
+    <motion.div
+      className="w-full bg-stone-900 border border-stone-800 rounded-xl p-3"
+      layoutId={props.layoutId}
+    >
+      {props.children}
+    </motion.div>
+  );
 };
 
 const ExerciseCardHeader = (props: ExerciseCardHeaderProps) => {
