@@ -10,6 +10,8 @@ import {
 } from "../ExerciseCards";
 import NewWorkoutExerciseButton from "@/components/workout_exercises/NewWorkoutExerciseButton";
 
+import TemplateExercisesList from "../TemplateExercisesList";
+
 import { Button } from "@/components/ui/button";
 
 import { Chip, handleColor } from "@/components/Chip";
@@ -23,8 +25,6 @@ const body_parts_ids = (body_parts: any) => {
 };
 
 export default function TemplateSinglePage(props: TemplateSinglePageProps) {
-  console.log(props.workout);
-
   return (
     <div className="pt-2">
       <div className="mb-4">
@@ -47,24 +47,7 @@ export default function TemplateSinglePage(props: TemplateSinglePageProps) {
       </div>
       <div className="pb-20">
         {props.workout.workout_exercises.length > 0 ? (
-          <ExerciseCardsList>
-            {props.workout.workout_exercises.map((exercise: any) => (
-              <ExerciseCard
-                key={exercise.id}
-                // exercise={exercise}
-              >
-                <ExerciseCardHeader
-                  title={exercise.exercises.title}
-                  subtitle={""}
-                  workout_exercise_id={exercise.id}
-                />
-                <ExerciseCardBody
-                  target_sets={exercise.target_sets}
-                  workout_exercise_id={exercise.id}
-                ></ExerciseCardBody>
-              </ExerciseCard>
-            ))}
-          </ExerciseCardsList>
+          <TemplateExercisesList workout_exercises={props.workout.workout_exercises} />
         ) : (
           <NoExercises>
             <NewWorkoutExerciseButton

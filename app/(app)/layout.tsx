@@ -47,6 +47,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html
       lang="en"
       className="dark"
+      suppressHydrationWarning
     >
       <head>
         <link
@@ -55,7 +56,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           sizes="any"
         />
       </head>
-      <body>
+      <body suppressHydrationWarning>
         {/* <ReactSmoothScroll> */}
         <div
           className={cn(

@@ -32,6 +32,8 @@ type ExerciseCardHeaderProps = {
   title: string;
   subtitle?: string;
   workout_exercise_id: number;
+  onReorder: (currentIndex: number, targetIndex: number) => void;
+  index: number;
 };
 
 type ExerciseCardBodyProps = {
@@ -65,7 +67,15 @@ const ExerciseCard = (props: ExerciseCardProps) => {
 };
 
 const ExerciseCardHeader = (props: ExerciseCardHeaderProps) => {
-  console.log(props.workout_exercise_id);
+  const onReorderClick = (direction: "up" | "down") => {
+    if (direction === "up" && props.index > 1) {
+      props.onReorder(props.index, props.index - 1);
+    } else if (direction === "down") {
+      props.onReorder(props.index, props.index + 1);
+    }
+
+    return;
+  };
 
   return (
     <div className=" flex justify-between items-start">
@@ -75,12 +85,14 @@ const ExerciseCardHeader = (props: ExerciseCardHeaderProps) => {
           <Button
             size="icon"
             variant="ghost"
+            onClick={() => onReorderClick("up")}
           >
             <ChevronUp className="h-4 w-4 stroke-stone-500" />
           </Button>
           <Button
             size="icon"
             variant="ghost"
+            onClick={() => onReorderClick("down")}
           >
             <ChevronDown className="h-4 w-4 stroke-stone-500" />
           </Button>
