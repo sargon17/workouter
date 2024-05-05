@@ -126,7 +126,6 @@ export function NewWorkoutExerciseForm(props: NewWorkoutExerciseFormProps) {
               handleFilter(e.target.value);
             }}
             value={inputValue}
-            autoFocus
           />
 
           <div className="mt-2">
