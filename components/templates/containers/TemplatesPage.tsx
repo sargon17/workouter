@@ -41,7 +41,11 @@ export default async function TemplatesPage() {
             <TemplateItem
               key={template.id}
               workout={template}
-            />
+            >
+              <Link href={`/workouts/templates/${template.id}`}>
+                <Button variant={"secondary"}>View</Button>
+              </Link>
+            </TemplateItem>
           ))}
         </TemplateList>
       </div>

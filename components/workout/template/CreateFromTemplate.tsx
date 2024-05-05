@@ -6,7 +6,9 @@ import { Button } from "@/components/ui/button";
 
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 
-import SingleTemplateButton from "./SingleTemplateButton";
+import UseTemplateButton from "./UseTemplateButton";
+
+import { TemplateList, TemplateItem } from "@/components/templates/TemplateList";
 
 export default async function CreateFromTemplate() {
   const supabase = createClient();
@@ -21,7 +23,7 @@ export default async function CreateFromTemplate() {
   // get user's templates
   const { data, error } = await supabase
     .from("workouts")
-    .select("*, workout_exercises(*, target_sets(*))")
+    .select("*, workout_exercises(*, target_sets(*)), workout_body_parts( body_parts(name, id))")
     .eq("user_id", user.id)
     .eq("is_template", true);
 
@@ -50,12 +52,16 @@ export default async function CreateFromTemplate() {
             <DialogTitle>Select a template</DialogTitle>
           </DialogHeader>
           <div className="">
-            {data.map((template: any) => (
-              <SingleTemplateButton
-                key={template.id}
-                template={template}
-              />
-            ))}
+            <TemplateList>
+              {data.map((template: any) => (
+                <TemplateItem
+                  key={template.id}
+                  workout={template}
+                >
+                  <UseTemplateButton template={template} />
+                </TemplateItem>
+              ))}
+            </TemplateList>
           </div>
         </DialogContent>
       </Dialog>

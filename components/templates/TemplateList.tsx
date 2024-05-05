@@ -6,7 +6,12 @@ const TemplateList = (props: { children: React.ReactNode | React.ReactNode[] }) 
   return <div className="flex flex-col gap-2">{props.children}</div>;
 };
 
-const TemplateItem = (props: { workout: any }) => {
+type TemplateItemProps = {
+  workout: any;
+  children?: React.ReactNode;
+};
+
+const TemplateItem = (props: TemplateItemProps) => {
   console.log(props.workout);
   return (
     <div className="flex justify-between items-start gap-4  p-2 border border-stone-800 bg-stone-900 rounded-xl">
@@ -28,9 +33,7 @@ const TemplateItem = (props: { workout: any }) => {
           ))}
         </div>
       </div>
-      <Link href={`/workouts/templates/${props.workout.id}`}>
-        <Button variant={"secondary"}>View</Button>
-      </Link>
+      {props.children}
     </div>
   );
 };

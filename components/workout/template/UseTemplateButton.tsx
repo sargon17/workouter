@@ -4,8 +4,13 @@ import { createClient } from "@/utils/supabase/client";
 import { useRouter } from "next/navigation";
 
 import { toast } from "sonner";
+import { Button } from "@/components/ui/button";
 
-export default function SingleTemplateButton({ template }: { template: any }) {
+type Props = {
+  template: any;
+};
+
+export default function UseTemplateButton(props: Props) {
   const supabase = createClient();
   const router = useRouter();
 
@@ -17,8 +22,8 @@ export default function SingleTemplateButton({ template }: { template: any }) {
       .insert([
         {
           date: new Date(),
-          user_id: template.user_id,
-          title: template.title,
+          user_id: props.template.user_id,
+          title: props.template.title,
           status_id: 2,
         },
       ])
@@ -31,7 +36,7 @@ export default function SingleTemplateButton({ template }: { template: any }) {
     // duplicate workout exercises
     const workout_id = data[0].id;
 
-    const workout_exercises = template.workout_exercises.map((exercise: any) => {
+    const workout_exercises = props.template.workout_exercises.map((exercise: any) => {
       return {
         workout_id,
         exercise_id: exercise.exercise_id,
@@ -59,7 +64,7 @@ export default function SingleTemplateButton({ template }: { template: any }) {
       return exercise.id;
     });
 
-    const target_sets = template.workout_exercises.map((exercise: any, index: number) => {
+    const target_sets = props.template.workout_exercises.map((exercise: any, index: number) => {
       return exercise.target_sets.map((set: any) => {
         return {
           workout_exercise_id: workout_exercise_ids[index],
@@ -87,26 +92,11 @@ export default function SingleTemplateButton({ template }: { template: any }) {
   };
 
   return (
-    <div
+    <Button
       onClick={handleDuplicate}
-      className="w-full border-b border-stone-900 px-1 py-3
-    hover:bg-stone-800/20 cursor-pointer transition-colors duration-200 ease-in-out
-    "
+      variant="secondary"
     >
-      <h3 className="text-lg font-bold">{template.title}</h3>
-      <p className="text-xs text-stone-500">{template.date}</p>
-
-      <p>
-        {/* count exercises and sets */}
-        {template.workout_exercises.length} exercises
-      </p>
-      <p>
-        {/* count exercises and sets */}
-        {template.workout_exercises.reduce((acc: any, curr: any) => {
-          return acc + curr.target_sets.length;
-        }, 0)}{" "}
-        sets
-      </p>
-    </div>
+      Use Template
+    </Button>
   );
 }
