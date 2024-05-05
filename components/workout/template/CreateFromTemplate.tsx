@@ -1,7 +1,6 @@
-"use client";
 import React from "react";
 
-import { createClient } from "@/utils/supabase/client";
+import { createClient } from "@/utils/supabase/server";
 
 import { Button } from "@/components/ui/button";
 
@@ -11,7 +10,10 @@ import UseTemplateButton from "./UseTemplateButton";
 
 import { TemplateList, TemplateItem } from "@/components/templates/TemplateList";
 
-export default async function CreateFromTemplate() {
+type TemplateProps = {
+  date?: string;
+};
+export default async function CreateFromTemplate(props: TemplateProps) {
   const supabase = createClient();
 
   //   get user's templates
@@ -59,7 +61,10 @@ export default async function CreateFromTemplate() {
                 key={template.id}
                 workout={template}
               >
-                <UseTemplateButton template={template} />
+                <UseTemplateButton
+                  template={template}
+                  date={props.date ? new Date(props.date) : new Date()}
+                />
               </TemplateItem>
             ))}
           </TemplateList>

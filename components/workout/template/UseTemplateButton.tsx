@@ -6,13 +6,20 @@ import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 
+import dayjs from "dayjs";
+
 type Props = {
   template: any;
+  date?: Date;
 };
 
 export default function UseTemplateButton(props: Props) {
   const supabase = createClient();
   const router = useRouter();
+
+  const date = props.date ? dayjs(props.date).format("YYYY-MM-DD") : dayjs().format("YYYY-MM-DD");
+
+  console.log("date", date);
 
   const handleDuplicate = async () => {
     // create a new workout with the same exercises and sets
@@ -21,7 +28,7 @@ export default function UseTemplateButton(props: Props) {
       .from("workouts")
       .insert([
         {
-          date: new Date(),
+          date: new Date(date),
           user_id: props.template.user_id,
           title: props.template.title,
           status_id: 2,
@@ -88,7 +95,7 @@ export default function UseTemplateButton(props: Props) {
     toast.success("Workout duplicated");
 
     // navigate to the new workout
-    router.push(`/workouts/${workout_id}`);
+    router.refresh();
   };
 
   return (
