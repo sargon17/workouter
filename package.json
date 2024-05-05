@@ -28,6 +28,7 @@
     "clsx": "^2.1.0",
     "cmdk": "^1.0.0",
     "date-fns": "^3.6.0",
+    "dayjs": "^1.11.11",
     "framer-motion": "^11.1.7",
     "geist": "^1.2.1",
     "lucide-react": "^0.363.0",

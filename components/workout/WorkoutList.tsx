@@ -14,7 +14,15 @@ import WorkoutListItem from "./WorkoutListItem";
 
 import { Tab, TabItem } from "@/components/Tab";
 
+import { ChevronLeft, ChevronRight } from "lucide-react";
+
 import ReloadButton from "../ReloadButton";
+
+import Link from "next/link";
+import { format, add, formatDistance } from "date-fns";
+
+import dayjs from "dayjs";
+import calendar from "dayjs/plugin/calendar";
 
 type Props = {
   date: string;
@@ -23,6 +31,9 @@ type Props = {
 export default async function WorkoutList(props: Props) {
   const supabase = createClient();
   const user = await getUser(supabase);
+
+  dayjs.extend(calendar);
+
   if (!user) return null;
 
   let { data: workouts, error } = await supabase
@@ -30,7 +41,8 @@ export default async function WorkoutList(props: Props) {
     .select(
       "id, title, date, status_id, workout_exercises(exercise_id, target_sets(*)), workout_statuses(name)"
     )
-    .eq("user_id", user.id);
+    .eq("user_id", user.id)
+    .eq("date", props.date);
 
   if (error) {
     console.error("error", error);
@@ -41,30 +53,76 @@ export default async function WorkoutList(props: Props) {
     workouts = [];
   }
 
+  type GetTimedLinkProps = {
+    currentDate: string;
+    delta: 1 | -1;
+  };
+  const getTimedLink = (props: GetTimedLinkProps): string => {
+    const date = new Date(props.currentDate);
+    const newDate = add(date, { days: props.delta });
+    return `/workouts?date=${format(newDate, "yyyy-MM-dd")}`;
+  };
+
   return (
     <div className="w-full h-full">
       <div className="flex justify-center mb-4">
-        {/* <Tab>
+        <Tab>
           <TabItem
             href="/workouts"
-            active={!isPast}
+            active
           >
-            Upcoming
+            Workouts
           </TabItem>
           <TabItem
-            href="/workouts?t=past"
-            active={isPast}
+            href="/workouts/templates"
+            active={false}
           >
-            Previous
+            Templates
           </TabItem>
-        </Tab> */}
+        </Tab>
+      </div>
+      <div className="flex justify-between items-center">
+        <Link
+          href={getTimedLink({
+            currentDate: props.date,
+            delta: -1,
+          })}
+        >
+          <Button
+            variant={"outline"}
+            size={"icon"}
+          >
+            <ChevronLeft className="w-4 h-4" />
+          </Button>
+        </Link>
+        <p className=" text-2xl font-bold flex justify-center items-center gap-1">
+          {dayjs(props.date).calendar(null, {
+            sameDay: "[Today]",
+            nextDay: "[Tomorrow]",
+            nextWeek: "dddd",
+            lastDay: "[Yesterday]",
+            lastWeek: "[Last] dddd",
+            sameElse: "DD/MM/YYYY",
+          })}
+          <ReloadButton />
+        </p>
+        <Link
+          href={getTimedLink({
+            currentDate: props.date,
+            delta: 1,
+          })}
+        >
+          <Button
+            variant={"outline"}
+            size={"icon"}
+          >
+            <ChevronRight className="w-4 h-4" />
+          </Button>
+        </Link>
       </div>
       {workouts.length > 0 && (
         <>
-          <div className="mb-4 flex justify-start items-center gap-1">
-            {/* <h1 className=" text-xl font-bold">{isPast ? "Previous" : "Upcoming"} Workouts</h1> */}
-            <ReloadButton />
-          </div>
+          <div className="mb-4 flex justify-start items-center gap-1"></div>
           <div className="flex flex-wrap gap-2">
             {workouts.map((workout: any, i: number) => (
               <WorkoutListItem

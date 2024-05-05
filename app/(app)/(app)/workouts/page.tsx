@@ -42,7 +42,6 @@ export default async function ProtectedPage({ searchParams }: { searchParams: { 
         }
       />
       <Body>
-        <Link href="/workouts/templates"> Templates </Link>
         <WorkoutList date={searchDate} />
       </Body>
     </>
