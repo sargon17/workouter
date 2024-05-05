@@ -16,17 +16,15 @@ export default function layout({ children, params }: { children: React.ReactNode
         backHref={`/workouts`}
         backText="Workouts"
         actionBtn={
-          <NewWorkoutExerciseButton workout_id={params.id}>
-            <Link href={`/session/${params.id}`}>
-              <Button
-                size="sm"
-                variant="default"
-              >
-                Start
-                <ArrowRight className="h-4 w-4 ml-1" />
-              </Button>
-            </Link>
-          </NewWorkoutExerciseButton>
+          <Link href={`/session/${params.id}`}>
+            <Button
+              size="sm"
+              variant="default"
+            >
+              Start
+              <ArrowRight className="h-4 w-4 ml-1" />
+            </Button>
+          </Link>
         }
       />
       {children}
