@@ -166,9 +166,9 @@ export default function TemplateCreatePage(props: TemplateCreatePageProps) {
           <motion.div
             className=" absolute -top-10 left-0 w-full flex justify-center items-center"
             layoutId="stepper"
-            initial={{ opacity: 0, y: 100, x: "-50%" }}
-            animate={{ opacity: 1, y: 0, x: "-50%" }}
-            exit={{ opacity: 0, y: -100, x: "-50%" }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
           >
             <Stepper
               steps={3}
