@@ -12,6 +12,8 @@ import NewWorkoutExerciseButton from "@/components/workout_exercises/NewWorkoutE
 
 import { Button } from "@/components/ui/button";
 
+import { Chip, handleColor } from "@/components/Chip";
+
 type TemplateSinglePageProps = {
   workout: any;
 };
@@ -21,13 +23,29 @@ const body_parts_ids = (body_parts: any) => {
 };
 
 export default function TemplateSinglePage(props: TemplateSinglePageProps) {
+  console.log(props.workout);
+
   return (
-    <div className="pt-4">
-      <div>
-        <h1 className=" text-xl md:text-3xl font-bold capitalize">{props.workout.title}</h1>
-        <p className=" text-sm text-stone-500">{props.workout.description}</p>
+    <div className="pt-2">
+      <div className="mb-4">
+        <div className="mb-2">
+          <h1 className=" text-xl md:text-3xl font-bold capitalize">{props.workout.title}</h1>
+          <p className=" text-sm text-stone-500">{props.workout.description}</p>
+        </div>
+        <div className=" flex justify-start items-center gap-2">
+          {props.workout.workout_body_parts.map((bp: any) => (
+            <Chip
+              key={bp.body_parts.id}
+              color={handleColor({ id: bp.body_parts.id })}
+              isActive
+              size="xs"
+            >
+              {bp.body_parts.name}
+            </Chip>
+          ))}
+        </div>
       </div>
-      <div>
+      <div className="pb-20">
         {props.workout.workout_exercises.length > 0 ? (
           <ExerciseCardsList>
             {props.workout.workout_exercises.map((exercise: any) => (
@@ -38,6 +56,7 @@ export default function TemplateSinglePage(props: TemplateSinglePageProps) {
                 <ExerciseCardHeader
                   title={exercise.exercises.title}
                   subtitle={""}
+                  workout_exercise_id={exercise.id}
                 />
                 <ExerciseCardBody
                   target_sets={exercise.target_sets}
@@ -45,19 +64,6 @@ export default function TemplateSinglePage(props: TemplateSinglePageProps) {
                 ></ExerciseCardBody>
               </ExerciseCard>
             ))}
-            <ExerciseActions>
-              <NewWorkoutExerciseButton
-                workout_id={props.workout.id}
-                body_parts={body_parts_ids(props.workout.workout_body_parts)}
-              >
-                <Button
-                  size="sm"
-                  variant="default"
-                >
-                  Add exercise
-                </Button>
-              </NewWorkoutExerciseButton>
-            </ExerciseActions>
           </ExerciseCardsList>
         ) : (
           <NoExercises>
@@ -74,6 +80,21 @@ export default function TemplateSinglePage(props: TemplateSinglePageProps) {
             </NewWorkoutExerciseButton>
           </NoExercises>
         )}
+      </div>
+      <div className="absolute bottom-20 left-0 w-full flex justify-center items-center py-2 bg-gradient-to-t from-stone-950/90 from-50% ">
+        <ExerciseActions>
+          <NewWorkoutExerciseButton
+            workout_id={props.workout.id}
+            body_parts={body_parts_ids(props.workout.workout_body_parts)}
+          >
+            <Button
+              size="sm"
+              variant="secondary"
+            >
+              Add exercise
+            </Button>
+          </NewWorkoutExerciseButton>
+        </ExerciseActions>
       </div>
     </div>
   );
