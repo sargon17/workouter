@@ -1,192 +1,217 @@
-import React from "react";
+"use client";
+import { createClient } from "@/utils/supabase/client";
+import { useRouter } from "next/navigation";
 
-import { MoreHorizontal, Plus, ArrowRight } from "lucide-react";
+import { useState, useEffect, Suspense, use } from "react";
+
 import { toast } from "sonner";
 
-import { createClient } from "@/utils/supabase/server";
-import { SupabaseClient } from "@supabase/supabase-js";
+import { getUser } from "@/lib/fetch";
+import CreateFromTemplate from "./template/CreateFromTemplate";
 
-import { SingleWorkout, StatusType } from "@/types/workout";
-import PrintDate from "../date/PrintDate";
-
-import { Card, CardHeader, CardTitle, CardFooter } from "../ui/card";
-import { Button } from "../ui/button";
-
-import NewTargetSetButton from "../target_set/NewTargetSetButton";
-import TargetSetItem from "../target_set/TargetSetItem";
-
-import SetItem from "../sets/SetItem";
-import NewSetButton from "../sets/NewSetButton";
-
-import NewWorkoutExerciseButton from "../workout_exercises/NewWorkoutExerciseButton";
-
+import { ExerciseCard, ExerciseCardHeader, ExerciseCardBody } from "../templates/ExerciseCards";
 import SingleWorkoutMoreButton from "./SingleWorkoutMoreButton";
-
-import SingleWorkoutExerciseMoreButton from "../workout_exercises/SingleWorkoutExerciseMoreButton";
-
-import StatusLabel from "../status/StatusLabel";
+import { MoreHorizontal } from "lucide-react";
 
 import Link from "next/link";
+import { Button } from "../ui/button";
+
+import { cn } from "@/lib/utils";
 
 type WorkoutDetailsProps = {
-  id: string;
+  date: string;
 };
 
-type WorkoutDetailsResponse = {
+type Workout = {
   id: string;
   title: string;
   date: string;
-  workout_statuses: StatusType | null;
-  workout_exercises: any[];
+  status_id: string;
+  workout_exercises: {
+    id: number;
+    exercise_id: string;
+    target_sets: {
+      id: number;
+      target_reps: number;
+      target_weight: number;
+    }[];
+    exercises: {
+      title: string;
+      id: string;
+    };
+  }[];
+  workout_statuses: {
+    name: string;
+  };
+  workout_body_parts: {
+    name: string;
+  }[];
 };
-
-export default async function WorkoutDetails({ id }: WorkoutDetailsProps) {
+export default function WorkoutDetails(props: WorkoutDetailsProps) {
   const supabase = createClient();
+  const router = useRouter();
+  const [workout, setWorkout] = useState<Workout | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
-  let workout: WorkoutDetailsResponse = await getWorkoutById(id, supabase);
+  const fetchWorkouts = async () => {
+    const user = await getUser(supabase);
 
-  if (!workout) {
-    toast("Error fetching workout");
-    return null;
-  }
+    if (!user) return;
 
-  // let { data: sets, error } = await supabase.from("sets").select("id");
+    const { data: workout, error } = await supabase
+      .from("workouts")
+      .select(
+        "id, title, date, status_id, workout_exercises(*, target_sets(*), exercises(*)), workout_statuses(name) workout_body_parts(name)"
+      )
+      .eq("user_id", user.id)
+      .eq("date", props.date);
+
+    if (error) {
+      console.error("error", error);
+      toast("Error fetching workouts");
+    }
+
+    if (!workout) {
+      toast("No workouts found");
+      return;
+    }
+
+    setWorkout(workout[0] as any);
+    setIsLoading(false);
+  };
+
+  useEffect(() => {
+    fetchWorkouts();
+  }, []);
+
+  useEffect(() => {
+    console.log("workout", workout);
+  }, [workout]);
 
   return (
     <div>
-      <div className=" flex justify-between items-start gap-2">
-        <div>
-          <div className="flex justify-between items-start">
-            <h1 className="text-2xl font-bold capitalize text-balance">{workout.title}</h1>
-            <SingleWorkoutMoreButton
-              id={workout.id}
-              title={workout.title}
-              date={workout.date}
+      <Suspense fallback={<WorkoutDetailsLoading />}>
+        {workout && (
+          <div>
+            <div
+              className={cn(
+                " w-full min-h-36 p-2 py-16 my-2 border border-lime-900 rounded-xl  flex flex-col justify-center items-center gap-2 relative",
+                {
+                  "border-lime-900 text-lime-500 bg-lime-800/5": workout.workout_statuses.name === "planed",
+                  "border-purple-900 text-purple-400 bg-purple-800/5":
+                    workout.workout_statuses.name === "done",
+                }
+              )}
             >
-              <Button
-                size="icon"
-                variant="ghost"
+              <svg
+                className="absolute top-0 left-0 w-full h-full opacity-5"
+                viewBox="0 0 500 100"
+                xmlns="http://www.w3.org/2000/svg"
+                // responsive
+                preserveAspectRatio="none"
               >
-                <MoreHorizontal className="h-4 w-4" />
-              </Button>
-            </SingleWorkoutMoreButton>
+                <pattern
+                  id="pattern-3"
+                  patternUnits="userSpaceOnUse"
+                  width="8"
+                  height="8"
+                >
+                  <path
+                    d="M-1,1 l4,-4 M0,8 l8,-8 M6,10 l4,-4"
+                    stroke="currentColor"
+                  />
+                </pattern>
+
+                <rect
+                  x="0"
+                  y="0"
+                  width="500"
+                  height="100"
+                  fill="url(#pattern-3)"
+                />
+              </svg>
+              <div
+                className={cn(
+                  "absolute top-1 left-1 text-xs font-bold py-0.5 px-2 rounded-lg bg-lime-500 text-lime-950",
+                  {
+                    "bg-purple-500 text-purple-950": workout.workout_statuses.name === "done",
+                  }
+                )}
+              >
+                {workout.workout_statuses.name}
+              </div>
+              <div className=" absolute z-10 top-1 right-1">
+                <SingleWorkoutMoreButton
+                  id={workout.id}
+                  title={workout.title}
+                  date={workout.date}
+                >
+                  <Button
+                    size="icon"
+                    variant="ghost"
+                  >
+                    <MoreHorizontal className="h-4 w-4" />
+                  </Button>
+                </SingleWorkoutMoreButton>
+              </div>
+              <div className="relative z-10 flex flex-col items-center gap-2">
+                <h2 className=" text-balance font-bold text-2xl antialiased capitalize">{workout.title}</h2>
+                <Link href={`/session/${workout.id}`}>
+                  <Button variant="outline">Start Workout</Button>
+                </Link>
+              </div>
+              <div className=" absolute min-h-12 bottom-0 left-0 w-full ">
+                <div
+                  className={cn("absolute inset-1 rounded-lg border p-2 font-bold flex gap-2", {
+                    "bg-purple-950 border-purple-800": workout.workout_statuses.name === "done",
+                    "bg-lime-950 border-lime-800": workout.workout_statuses.name === "planed",
+                  })}
+                >
+                  <p>Exercises: {workout.workout_exercises.length}</p>
+                  <p>
+                    Sets: {workout.workout_exercises.reduce((acc, curr) => acc + curr.target_sets.length, 0)}
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div className="flex flex-col gap-2 mb-12 ">
+              {workout.workout_exercises.map((exercise) => (
+                <ExerciseCard key={exercise.exercise_id}>
+                  <ExerciseCardHeader
+                    title={exercise.exercises.title}
+                    workout_exercise_id={exercise.id}
+                  />
+                  <ExerciseCardBody
+                    target_sets={exercise.target_sets}
+                    workout_exercise_id={exercise.id}
+                  />
+                </ExerciseCard>
+              ))}
+            </div>
           </div>
-          {workout.workout_statuses && (
-            <StatusLabel
-              status={workout.workout_statuses?.name}
-              workout_id={workout.id}
-            />
-          )}
-        </div>
-      </div>
-      <PrintDate date={workout.date} />
-      <div className="flex flex-wrap gap-2 py-4">
-        {workout.workout_exercises &&
-          workout.workout_exercises.map((workout_exercise: any, index) => (
-            <ExerciseCard
-              exercise={workout_exercise}
-              index={index}
-            />
-          ))}
-      </div>
+        )}
+        {isLoading && <WorkoutDetailsLoading />}
+        {!workout && !isLoading && <NoWorkoutsFound />}
+      </Suspense>
     </div>
   );
 }
 
-const ExerciseCard = ({ exercise, index }: { exercise: any; index: number }) => {
-  const sets = exercise.sets.sort((a: any, b: any) => a.id - b.id);
-  const target_sets = exercise.target_sets.sort((a: any, b: any) => a.id - b.id);
-
+const NoWorkoutsFound = () => {
   return (
-    <div
-      key={exercise.id}
-      className="w-full border border-stone-800 bg-stone-900 p-2 rounded-xl"
-    >
-      <div>
-        <div className="w-full flex justify-between items-center gap-2">
-          <h1 className="text-lg font-bold">
-            {/* <span className="text-xs text-stone-600 font-light">{index + 1}.</span> */}
-            {exercise.exercises.title}
-          </h1>
-          <div>
-            <SingleWorkoutExerciseMoreButton id={exercise.id}>
-              <Button
-                size="icon"
-                variant="ghost"
-              >
-                <MoreHorizontal className="h-4 w-4" />
-              </Button>
-            </SingleWorkoutExerciseMoreButton>
-          </div>
-        </div>
-        <div className="text-xs text-stone-500">
-          <p className=" text-stone-500">
-            {target_sets.length}
-            {target_sets.length === 1 ? " set" : " sets"}
-          </p>
-
-          <div className="flex justify-start items-center gap-2">
-            <span className="font-semibold text-stone-300">Target:</span>{" "}
-            {target_sets.map((set: any) => (
-              <TargetSetItem
-                set_id={set.id}
-                key={set.id}
-              >
-                {set.target_reps} x {set.target_weight}kg
-              </TargetSetItem>
-            ))}
-            <NewTargetSetButton workout_exercise_id={exercise.id}>
-              <Button
-                variant="ghost"
-                size="sm"
-                className="h-6 w-6 flex justify-center items-center p-1"
-              >
-                <Plus className="h-3 w-3" />
-              </Button>
-            </NewTargetSetButton>
-          </div>
-        </div>
-      </div>
-      <div>
-        <div className="flex flex-wrap gap-1 items-center mt-4 mb-2">
-          {sets.map((set: any) => (
-            <SetItem
-              key={set.id}
-              id={set.id}
-              reps={set.reps}
-              weight={set.weight}
-            >
-              <span className="bg-stone-950 border border-stone-900 rounded-md p-2 text-stone-300 font-bold text-sm">
-                {set.reps} x {set.weight}kg
-              </span>
-            </SetItem>
-          ))}
-          <NewSetButton workout_exercise_id={exercise.id}>
-            <Button
-              variant="ghost"
-              size="sm"
-              className="h-6 w-6 flex justify-center items-center p-1"
-            >
-              <Plus className="h-3 w-3" />
-            </Button>
-          </NewSetButton>
-        </div>
-      </div>
+    <div className="w-full h-[70vh] flex flex-col justify-center items-center">
+      <h1>No workouts found</h1>
+      <CreateFromTemplate />
     </div>
   );
 };
 
-const getWorkoutById = async (id: string, supabase: SupabaseClient) => {
-  let { data: workouts, error } = await supabase
-    .from("workouts")
-    .select(
-      "id, title, date, status_id, workout_exercises(*, target_sets(*), sets(*), exercises(title)), workout_statuses(name)"
-    )
-    .eq("id", id);
-
-  if (error) {
-    throw error;
-  }
-
-  return workouts && (workouts[0] as any);
+const WorkoutDetailsLoading = () => {
+  return (
+    <div className="w-full h-[70vh] flex flex-col justify-center items-center">
+      <h1 className=" animate-pulse font-bold text-lg">Loading your workout details...</h1>
+    </div>
+  );
 };
+
+export { WorkoutDetailsLoading };

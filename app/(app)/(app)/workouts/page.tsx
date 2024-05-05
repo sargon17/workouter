@@ -11,6 +11,14 @@ import { Button } from "@/components/ui/button";
 
 import Link from "next/link";
 
+import DaysNavigation from "@/components/workout/DaysNavigation";
+import WorkoutDetails from "@/components/workout/WorkoutDetails";
+import { WorkoutDetailsLoading } from "@/components/workout/WorkoutDetails";
+import { Suspense } from "react";
+
+import loading from "./loading";
+import Loading from "@/components/Loading";
+
 export default async function ProtectedPage({ searchParams }: { searchParams: { date: string } }) {
   const supabase = createClient();
   const searchDate = searchParams.date || new Date().toISOString().split("T")[0];
@@ -30,19 +38,17 @@ export default async function ProtectedPage({ searchParams }: { searchParams: { 
       <Header
         title="workouts"
         backHref="/"
-        actionBtn={
-          <NewWorkoutButton>
-            <Button
-              size="icon"
-              variant="outline"
-            >
-              <Plus className="h-4 w-4" />
-            </Button>
-          </NewWorkoutButton>
-        }
       />
       <Body>
-        <WorkoutList date={searchDate} />
+        <DaysNavigation date={searchDate} />
+        <Suspense fallback={<WorkoutDetailsLoading />}>
+          <WorkoutDetails
+            date={searchDate}
+            key={searchDate}
+          />
+        </Suspense>
+
+        {/* <WorkoutList date={searchDate} /> */}
       </Body>
     </>
   );

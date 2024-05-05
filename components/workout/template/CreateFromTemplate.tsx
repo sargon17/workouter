@@ -1,6 +1,7 @@
+"use client";
 import React from "react";
 
-import { createClient } from "@/utils/supabase/server";
+import { createClient } from "@/utils/supabase/client";
 
 import { Button } from "@/components/ui/button";
 
@@ -38,7 +39,7 @@ export default async function CreateFromTemplate() {
   return (
     <div>
       <Dialog>
-        <p className="text-xs text-stone-500 pb-1">Create a workout from a template you've saved.</p>
+        {/* <p className="text-xs text-stone-500 pb-1">Create a workout from a template you've saved.</p> */}
         <DialogTrigger asChild>
           <Button
             type="button"

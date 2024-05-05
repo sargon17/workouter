@@ -8,7 +8,11 @@ import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 
+import dayjs from "dayjs";
+
+import calendar from "dayjs/plugin/calendar";
 export function DatePicker({ field }: { field: any }) {
+  dayjs.extend(calendar);
   return (
     <>
       <Dialog>
@@ -23,7 +27,18 @@ export function DatePicker({ field }: { field: any }) {
               )}
             >
               <CalendarIcon className="mr-2 h-4 w-4" />
-              {field.value ? format(field.value, "PPP") : <span>Pick a date</span>}
+              {field.value ? (
+                dayjs(new Date(field.value)).calendar(null, {
+                  sameDay: "[Today]",
+                  nextDay: "[Tomorrow]",
+                  nextWeek: "dddd",
+                  lastDay: "[Yesterday]",
+                  lastWeek: "[Last] dddd",
+                  sameElse: "DD/MM/YYYY",
+                })
+              ) : (
+                <span>Pick a date</span>
+              )}
             </Button>
           </DialogTrigger>
           <DialogContent>
@@ -39,33 +54,9 @@ export function DatePicker({ field }: { field: any }) {
                 }}
                 initialFocus
                 weekStartsOn={1}
-                disabled={{ before: new Date() }}
               />
-              {/* <DayPicker
-              mode="single"
-              selected={field.value}
-              onSelect={(e: any) => {
-                field.onChange(e);
-              }}
-            /> */}
             </div>
           </DialogContent>
-
-          {/* <DialogFooter>
-            <div className="flex w-full justify-end gap-2">
-              <DrawerClose>
-                <Button
-                  variant="outline"
-                  type="button"
-                >
-                  Cancel
-                </Button>
-              </DrawerClose>
-              <DrawerClose>
-                <Button type="submit">Submit</Button>
-              </DrawerClose>
-            </div>
-          </DialogFooter> */}
         </div>
       </Dialog>
     </>
