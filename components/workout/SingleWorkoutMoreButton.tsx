@@ -1,5 +1,5 @@
 "use client";
-import { Trash, Edit, Copy, LayoutGrid } from "lucide-react";
+import { Trash, Edit } from "lucide-react";
 
 import { useState } from "react";
 import {
@@ -15,7 +15,6 @@ import { Drawer, DrawerContent, DrawerHeader, DrawerTitle } from "@/components/u
 
 import DeleteWorkoutButton from "./delete/DeleteWorkoutButton";
 import EditWorkoutForm from "./edit/EditWorkoutForm";
-import SetAsTemplateButton from "./template/SetAsTemplateButton";
 
 export default function SingleWorkoutMoreButton({
   children,
