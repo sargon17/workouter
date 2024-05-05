@@ -38,6 +38,11 @@ export default async function ProtectedPage({ searchParams }: { searchParams: { 
       <Header
         title="workouts"
         backHref="/"
+        actionBtn={
+          <Link href="/templates">
+            <Button>Templates</Button>
+          </Link>
+        }
       />
       <Body>
         <DaysNavigation date={searchDate} />
