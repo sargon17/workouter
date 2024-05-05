@@ -1,5 +1,6 @@
 "use client";
 
+import { motion, AnimatePresence, LayoutGroup } from "framer-motion";
 import { useState, useEffect } from "react";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -159,42 +160,74 @@ export default function TemplateCreatePage(props: TemplateCreatePageProps) {
   }, [input.body_parts_id || input.workout_type_id]);
 
   return (
-    <div className="flex flex-col justify-center items-center h-[80vh]">
-      <div className="relative w-full flex justify-center">
-        <div className=" absolute -top-10 left-1/2 -translate-x-1/2">
-          <Stepper
-            steps={3}
-            activeStep={step - 1}
-            onClick={(step) => setStep(step + 1)}
-          />
+    <AnimatePresence mode="wait">
+      <div className="flex flex-col justify-center items-center h-[80vh]">
+        <div className="relative w-full flex justify-center">
+          <motion.div
+            className=" absolute -top-10 left-0 w-full flex justify-center items-center"
+            layoutId="stepper"
+            initial={{ opacity: 0, y: 100, x: "-50%" }}
+            animate={{ opacity: 1, y: 0, x: "-50%" }}
+            exit={{ opacity: 0, y: -100, x: "-50%" }}
+          >
+            <Stepper
+              steps={3}
+              activeStep={step - 1}
+              onClick={(step) => setStep(step + 1)}
+            />
+          </motion.div>
+          {step === 1 && (
+            <motion.div
+              layoutId="step1"
+              initial={{ opacity: 0, x: 100 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -100 }}
+              key={1}
+            >
+              <Step1
+                workoutTypes={props.workoutTypes}
+                value={input.workout_type_id}
+                onChange={(value) => setInput({ ...input, workout_type_id: value })}
+                onNext={handleNextStep}
+              />
+            </motion.div>
+          )}
+          {step === 2 && (
+            <motion.div
+              layoutId="step2"
+              initial={{ opacity: 0, x: 100 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -100 }}
+              key={2}
+            >
+              <Step2
+                bodyParts={props.bodyParts}
+                value={input.body_parts_id}
+                onChange={(value) => handleBodyPartChange(value)}
+                onNext={handleNextStep}
+              />
+            </motion.div>
+          )}
+          {step === 3 && (
+            <motion.div
+              layoutId="step3"
+              initial={{ opacity: 0, x: 100 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -100 }}
+              key={3}
+            >
+              <Step3
+                title={input.title}
+                description={input.description}
+                onTitleChange={(value) => setInput({ ...input, title: value })}
+                onDescriptionChange={(value) => setInput({ ...input, description: value })}
+                onNext={createTemplate}
+              />
+            </motion.div>
+          )}
         </div>
-        {step === 1 && (
-          <Step1
-            workoutTypes={props.workoutTypes}
-            value={input.workout_type_id}
-            onChange={(value) => setInput({ ...input, workout_type_id: value })}
-            onNext={handleNextStep}
-          />
-        )}
-        {step === 2 && (
-          <Step2
-            bodyParts={props.bodyParts}
-            value={input.body_parts_id}
-            onChange={(value) => handleBodyPartChange(value)}
-            onNext={handleNextStep}
-          />
-        )}
-        {step === 3 && (
-          <Step3
-            title={input.title}
-            description={input.description}
-            onTitleChange={(value) => setInput({ ...input, title: value })}
-            onDescriptionChange={(value) => setInput({ ...input, description: value })}
-            onNext={createTemplate}
-          />
-        )}
       </div>
-    </div>
+    </AnimatePresence>
   );
 }
 
