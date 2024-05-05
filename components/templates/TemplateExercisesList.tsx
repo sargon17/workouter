@@ -1,12 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, use } from "react";
 import { createClient } from "@/utils/supabase/client";
 import { useRouter } from "next/navigation";
 
 import { toast } from "sonner";
 
-import { motion, LayoutGroup } from "framer-motion";
+import { LayoutGroup, AnimatePresence } from "framer-motion";
 
 import { ExerciseCard, ExerciseCardBody, ExerciseCardHeader, ExerciseCardsList } from "./ExerciseCards";
 
@@ -18,7 +18,11 @@ export default function TemplateExercisesList(props: TemplateExercisesListProps)
     props.workout_exercises.sort((a: any, b: any) => a.order - b.order)
   );
 
-  const client = createClient();
+  useEffect(() => {
+    setWorkoutExercises(props.workout_exercises.sort((a: any, b: any) => a.order - b.order));
+  }, [props.workout_exercises]);
+
+  const supabase = createClient();
   const router = useRouter();
 
   const handleExercisesReorder = async (currentIndex: number, targetIndex: number) => {
@@ -45,7 +49,7 @@ export default function TemplateExercisesList(props: TemplateExercisesListProps)
       return updated.sort((a: any, b: any) => a.order - b.order);
     });
 
-    const { data, error } = await client.from("workout_exercises").upsert([
+    const { data, error } = await supabase.from("workout_exercises").upsert([
       {
         id: workout_exercise.id,
         order: targetIndex,
@@ -63,28 +67,52 @@ export default function TemplateExercisesList(props: TemplateExercisesListProps)
     }
   };
 
+  const handleDeleteExercise = async (workout_exercise_id: number) => {
+    // optimistic update
+    setWorkoutExercises(workout_exercises.filter((exercise: any) => exercise.id !== workout_exercise_id));
+
+    const { data, error } = await supabase
+      .from("workout_exercises")
+      .delete()
+      .eq("id", workout_exercise_id)
+      .single();
+
+    if (error) {
+      console.error(error);
+      toast.error("An error occurred while deleting the exercise");
+      // revert the optimistic update
+      setWorkoutExercises(props.workout_exercises.sort((a: any, b: any) => a.order - b.order));
+      return;
+    }
+
+    return;
+  };
+
   return (
-    <LayoutGroup>
-      <ExerciseCardsList>
-        {workout_exercises.map((exercise: any) => (
-          <ExerciseCard
-            key={exercise.id}
-            layoutId={exercise.id + "exercise-card"}
-          >
-            <ExerciseCardHeader
-              title={exercise.exercises.title}
-              subtitle={""}
-              workout_exercise_id={exercise.id}
-              onReorder={handleExercisesReorder}
-              index={exercise.order}
-            />
-            <ExerciseCardBody
-              target_sets={exercise.target_sets}
-              workout_exercise_id={exercise.id}
-            ></ExerciseCardBody>
-          </ExerciseCard>
-        ))}
-      </ExerciseCardsList>
-    </LayoutGroup>
+    <AnimatePresence mode="wait">
+      <LayoutGroup>
+        <ExerciseCardsList>
+          {workout_exercises.map((exercise: any) => (
+            <ExerciseCard
+              key={exercise.id}
+              layoutId={exercise.id + exercise.exercises.title + "_card"}
+            >
+              <ExerciseCardHeader
+                title={exercise.exercises.title}
+                subtitle={""}
+                workout_exercise_id={exercise.id}
+                onReorder={handleExercisesReorder}
+                index={exercise.order}
+                onDelete={handleDeleteExercise}
+              />
+              <ExerciseCardBody
+                target_sets={exercise.target_sets}
+                workout_exercise_id={exercise.id}
+              ></ExerciseCardBody>
+            </ExerciseCard>
+          ))}
+        </ExerciseCardsList>
+      </LayoutGroup>
+    </AnimatePresence>
   );
 }

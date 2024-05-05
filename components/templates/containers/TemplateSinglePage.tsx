@@ -1,13 +1,6 @@
 import React from "react";
 
-import {
-  ExerciseCard,
-  NoExercises,
-  ExerciseCardsList,
-  ExerciseActions,
-  ExerciseCardHeader,
-  ExerciseCardBody,
-} from "../ExerciseCards";
+import { NoExercises, ExerciseActions } from "../ExerciseCards";
 import NewWorkoutExerciseButton from "@/components/workout_exercises/NewWorkoutExerciseButton";
 
 import TemplateExercisesList from "../TemplateExercisesList";

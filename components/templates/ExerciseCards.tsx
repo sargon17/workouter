@@ -3,7 +3,6 @@
 import { motion } from "framer-motion";
 
 import { createClient } from "@/utils/supabase/client";
-import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 
@@ -20,8 +19,6 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-import { toast } from "sonner";
-
 type ExerciseCardsListProps = {
   children?: React.ReactNode | React.ReactNode[];
 };
@@ -37,6 +34,7 @@ type ExerciseCardHeaderProps = {
   workout_exercise_id: number;
   onReorder: (currentIndex: number, targetIndex: number) => void;
   index: number;
+  onDelete: (id: number) => void;
 };
 
 type ExerciseCardBodyProps = {
@@ -59,6 +57,7 @@ type NoExercisesProps = {
 type ExerciseMoreButtonProps = {
   children: React.ReactNode;
   workout_exercise_id: number;
+  onDelete: (id: number) => void;
 };
 
 const ExerciseCardsList = (props: ExerciseCardsListProps) => {
@@ -70,6 +69,9 @@ const ExerciseCard = (props: ExerciseCardProps) => {
     <motion.div
       className="w-full bg-stone-900 border border-stone-800 rounded-xl p-3"
       layoutId={props.layoutId}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
     >
       {props.children}
     </motion.div>
@@ -109,7 +111,10 @@ const ExerciseCardHeader = (props: ExerciseCardHeaderProps) => {
         </div>
         {props.subtitle && <p className=" text-sm text-stone-500">{props.subtitle}</p>}
       </div>
-      <ExerciseMoreButton workout_exercise_id={props.workout_exercise_id}>
+      <ExerciseMoreButton
+        workout_exercise_id={props.workout_exercise_id}
+        onDelete={props.onDelete}
+      >
         <Button
           size="icon"
           variant="ghost"
@@ -258,24 +263,6 @@ const NoExercises = (props: NoExercisesProps) => {
 };
 
 const ExerciseMoreButton = (props: ExerciseMoreButtonProps) => {
-  const supabase = createClient();
-
-  const router = useRouter();
-
-  const handleExerciseDelete = async (id: number) => {
-    const { data, error } = await supabase.from("workout_exercises").delete().eq("id", id).single();
-
-    if (!error) {
-      console.log(data);
-      toast.success("Exercise deleted successfully");
-      router.refresh();
-      return;
-    }
-
-    toast.error("An error occurred while deleting the exercise");
-    return;
-  };
-
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>{props.children}</DropdownMenuTrigger>
@@ -285,7 +272,7 @@ const ExerciseMoreButton = (props: ExerciseMoreButtonProps) => {
 
         <DropdownMenuItem
           className="text-red-500 dark:focus:bg-red-900 "
-          onClick={() => handleExerciseDelete(props.workout_exercise_id)}
+          onClick={() => props.onDelete(props.workout_exercise_id)}
         >
           <Trash2 className="h-4 w-4 mr-2" />
           Delete

@@ -60,9 +60,17 @@ export function NewWorkoutExerciseForm(props: NewWorkoutExerciseFormProps) {
       return;
     }
 
+    const othersExercises = await getOthersExercises(props.workout_id);
+
+    let order = 1;
+
+    if (othersExercises) {
+      order = othersExercises.length + 1;
+    }
+
     const { data, error } = await supabase
       .from("workout_exercises")
-      .insert([{ workout_id: props.workout_id, exercise_id: selectedExercise?.id }])
+      .insert([{ workout_id: props.workout_id, exercise_id: selectedExercise?.id, order }])
       .select();
 
     if (error) {
@@ -92,10 +100,22 @@ export function NewWorkoutExerciseForm(props: NewWorkoutExerciseFormProps) {
       }
     }
 
-    toast.success("Workout exercise created successfully");
+    toast.success("Exercise added to workout successfully");
     closeBtnRef.current?.click();
     router.refresh();
   }
+
+  const getOthersExercises = async (workout_id: string) => {
+    const { data, error } = await supabase.from("workout_exercises").select("*").eq("workout_id", workout_id);
+
+    if (error) {
+      console.error("error", error);
+      toast.error("Error fetching exercises");
+      return;
+    }
+
+    return data;
+  };
 
   const handleFilter = (value: string) => {
     setInputValue(value);
