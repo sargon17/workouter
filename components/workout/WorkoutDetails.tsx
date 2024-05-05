@@ -80,7 +80,7 @@ export default async function WorkoutDetails({ id }: WorkoutDetailsProps) {
         </div>
       </div>
       <PrintDate date={workout.date} />
-      <div className="flex flex-wrap gap-4 py-4">
+      <div className="flex flex-wrap gap-2 py-4">
         {workout.workout_exercises &&
           workout.workout_exercises.map((workout_exercise: any, index) => (
             <ExerciseCard
@@ -100,7 +100,7 @@ const ExerciseCard = ({ exercise, index }: { exercise: any; index: number }) => 
   return (
     <div
       key={exercise.id}
-      className="w-full border border-stone-900 p-2 rounded-xl"
+      className="w-full border border-stone-800 bg-stone-900 p-2 rounded-xl"
     >
       <div>
         <div className="w-full flex justify-between items-center gap-2">
