@@ -39,7 +39,7 @@ export default async function ProtectedPage({ searchParams }: { searchParams: { 
         title="workouts"
         backHref="/"
         actionBtn={
-          <Link href="/templates">
+          <Link href="/workouts/templates">
             <Button>Templates</Button>
           </Link>
         }
