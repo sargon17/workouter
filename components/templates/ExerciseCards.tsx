@@ -72,6 +72,7 @@ const ExerciseCard = (props: ExerciseCardProps) => {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
+      key={props.layoutId}
     >
       {props.children}
     </motion.div>
