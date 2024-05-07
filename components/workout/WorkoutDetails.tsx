@@ -74,10 +74,18 @@ export default async function WorkoutDetails(props: WorkoutDetailsProps) {
       toast("No workouts found");
       return;
     }
+
     return workout[0];
   };
 
   const workout: any = await fetchWorkouts();
+  let exercises: any = [];
+
+  if (workout) {
+    exercises = workout.workout_exercises.sort((a: any, b: any) => a.order - b.order);
+  }
+
+  console.log("exercises", exercises);
 
   return (
     <div>
@@ -172,7 +180,7 @@ export default async function WorkoutDetails(props: WorkoutDetailsProps) {
               </div>
             </div>
             <div className="flex flex-col gap-2 mb-12 ">
-              {workout.workout_exercises.map((exercise: any) => (
+              {exercises.map((exercise: any) => (
                 <ExerciseCard key={exercise.exercise_id}>
                   <ExerciseCardHeader
                     title={exercise.exercises.title}
