@@ -57,6 +57,7 @@ export default function UseTemplateButton(props: Props) {
           return {
             workout_id,
             exercise_id: exercise.exercise_id,
+            order: exercise.order,
           };
         })
       )

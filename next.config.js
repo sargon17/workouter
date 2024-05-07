@@ -18,7 +18,16 @@ const nextConfig = withPWA({
   },
 
   images: {
-    domains: ["images.unsplash.com", "cdn.midjourney.com"],
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "images.unsplash.com",
+      },
+      {
+        protocol: "https",
+        hostname: "cdn.midjourney.com",
+      },
+    ],
   },
 });
 

@@ -16,9 +16,6 @@ import WorkoutDetails from "@/components/workout/WorkoutDetails";
 import { WorkoutDetailsLoading } from "@/components/workout/WorkoutDetails";
 import { Suspense } from "react";
 
-import loading from "./loading";
-import Loading from "@/components/Loading";
-
 export default async function ProtectedPage({ searchParams }: { searchParams: { date: string } }) {
   const supabase = createClient();
   const searchDate = searchParams.date || new Date().toISOString().split("T")[0];
@@ -52,8 +49,6 @@ export default async function ProtectedPage({ searchParams }: { searchParams: { 
             key={searchDate}
           />
         </Suspense>
-
-        {/* <WorkoutList date={searchDate} /> */}
       </Body>
     </>
   );
