@@ -11,6 +11,8 @@ import { LayoutGroup, AnimatePresence } from "framer-motion";
 import { ExerciseCard, ExerciseCardBody, ExerciseCardHeader, ExerciseCardsList } from "./ExerciseCards";
 import { set } from "date-fns";
 
+import handleMassExercisesReorder from "@/utils/handleMassExercisesReorder";
+
 type TemplateExercisesListProps = {
   workout_exercises: any;
 };
@@ -86,38 +88,22 @@ export default function TemplateExercisesList(props: TemplateExercisesListProps)
       return;
     }
 
-    handleMassOrder(workout_exercises.filter((exercise: any) => exercise.id !== workout_exercise_id));
+    setWorkoutExercises(async () => {
+      return await handleMassExercisesReorder(
+        workout_exercises.filter((exercise: any) => exercise.id !== workout_exercise_id),
+        supabase
+      );
+    });
 
     return;
-  };
-
-  const handleMassOrder = async (exercises: any) => {
-    const updated = exercises.map((exercise: any, index: number) => {
-      return { ...exercise, order: index + 1 };
-    });
-
-    const UpdatedToSupabase = updated.map((exercise: any) => {
-      return {
-        id: exercise.id,
-        order: exercise.order,
-      };
-    });
-
-    const { data, error } = await supabase.from("workout_exercises").upsert(UpdatedToSupabase);
-
-    if (error) {
-      console.error(error);
-      toast.error("Failed to reorder exercises.");
-    }
-
-    toast.success("Exercises reordered successfully");
-    setWorkoutExercises(updated);
   };
 
   useEffect(() => {
     // if all exercises have 0 order then create new order based on the id
     if (workout_exercises.every((exercise: any) => exercise.order === 0)) {
-      handleMassOrder(workout_exercises);
+      setWorkoutExercises(async () => {
+        return await handleMassExercisesReorder(workout_exercises, supabase);
+      });
     }
   }, [props.workout_exercises]);
 
