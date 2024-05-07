@@ -56,7 +56,9 @@ export default function Session(props: Props) {
   useEffect(() => {
     if ("wakeLock" in navigator) {
       // @ts-ignore
-      navigator.wakeLock.request("screen");
+      navigator.wakeLock.request("screen").then(() => {
+        console.log("Wake lock acquired");
+      });
     }
   }, []);
 

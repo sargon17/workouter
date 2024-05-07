@@ -16,7 +16,7 @@ export default async function page({ params }: { params: { id: string } }) {
     return redirect("/login");
   }
 
-  const { data: workoutData, error: workoutError } = await supabase
+  let { data: workoutData, error: workoutError } = await supabase
     .from("workouts")
     .select("*, exercises:workout_exercises(*, exercise_data:exercises(title), target_sets(*), sets(*))")
     .eq("id", params.id)
@@ -26,6 +26,9 @@ export default async function page({ params }: { params: { id: string } }) {
     return <div>Error loading workout</div>;
     redirect("/workouts");
   }
+
+  // sort exercises by order
+  workoutData.exercises = workoutData.exercises.sort((a: any, b: any) => a.order - b.order);
 
   return (
     <>
