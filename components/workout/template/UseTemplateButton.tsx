@@ -47,20 +47,13 @@ export default function UseTemplateButton(props: Props) {
       return {
         workout_id,
         exercise_id: exercise.exercise_id,
+        order: exercise.order,
       };
     });
 
     const { data: workoutExerciseData, error: workoutExerciseError } = await supabase
       .from("workout_exercises")
-      .insert(
-        workout_exercises.map((exercise: any) => {
-          return {
-            workout_id,
-            exercise_id: exercise.exercise_id,
-            order: exercise.order,
-          };
-        })
-      )
+      .insert(workout_exercises)
       .select();
 
     if (workoutExerciseError) {
