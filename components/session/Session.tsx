@@ -60,7 +60,7 @@ export default function Session(props: Props) {
 
       return () => {
         // @ts-ignore
-        navigator.wakeLock.release().then(() => {});
+        navigator.wakeLock.release("screen").then(() => {});
       };
     }
   }, []);

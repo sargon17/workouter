@@ -10,22 +10,22 @@ const withPWA = require("next-pwa")({
 });
 
 const nextConfig = withPWA({
-  reactStrictMode: true,
+  // reactStrictMode: true,
   publicRuntimeConfig: {
     version,
   },
   experimental: {
-    reactCompiler: true,
+    reactCompiler: false,
     ppr: "incremental",
     after: true,
-    // turbo: {
-    //   rules: {
-    //     "*.svg": {
-    //       loaders: ["@svgr/webpack"],
-    //       as: "*.js",
-    //     },
-    //   },
-    // },
+    turbo: {
+      rules: {
+        "*.svg": {
+          loaders: ["@svgr/webpack"],
+          as: "*.js",
+        },
+      },
+    },
   },
   images: {
     remotePatterns: [
@@ -41,4 +41,4 @@ const nextConfig = withPWA({
   },
 });
 
-module.exports = withPayload(nextConfig);
+module.exports = withPayload(withPayload(nextConfig));
