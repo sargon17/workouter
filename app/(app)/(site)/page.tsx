@@ -39,17 +39,17 @@ export default async function Index() {
   return (
     <div className="w-full flex flex-col gap-20 items-center overflow-hidden">
       <Body>
-        {content.layout?.map((block: singleLayout) => {
+        {content.layout?.map((block: singleLayout, index: number) => {
           switch (block.blockType) {
             case "Hero":
               return (
                 <HomeHero
-                  key={block.id}
+                  key={index + "hero"}
                   content={block as any}
                 />
               );
             case "features":
-              return <HomeFeatures key={block.id} />;
+              return <HomeFeatures key={index + "hero"} />;
             default:
               return null;
           }

@@ -10,13 +10,23 @@ const withPWA = require("next-pwa")({
 });
 
 const nextConfig = withPWA({
-  // Your Next.js configuration
   reactStrictMode: true,
   publicRuntimeConfig: {
-    // Will be available on both server and client
     version,
   },
-
+  experimental: {
+    reactCompiler: true,
+    ppr: "incremental",
+    after: true,
+    // turbo: {
+    //   rules: {
+    //     "*.svg": {
+    //       loaders: ["@svgr/webpack"],
+    //       as: "*.js",
+    //     },
+    //   },
+    // },
+  },
   images: {
     remotePatterns: [
       {
