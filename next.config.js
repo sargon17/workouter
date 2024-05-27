@@ -15,9 +15,9 @@ const nextConfig = withPWA({
     version,
   },
   experimental: {
-    reactCompiler: false,
-    ppr: "incremental",
-    after: true,
+    // reactCompiler: false,
+    // ppr: "incremental",
+    // after: true,
     turbo: {
       rules: {
         "*.svg": {
