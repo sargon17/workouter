@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { ReactLenis, useLenis } from "@studio-freight/react-lenis";
+import { ReactLenis, useLenis } from "lenis/react";
 
 export default function ReactSmoothScroll({ children }: { children: React.ReactNode }) {
   const lenis = useLenis(({ scroll }) => {

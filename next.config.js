@@ -14,19 +14,7 @@ const nextConfig = withPWA({
   publicRuntimeConfig: {
     version,
   },
-  experimental: {
-    // reactCompiler: false,
-    // ppr: "incremental",
-    // after: true,
-    turbo: {
-      rules: {
-        "*.svg": {
-          loaders: ["@svgr/webpack"],
-          as: "*.js",
-        },
-      },
-    },
-  },
+  experimental: {},
   images: {
     remotePatterns: [
       {

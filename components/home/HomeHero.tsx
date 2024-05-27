@@ -6,6 +6,8 @@ import { ArrowRight } from "lucide-react";
 import { Button } from "../ui/button";
 import Link from "next/link";
 
+import BG from "@/public/images/hero_bg.jpg";
+
 interface Props {
   content: {
     id: string;
@@ -23,7 +25,7 @@ export default function HomeHero(props: Props) {
       <div className=" w-full h-[90lvh] border border-stone-900 rounded-md flex justify-center items-center p-2 relative overflow-hidden">
         <div className="absolute inset-0 z-0">
           <Image
-            src="/images/hero_bg.jpg"
+            src={BG}
             alt="hero background"
             layout="fill"
             objectFit="cover"
