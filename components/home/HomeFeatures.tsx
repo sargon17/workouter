@@ -1,8 +1,6 @@
 import React from "react";
 
-import { ArrowRight } from "lucide-react";
-import Link from "next/link";
-import { Button } from "../ui/button";
+import Pattern from "../Pattern";
 
 import { cn } from "@/lib/utils";
 
@@ -85,34 +83,10 @@ const Card = (props: {
       )}
     >
       <div className="relative h-300px w-full">
-        <div className="relative h-[250px] border border-lime-300/20 rounded-xl overflow-hidden outline-dashed outline-2 outline-lime-300/0 outline-offset-8  group-hover:border-lime-300/50 group-hover:outline-offset-0 group-hover:outline-lime-300/20  transition-all ease-out duration-500 ">
-          <svg
-            className="h-full object-fill"
-            viewBox="0 0 500 200"
-            xmlns="http://www.w3.org/2000/svg"
-            // responsive
-            preserveAspectRatio="none"
-          >
-            <pattern
-              id={`pattern-${props.title.toLowerCase().split(" ").join("-")}`}
-              patternUnits="userSpaceOnUse"
-              width="8"
-              height="8"
-              className="stroke-lime-300/5 group-hover:stroke-lime-300/10 transition-all ease-out duration-500"
-            >
-              <path d="M-1,1 l4,-4 M0,8 l8,-8 M6,10 l4,-4" />
-            </pattern>
-
-            <rect
-              x="0"
-              y="0"
-              width="500"
-              height="200"
-              // fill="url(#pattern-3)"
-              fill={`url(#pattern-${props.title.toLowerCase().split(" ").join("-")})`}
-              stroke="transparent"
-            />
-          </svg>
+        <div className="relative h-[250px] border border-lime-300/20 rounded-xl overflow-hidden outline-dashed outline-2 outline-lime-300/0 outline-offset-8  group-hover:border-lime-300/50 group-hover:outline-offset-0 group-hover:outline-lime-300/20  transition-all ease-out duration-500 text-lime-500 ">
+          <div className=" opacity-50">
+            <Pattern />
+          </div>
           {props.children}
         </div>
       </div>
@@ -172,11 +146,34 @@ const TagsFeature = () => {
 };
 
 const Tag = (props: { children: React.ReactNode; color: string; className?: string }) => {
+  const classes = {
+    "border-blue-500/70 bg-blue-500/10 text-blue-200": props.color === "blue",
+    "border-red-500/70 bg-red-500/10 text-red-200": props.color === "red",
+    "border-yellow-500/70 bg-yellow-500/10 text-yellow-200": props.color === "yellow",
+    "border-green-500/70 bg-green-500/10 text-green-200": props.color === "green",
+    "border-teal-500/70 bg-teal-500/10 text-teal-200": props.color === "teal",
+    "border-cyan-500/70 bg-cyan-500/10 text-cyan-200": props.color === "cyan",
+    "border-indigo-500/70 bg-indigo-500/10 text-indigo-200": props.color === "indigo",
+    "border-purple-500/70 bg-purple-500/10 text-purple-200": props.color === "purple",
+    "border-pink-500/70 bg-pink-500/10 text-pink-200": props.color === "pink",
+    "border-rose-500/70 bg-rose-500/10 text-rose-200": props.color === "rose",
+    "border-fuchsia-500/70 bg-fuchsia-500/10 text-fuchsia-200": props.color === "fuchsia",
+    "border-violet-500/70 bg-violet-500/10 text-violet-200": props.color === "violet",
+    "border-orange-500/70 bg-orange-500/10 text-orange-200": props.color === "orange",
+    "border-amber-500/70 bg-amber-500/10 text-amber-200": props.color === "amber",
+    "border-gray-500/70 bg-gray-500/10 text-gray-200": props.color === "gray",
+    "border-zinc-500/70 bg-zinc-500/10 text-zinc-200": props.color === "zinc",
+    "border-neutral-500/70 bg-neutral-500/10 text-neutral-200": props.color === "neutral",
+    "border-slate-500/70 bg-slate-500/10 text-slate-200": props.color === "slate",
+    "border-lime-500/70 bg-lime-500/10 text-lime-200": props.color === "lime",
+  };
+
   return (
     <div
       className={cn(
-        `absolute text-2xl h-fit font-bold rounded-full px-4 py-0 cursor-pointer bg-${props.color}-500/10 border-2 border-${props.color}-500 text-${props.color}-500 opacity-10 group-hover:opacity-100 transition-all ease-out duration-500 backdrop-blur-sm`,
-        props.className
+        `absolute text-2xl h-fit font-bold rounded-full px-4 py-0 cursor-pointer border-2 opacity-10 group-hover:opacity-100 transition-all ease-out duration-500 backdrop-blur-sm`,
+        props.className,
+        classes
       )}
     >
       {props.children}

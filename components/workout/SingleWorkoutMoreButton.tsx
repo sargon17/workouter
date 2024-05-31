@@ -1,6 +1,6 @@
 "use client";
-import { Trash, Edit } from "lucide-react";
-import { useState, memo } from "react";
+import { Trash } from "lucide-react";
+import { memo } from "react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -9,28 +9,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Drawer, DrawerContent, DrawerHeader, DrawerTitle } from "@/components/ui/drawer";
-import DeleteWorkoutButton from "./delete/DeleteWorkoutButton";
-import EditWorkoutForm from "./edit/EditWorkoutForm";
 
-const EditWorkoutDrawerContent = memo(function EditWorkoutDrawerContent({
-  id,
-  title,
-  date,
-}: {
-  id: string;
-  title: string;
-  date: any;
-}) {
-  return (
-    <DrawerContent>
-      <DrawerHeader>
-        <DrawerTitle>Edit Target Set</DrawerTitle>
-      </DrawerHeader>
-      <EditWorkoutForm id={id} original_title={title} original_date={date} />
-    </DrawerContent>
-  );
-});
+import DeleteWorkoutButton from "./delete/DeleteWorkoutButton";
 
 function SingleWorkoutMoreButton({
   children,
@@ -43,19 +23,13 @@ function SingleWorkoutMoreButton({
   title: string;
   date: any;
 }) {
-  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-
   return (
     <>
       <DropdownMenu>
-        <DropdownMenuTrigger asChild>{children}</DropdownMenuTrigger>
+        <DropdownMenuTrigger>{children}</DropdownMenuTrigger>
         <DropdownMenuContent>
           <DropdownMenuLabel>Workout Actions</DropdownMenuLabel>
           <DropdownMenuSeparator />
-          <DropdownMenuItem onClick={() => setIsDrawerOpen(true)}>
-            <Edit className="h-4 w-4 mr-2" />
-            Edit
-          </DropdownMenuItem>
           <DeleteWorkoutButton workout_id={id}>
             <DropdownMenuItem className="text-red-500 dark:focus:bg-red-900">
               <Trash className="h-4 w-4 mr-2" />
@@ -64,13 +38,8 @@ function SingleWorkoutMoreButton({
           </DeleteWorkoutButton>
         </DropdownMenuContent>
       </DropdownMenu>
-
-      <Drawer open={isDrawerOpen} onOpenChange={setIsDrawerOpen}>
-        <EditWorkoutDrawerContent id={id} title={title} date={date} />
-      </Drawer>
     </>
   );
 }
 
-
-export default SingleWorkoutMoreButton;
+export default memo(SingleWorkoutMoreButton);

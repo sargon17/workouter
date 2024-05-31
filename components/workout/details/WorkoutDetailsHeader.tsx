@@ -33,7 +33,7 @@ const WorkoutDetailsHeader = (props: WorkoutDetailsHeaderProps) => {
       <Pattern />
       {props.chip && <div className="absolute top-1 left-1">{props.chip}</div>}
 
-      {/* <div className=" absolute z-10 top-1 right-1">
+      <div className=" absolute z-10 top-1 right-1">
         <SingleWorkoutMoreButton
           id={props.workout.id}
           title={props.workout.title}
@@ -46,7 +46,7 @@ const WorkoutDetailsHeader = (props: WorkoutDetailsHeaderProps) => {
             <MoreHorizontal className="h-4 w-4" />
           </Button>
         </SingleWorkoutMoreButton>
-      </div> */}
+      </div>
       <div className="relative z-10 flex flex-col items-center gap-2">
         <h2 className=" text-balance font-bold text-2xl antialiased capitalize text-center">
           {props.workout.title}
