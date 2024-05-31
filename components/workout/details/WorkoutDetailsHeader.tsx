@@ -1,4 +1,6 @@
 import SingleWorkoutMoreButton from "./../SingleWorkoutMoreButton";
+import StartWorkoutTrigger from "./../start/StartWorkoutTrigger";
+import Pattern from "@/components/Pattern";
 import { MoreHorizontal } from "lucide-react";
 
 import Link from "next/link";
@@ -50,6 +52,9 @@ const WorkoutDetailsHeader = (props: WorkoutDetailsHeaderProps) => {
           {props.workout.title}
         </h2>
         {props.workout.workout_statuses?.name === "planed" && <StartWorkoutButton workout={props.workout} />}
+        {props.workout.workout_statuses?.name === "in progress" && (
+          <ContinueWorkoutButton workout={props.workout} />
+        )}
       </div>
       <div className=" absolute min-h-12 bottom-0 left-0 w-full ">
         <WorkoutDetailsHeaderFooter
@@ -63,8 +68,16 @@ const WorkoutDetailsHeader = (props: WorkoutDetailsHeaderProps) => {
 
 const StartWorkoutButton = ({ workout }: { workout: Workout }) => {
   return (
-    <Link href={`/session/${workout.id}`}>
+    <StartWorkoutTrigger workout_id={workout.id}>
       <Button variant="outline">Start Workout</Button>
+    </StartWorkoutTrigger>
+  );
+};
+
+const ContinueWorkoutButton = ({ workout }: { workout: Workout }) => {
+  return (
+    <Link href={`/session/${workout.id}`}>
+      <Button variant="outline">Continue Workout</Button>
     </Link>
   );
 };
@@ -91,66 +104,6 @@ const WorkoutDetailsHeaderFooter = (props: WorkoutDetailsHeaderFooterProps) => {
         {props.workout.workout_exercises.length}
       </div>
     </div>
-  );
-};
-
-const Pattern = () => {
-  return (
-    <svg
-      className="absolute top-0 left-0 w-full h-full opacity-20"
-      viewBox="0 0 500 100"
-      xmlns="http://www.w3.org/2000/svg"
-      // responsive
-      preserveAspectRatio="none"
-    >
-      <pattern
-        id="pattern-3"
-        patternUnits="userSpaceOnUse"
-        width="8"
-        height="8"
-      >
-        <path
-          d="M-1,1 l4,-4 M0,8 l8,-8 M6,10 l4,-4"
-          stroke="currentColor"
-        />
-      </pattern>
-      <defs>
-        <radialGradient
-          id="RadialGradient1"
-          cx="50%"
-          cy="50%"
-          r="50%"
-          fx="50%"
-          fy="50%"
-        >
-          <stop
-            offset="20%"
-            style={{ stopColor: "white", stopOpacity: 1 }}
-          />
-          <stop
-            offset="90%"
-            style={{ stopColor: "white", stopOpacity: 0 }}
-          />
-        </radialGradient>
-        <mask id="circleMask">
-          <circle
-            cx="250"
-            cy="100"
-            r="250"
-            fill="url(#RadialGradient1)"
-          />
-        </mask>
-      </defs>
-
-      <rect
-        x="0"
-        y="0"
-        width="500"
-        height="500"
-        fill="url(#pattern-3)"
-        mask="url(#circleMask)"
-      />
-    </svg>
   );
 };
 
