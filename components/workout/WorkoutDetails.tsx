@@ -66,6 +66,7 @@ export default async function WorkoutDetails(props: WorkoutDetailsProps) {
           <div>
             <WorkoutDetailsHeader
               workout={workout}
+              status={workout.workout_statuses?.name}
               chip={
                 <StatusLabel
                   status={workout.workout_statuses?.name}

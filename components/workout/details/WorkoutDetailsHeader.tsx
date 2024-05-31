@@ -7,25 +7,26 @@ import { Button } from "../../ui/button";
 import { cn } from "@/lib/utils";
 
 import { Workout } from "../workout.d";
+import { StatusType } from "@/types/workout";
+
+import { getStatusColor } from "../../status/getStatusColor";
 
 type WorkoutDetailsHeaderProps = {
   workout: Workout;
-  status?: "done" | "planed";
+  status?: StatusType["name"];
   //   children?: React.ReactNode;
   chip?: React.ReactNode;
 };
 
 const WorkoutDetailsHeader = (props: WorkoutDetailsHeaderProps) => {
   const status = props.status || "planed";
+  const color = getStatusColor(status);
 
   return (
     <div
       className={cn(
-        " w-full min-h-36 p-2 py-16 my-2 border rounded-2xl flex flex-col justify-center items-center gap-2 relative",
-        {
-          "border-lime-500/70  text-lime-200": status === "planed",
-          "border-purple-500/70  text-purple-200": status === "done",
-        }
+        " w-full min-h-36 p-2 py-16 my-2 border rounded-2xl flex flex-col justify-center items-center gap-2 relative" +
+          ` border-${color}-500/70 text-${color}-200`
       )}
     >
       <Pattern />
@@ -108,7 +109,7 @@ const Pattern = () => {
             style={{ stopColor: "white", stopOpacity: 1 }}
           />
           <stop
-            offset="100%"
+            offset="90%"
             style={{ stopColor: "white", stopOpacity: 0 }}
           />
         </radialGradient>
