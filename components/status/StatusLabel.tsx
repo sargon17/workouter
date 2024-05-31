@@ -5,6 +5,8 @@ import UpdateStatus from "./UpdateStatus";
 
 import { StatusType } from "@/types/workout";
 
+import { getStatusColor } from "./getStatusColor";
+
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -13,15 +15,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-
-const conditionalStyles = {
-  planed: "lime",
-  "in progress": "cyan",
-  done: "purple",
-  canceled: "red",
-  skipped: "red",
-  "to plan": "orange",
-};
 
 type StatusLabelProps = {
   status: StatusType["name"];
@@ -38,7 +31,7 @@ export default async function StatusLabel(props: StatusLabelProps) {
         <DropdownMenuTrigger asChild>
           {
             <Chip
-              color={conditionalStyles[props.status] as any}
+              color={getStatusColor(props.status)}
               size="xs"
               isActive
             >
@@ -58,7 +51,7 @@ export default async function StatusLabel(props: StatusLabelProps) {
             >
               <DropdownMenuItem>
                 <Chip
-                  color={conditionalStyles[status.name] as any}
+                  color={getStatusColor(status.name)}
                   size="xs"
                   isActive
                 >
