@@ -6,7 +6,10 @@ import { toast } from "sonner";
 import { getUser } from "@/lib/fetch";
 import CreateFromTemplate from "./template/CreateFromTemplate";
 
-import { ExerciseCard, ExerciseCardHeader, ExerciseCardBody } from "../templates/ExerciseCards";
+import { For } from "million/react";
+
+
+import { ExerciseCard, ExerciseCardBody, ExerciseCardHeader} from "../exercises/card/ExerciseCard";
 import SingleWorkoutMoreButton from "./SingleWorkoutMoreButton";
 import { MoreHorizontal } from "lucide-react";
 

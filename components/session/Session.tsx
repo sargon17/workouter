@@ -52,18 +52,6 @@ export default function Session(props: Props) {
   const [setData, setSetData] = useState<Set | null>(null);
   const supabase = createClient();
 
-  //wake lock
-  useEffect(() => {
-    if ("wakeLock" in navigator) {
-      // @ts-ignore
-      navigator.wakeLock.request("screen").then(() => {});
-
-      return () => {
-        // @ts-ignore
-        navigator.wakeLock.release("screen").then(() => {});
-      };
-    }
-  }, []);
 
   useEffect(() => {
     let activeExercise = 0;

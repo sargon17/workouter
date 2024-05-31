@@ -10,7 +10,6 @@ import {
   DrawerClose,
 } from "@/components/ui/drawer";
 
-import { useState } from "react";
 
 type Props = {
   children: React.ReactNode | React.ReactNode[];
@@ -98,7 +97,7 @@ function CurrentSetDataItem(props: Pick<SetDataProps, "label" | "value">) {
   );
 }
 
-function SetDataAdvancedEditor(props: SetDataAdvancedEditorProps) {
+const SetDataAdvancedEditor = (props: SetDataAdvancedEditorProps) => {
   return (
     <Drawer activeSnapPoint={"50%"}>
       <DrawerTrigger className="w-full">{props.children}</DrawerTrigger>
@@ -159,7 +158,7 @@ function SetDataAdvancedEditor(props: SetDataAdvancedEditorProps) {
       </DrawerContent>
     </Drawer>
   );
-}
+};
 
 function EditButton(props: { onClick: () => void; children: React.ReactNode }) {
   return (

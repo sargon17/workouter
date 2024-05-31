@@ -8,6 +8,7 @@
   },
   "dependencies": {
     "@hookform/resolvers": "^3.4.2",
+    "@million/lint": "^1.0.0-rc.13",
     "@payloadcms/db-postgres": "3.0.0-beta.11",
     "@payloadcms/next": "3.0.0-beta.11",
     "@payloadcms/richtext-lexical": "3.0.0-beta.11",
@@ -35,6 +36,7 @@
     "graphql": "^16.8.1",
     "lenis": "^1.0.45",
     "lucide-react": "^0.379.0",
+    "million": "^3.1.6",
     "next": "^14.2.3",
     "next-pwa": "^5.6.0",
     "next-themes": "^0.3.0",

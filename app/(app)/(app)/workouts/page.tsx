@@ -1,9 +1,5 @@
-import { Plus } from "lucide-react";
-
 import { createClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
-import WorkoutList from "@/components/workout/WorkoutList";
-import NewWorkoutButton from "@/components/workout/NewWorkoutButton";
 
 import Header from "@/components/Header";
 import Body from "@/components/Body";

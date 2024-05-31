@@ -1,15 +1,17 @@
 "use client";
 
-import { useState, useEffect, use } from "react";
+import { useState, useEffect} from "react";
 import { createClient } from "@/utils/supabase/client";
 import { useRouter } from "next/navigation";
 
 import { toast } from "sonner";
 
+import { ExerciseCard, ExerciseCardBody, ExerciseCardHeader } from "@/components/exercises/card/ExerciseCard";
+
 import { LayoutGroup, AnimatePresence } from "framer-motion";
 
-import { ExerciseCard, ExerciseCardBody, ExerciseCardHeader, ExerciseCardsList } from "./ExerciseCards";
-import { set } from "date-fns";
+import { ExerciseCardsList } from "../exercises/ExerciseCardsList";
+// import ExerciseCard from "../exercises/ExerciseCard";
 
 import handleMassExercisesReorder from "@/utils/handleMassExercisesReorder";
 
