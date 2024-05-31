@@ -38,7 +38,7 @@ const Chip = (props: ChipProps) => {
       onClick={props.onClick}
       className={cn(
         "border rounded-3xl px-3 py-1  font-bold text-xs bg-stone-950 border-stone-800 text-stone-400 cursor-pointer transition-all duration-300 ease-in-out" +
-          (props.isActive ? `border-${clr}-500/70 bg-${clr}-500/10 text-${clr}-200` : ""),
+          (props.isActive ? ` border-${clr}-500/70 bg-${clr}-500/10 text-${clr}-200` : ""),
         {
           "px-2 py-0.5": props.size === "xs",
         }

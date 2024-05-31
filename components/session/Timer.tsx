@@ -4,6 +4,8 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Pause, Play, SkipForward, TimerReset } from "lucide-react";
 
+import Pattern from "../Pattern";
+
 export default function Timer() {
   const [timer, setTimer] = React.useState({
     time: 60,
@@ -66,41 +68,15 @@ export default function Timer() {
   return (
     <div
       className={cn(
-        "w-full h-[50lvh] max-h-[200px] border border-lime-300/50 rounded-xl bg-lime-500/10 flex justify-center items-center text-lime-300 flex-col relative",
+        "w-full h-[50lvh] max-h-[200px] border border-lime-300/50 rounded-xl flex justify-center items-center text-lime-300 flex-col relative",
         {
           "animate-timer-danger": timer.time < 10 && timer.time > 3,
           "animate-timer-danger-fast": timer.time <= 3 && timer.time > 0,
-          "border-rose-400/50 text-rose-400 bg-rose-500/10": timer.time === 0,
+          "border-rose-400/50 text-rose-400": timer.time === 0,
         }
       )}
     >
-      <svg
-        className="absolute top-0 left-0 w-full h-full opacity-20"
-        viewBox="0 0 500 100"
-        xmlns="http://www.w3.org/2000/svg"
-        // responsive
-        preserveAspectRatio="none"
-      >
-        <pattern
-          id="pattern-3"
-          patternUnits="userSpaceOnUse"
-          width="8"
-          height="8"
-        >
-          <path
-            d="M-1,1 l4,-4 M0,8 l8,-8 M6,10 l4,-4"
-            stroke="currentColor"
-          />
-        </pattern>
-
-        <rect
-          x="0"
-          y="0"
-          width="500"
-          height="100"
-          fill="url(#pattern-3)"
-        />
-      </svg>
+      <Pattern />
 
       <div className="relative z-50">
         <div className="flex justify-center items-center">
