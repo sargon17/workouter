@@ -8,6 +8,8 @@ import { getUser } from "@/lib/fetch";
 import { WorkoutDetailsHeader } from "./details/WorkoutDetailsHeader";
 import { ExerciseCard, ExerciseCardBody, ExerciseCardHeader } from "../exercises/card/ExerciseCard";
 
+import NoExercisesList from "../exercises/list/NoExercisesList";
+
 import { Suspense } from "react";
 
 import StatusLabel from "../status/StatusLabel";
@@ -75,7 +77,7 @@ export default async function WorkoutDetails(props: WorkoutDetailsProps) {
               )
             }
           />
-          {workout && (
+          {workout ? (
             <div className="flex flex-col gap-2 mb-12 ">
               {exercises.map((exercise: any) => (
                 <ExerciseCard key={exercise.exercise_id}>
@@ -90,6 +92,8 @@ export default async function WorkoutDetails(props: WorkoutDetailsProps) {
                 </ExerciseCard>
               ))}
             </div>
+          ) : (
+            <NoExercisesList />
           )}
         </div>
       </Suspense>
