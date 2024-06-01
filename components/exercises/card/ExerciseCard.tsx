@@ -1,21 +1,19 @@
-"use client"
+"use client";
 
 import React, { FC } from "react";
-
 
 import { motion } from "framer-motion";
 
 import ExerciseCardBody from "./ExerciseCardBody";
 import ExerciseCardHeader from "./ExerciseCardHeader";
-
-
+import NoExercisesCard from "./NoExercisesCard";
 
 type ExerciseCardProps = {
   children: React.ReactNode | React.ReactNode[];
   layoutId?: string;
 };
 
-const ExerciseCard: FC<ExerciseCardProps>  = (props: ExerciseCardProps) => {
+const ExerciseCard: FC<ExerciseCardProps> = (props: ExerciseCardProps) => {
   return (
     <motion.div
       className="w-full bg-stone-900 border border-stone-800 rounded-xl p-3"
@@ -29,6 +27,4 @@ const ExerciseCard: FC<ExerciseCardProps>  = (props: ExerciseCardProps) => {
   );
 };
 
-
-export { ExerciseCard, ExerciseCardHeader, ExerciseCardBody };
-
+export { ExerciseCard, ExerciseCardHeader, ExerciseCardBody, NoExercisesCard };

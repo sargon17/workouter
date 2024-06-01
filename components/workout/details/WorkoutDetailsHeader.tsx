@@ -22,8 +22,12 @@ type WorkoutDetailsHeaderProps = {
 };
 
 const WorkoutDetailsHeader = (props: WorkoutDetailsHeaderProps) => {
-  const status = props.status || "planed";
-  const color = getStatusColor(status);
+  const status = props.status;
+  let color = "stone";
+
+  if (status) {
+    color = getStatusColor(status);
+  }
 
   const conditionalButtonRender = () => {
     if (props.workout) {
@@ -44,7 +48,7 @@ const WorkoutDetailsHeader = (props: WorkoutDetailsHeaderProps) => {
     <div
       className={cn(
         "w-full min-h-56 p-2 py-16 my-2 border rounded-2xl flex flex-col justify-center items-center gap-2 relative" +
-          ` border-${color}-500/70 text-${color}-200`
+          ` border-${color}-500/20 text-${color}-200`
       )}
     >
       <Pattern />
@@ -121,7 +125,7 @@ type WorkoutDetailsHeaderFooterProps = {
 const WorkoutDetailsHeaderFooter = (props: WorkoutDetailsHeaderFooterProps) => {
   const clss = cn(
     "backdrop-blur-sm border rounded-xl p-2 px-4 w-full" +
-      ` bg-${props.color}-500/5 border-${props.color}-500/70 text-${props.color}-200`
+      ` bg-${props.color}-500/5 border-${props.color}-500/20 text-${props.color}-200`
   );
 
   return (
