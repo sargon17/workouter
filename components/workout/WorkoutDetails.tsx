@@ -1,70 +1,29 @@
-import { createClient } from "@/utils/supabase/server";
-// import { useRouter } from "next/navigation";
-
-import { toast } from "sonner";
-
-import { getUser } from "@/lib/fetch";
-
 import { WorkoutDetailsHeader } from "./details/WorkoutDetailsHeader";
 import { ExerciseCard, ExerciseCardBody, ExerciseCardHeader } from "../exercises/card/ExerciseCard";
 
 import NoExercisesList from "../exercises/list/NoExercisesList";
 
-import { Suspense } from "react";
-
 import StatusLabel from "../status/StatusLabel";
-import { w } from "million/dist/shared/million.50256fe7.mjs";
-import { date } from "zod";
 
 // force dynamic cashing
 export const dynamic = "force-dynamic";
 
 type WorkoutDetailsProps = {
   date: string;
+  workout: any;
 };
 
 export default async function WorkoutDetails(props: WorkoutDetailsProps) {
-  const supabase = createClient();
-  //   const router = useRouter();
+  const workout = props.workout;
 
-  const fetchWorkouts = async () => {
-    const user = await getUser(supabase);
-
-    if (!user) return;
-
-    const { data: workout, error } = await supabase
-      .from("workouts")
-      .select(
-        "id, title, date, status_id, workout_exercises(*, target_sets(*), exercises(*)), workout_statuses(name) workout_body_parts(name)"
-      )
-      .eq("user_id", user.id)
-      .eq("date", props.date);
-
-    if (error) {
-      console.error("error", error);
-      toast("Error fetching workouts");
-    }
-
-    if (!workout) {
-      toast("No workouts found");
-      return;
-    }
-
-    return workout[0];
-  };
-
-  const workout: any = await fetchWorkouts();
   let exercises: any = [];
 
   if (workout) {
     exercises = workout.workout_exercises.sort((a: any, b: any) => a.order - b.order);
   }
 
-  console.log("exercises", exercises);
-
   return (
     <div>
-      {/* <Suspense fallback={<WorkoutDetailsLoading />}> */}
       <div>
         <WorkoutDetailsHeader
           workout={workout && workout}
@@ -101,7 +60,6 @@ export default async function WorkoutDetails(props: WorkoutDetailsProps) {
           <NoExercisesList />
         )}
       </div>
-      {/* </Suspense> */}
     </div>
   );
 }
