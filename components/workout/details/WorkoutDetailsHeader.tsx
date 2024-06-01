@@ -2,6 +2,7 @@ import SingleWorkoutMoreButton from "./../SingleWorkoutMoreButton";
 import StartWorkoutTrigger from "./../start/StartWorkoutTrigger";
 import Pattern from "@/components/Pattern";
 import { MoreHorizontal } from "lucide-react";
+import CreateFromTemplate from "../template/CreateFromTemplateTrigger";
 
 import Link from "next/link";
 import { Button } from "../../ui/button";
@@ -14,14 +15,30 @@ import { StatusType } from "@/types/workout";
 import { getStatusColor } from "../../status/getStatusColor";
 
 type WorkoutDetailsHeaderProps = {
-  workout: Workout;
+  workout: Workout | null;
   status?: StatusType["name"];
   chip?: React.ReactNode;
+  date: string;
 };
 
 const WorkoutDetailsHeader = (props: WorkoutDetailsHeaderProps) => {
   const status = props.status || "planed";
   const color = getStatusColor(status);
+
+  const conditionalButtonRender = () => {
+    if (props.workout) {
+      switch (status) {
+        case "planed":
+          return <StartWorkoutButton workout={props.workout} />;
+        case "in progress":
+          return <ContinueWorkoutButton workout={props.workout} />;
+        default:
+          return null;
+      }
+    } else {
+      return <CreateFromTemplateButton date={props.date} />;
+    }
+  };
 
   return (
     <div
@@ -31,38 +48,52 @@ const WorkoutDetailsHeader = (props: WorkoutDetailsHeaderProps) => {
       )}
     >
       <Pattern />
-      {props.chip && <div className="absolute top-1 left-1">{props.chip}</div>}
+      {props.workout && props.chip && <div className="absolute top-1 left-1">{props.chip}</div>}
 
-      <div className=" absolute z-10 top-1 right-1">
-        <SingleWorkoutMoreButton
-          id={props.workout.id}
-          title={props.workout.title}
-          date={props.workout.date}
-        >
-          <Button
-            size="icon"
-            variant="ghost"
+      {props.workout && (
+        <div className=" absolute z-10 top-1 right-1">
+          <SingleWorkoutMoreButton
+            id={props.workout.id}
+            title={props.workout.title}
+            date={props.workout.date}
           >
-            <MoreHorizontal className="h-4 w-4" />
-          </Button>
-        </SingleWorkoutMoreButton>
-      </div>
+            <Button
+              size="icon"
+              variant="ghost"
+            >
+              <MoreHorizontal className="h-4 w-4" />
+            </Button>
+          </SingleWorkoutMoreButton>
+        </div>
+      )}
       <div className="relative z-10 flex flex-col items-center gap-2">
         <h2 className=" text-balance font-bold text-2xl antialiased capitalize text-center">
-          {props.workout.title}
+          {props.workout?.title || "Nothing planned yet for Today"}
         </h2>
-        {props.workout.workout_statuses?.name === "planed" && <StartWorkoutButton workout={props.workout} />}
-        {props.workout.workout_statuses?.name === "in progress" && (
-          <ContinueWorkoutButton workout={props.workout} />
-        )}
+        {conditionalButtonRender()}
       </div>
-      <div className=" absolute min-h-12 bottom-0 left-0 w-full ">
-        <WorkoutDetailsHeaderFooter
-          workout={props.workout}
-          color={color}
-        />
-      </div>
+      {props.workout && (
+        <div className=" absolute min-h-12 bottom-0 left-0 w-full ">
+          <WorkoutDetailsHeaderFooter
+            workout={props.workout}
+            color={color}
+          />
+        </div>
+      )}
     </div>
+  );
+};
+
+const CreateFromTemplateButton = ({ date }: { date: string }) => {
+  return (
+    <CreateFromTemplate date={date}>
+      <Button
+        variant="outline"
+        size="sm"
+      >
+        Create from Template
+      </Button>
+    </CreateFromTemplate>
   );
 };
 

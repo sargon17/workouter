@@ -4,7 +4,6 @@ import { createClient } from "@/utils/supabase/server";
 import { toast } from "sonner";
 
 import { getUser } from "@/lib/fetch";
-import CreateFromTemplate from "./template/CreateFromTemplate";
 
 import { WorkoutDetailsHeader } from "./details/WorkoutDetailsHeader";
 import { ExerciseCard, ExerciseCardBody, ExerciseCardHeader } from "../exercises/card/ExerciseCard";
@@ -62,18 +61,21 @@ export default async function WorkoutDetails(props: WorkoutDetailsProps) {
   return (
     <div>
       <Suspense fallback={<WorkoutDetailsLoading />}>
-        {workout && (
-          <div>
-            <WorkoutDetailsHeader
-              workout={workout}
-              status={workout.workout_statuses?.name}
-              chip={
+        <div>
+          <WorkoutDetailsHeader
+            workout={workout && workout}
+            status={workout && workout.workout_statuses?.name}
+            date={props.date}
+            chip={
+              workout && (
                 <StatusLabel
                   status={workout.workout_statuses?.name}
                   workout_id={workout.id}
                 />
-              }
-            />
+              )
+            }
+          />
+          {workout && (
             <div className="flex flex-col gap-2 mb-12 ">
               {exercises.map((exercise: any) => (
                 <ExerciseCard key={exercise.exercise_id}>
@@ -88,9 +90,8 @@ export default async function WorkoutDetails(props: WorkoutDetailsProps) {
                 </ExerciseCard>
               ))}
             </div>
-          </div>
-        )}
-        {!workout && <NoWorkoutsFound date={props.date} />}
+          )}
+        </div>
       </Suspense>
     </div>
   );
@@ -100,7 +101,7 @@ const NoWorkoutsFound = (props: { date: string }) => {
   return (
     <div className="w-full h-[70vh] flex flex-col justify-center items-center">
       <h1>No workouts found there</h1>
-      <CreateFromTemplate date={props.date} />
+      {/* <CreateFromTemplate date={props.date} /> */}
     </div>
   );
 };
