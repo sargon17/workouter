@@ -1,5 +1,3 @@
-import React from "react";
-
 import { createClient } from "@/utils/supabase/server";
 
 import { Button } from "@/components/ui/button";
@@ -11,9 +9,10 @@ import UseTemplateButton from "./UseTemplateButton";
 import { TemplateList, TemplateItem } from "@/components/templates/TemplateList";
 
 type TemplateProps = {
-  date?: string;
+  children: React.ReactNode;
+  date: string;
 };
-export default async function CreateFromTemplate(props: TemplateProps) {
+export default async function CreateFromTemplateTrigger(props: TemplateProps) {
   const supabase = createClient();
 
   //   get user's templates
@@ -41,16 +40,7 @@ export default async function CreateFromTemplate(props: TemplateProps) {
   return (
     <div>
       <Dialog>
-        {/* <p className="text-xs text-stone-500 pb-1">Create a workout from a template you've saved.</p> */}
-        <DialogTrigger asChild>
-          <Button
-            type="button"
-            variant={"default"}
-            size="sm"
-          >
-            Create from Template
-          </Button>
-        </DialogTrigger>
+        <DialogTrigger asChild>{props.children}</DialogTrigger>
         <DialogContent className="w-full">
           <DialogHeader>
             <DialogTitle>Select a template</DialogTitle>
