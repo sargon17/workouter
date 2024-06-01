@@ -13,7 +13,7 @@ type ExerciseCardProps = {
   layoutId?: string;
 };
 
-const ExerciseCard: FC<ExerciseCardProps> = (props: ExerciseCardProps) => {
+const ExerciseCard = (props: ExerciseCardProps) => {
   return (
     <motion.div
       className="w-full bg-stone-900 border border-stone-800 rounded-xl p-3"

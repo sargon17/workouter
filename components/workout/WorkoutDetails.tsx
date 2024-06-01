@@ -13,6 +13,8 @@ import NoExercisesList from "../exercises/list/NoExercisesList";
 import { Suspense } from "react";
 
 import StatusLabel from "../status/StatusLabel";
+import { w } from "million/dist/shared/million.50256fe7.mjs";
+import { date } from "zod";
 
 // force dynamic cashing
 export const dynamic = "force-dynamic";
@@ -62,53 +64,47 @@ export default async function WorkoutDetails(props: WorkoutDetailsProps) {
 
   return (
     <div>
-      <Suspense fallback={<WorkoutDetailsLoading />}>
-        <div>
-          <WorkoutDetailsHeader
-            workout={workout && workout}
-            status={workout && workout.workout_statuses?.name}
-            date={props.date}
-            chip={
-              workout && (
-                <StatusLabel
-                  status={workout.workout_statuses?.name}
-                  workout_id={workout.id}
+      {/* <Suspense fallback={<WorkoutDetailsLoading />}> */}
+      <div>
+        <WorkoutDetailsHeader
+          workout={workout && workout}
+          status={workout && workout.workout_statuses?.name}
+          date={props.date}
+          chip={
+            workout && (
+              <StatusLabel
+                status={workout.workout_statuses?.name}
+                workout_id={workout.id}
+              />
+            )
+          }
+        />
+        {workout ? (
+          <div className="flex flex-col gap-2 mb-12 ">
+            {exercises.map((exercise: any) => (
+              <ExerciseCard
+                layoutId={exercise.id + props.date + "_card"}
+                key={exercise.id + workout.id + props.date + "_card"}
+              >
+                <ExerciseCardHeader
+                  title={exercise.exercises.title}
+                  workout_exercise_id={exercise.id}
                 />
-              )
-            }
-          />
-          {workout ? (
-            <div className="flex flex-col gap-2 mb-12 ">
-              {exercises.map((exercise: any) => (
-                <ExerciseCard key={exercise.exercise_id}>
-                  <ExerciseCardHeader
-                    title={exercise.exercises.title}
-                    workout_exercise_id={exercise.id}
-                  />
-                  <ExerciseCardBody
-                    target_sets={exercise.target_sets}
-                    workout_exercise_id={exercise.id}
-                  />
-                </ExerciseCard>
-              ))}
-            </div>
-          ) : (
-            <NoExercisesList />
-          )}
-        </div>
-      </Suspense>
+                <ExerciseCardBody
+                  target_sets={exercise.target_sets}
+                  workout_exercise_id={exercise.id}
+                />
+              </ExerciseCard>
+            ))}
+          </div>
+        ) : (
+          <NoExercisesList />
+        )}
+      </div>
+      {/* </Suspense> */}
     </div>
   );
 }
-
-const NoWorkoutsFound = (props: { date: string }) => {
-  return (
-    <div className="w-full h-[70vh] flex flex-col justify-center items-center">
-      <h1>No workouts found there</h1>
-      {/* <CreateFromTemplate date={props.date} /> */}
-    </div>
-  );
-};
 
 const WorkoutDetailsLoading = () => {
   return (

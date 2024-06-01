@@ -2,7 +2,7 @@ import { ExerciseCard, ExerciseCardBody, ExerciseCardHeader } from "../card/Exer
 
 const fakeExercises = [
   {
-    id: 0,
+    id: "fake-exercise-1",
     title: "Bench Press",
     target_sets: [
       {
@@ -28,7 +28,7 @@ const fakeExercises = [
     ],
   },
   {
-    id: 1,
+    id: "fake-exercise-2",
     title: "Bicep Curl",
     target_sets: [
       {
@@ -60,8 +60,8 @@ export default function NoExercisesList() {
     <div className="flex flex-col gap-2 justify-start items-center mt-4 relative overflow-hidden">
       {fakeExercises.map((exercise: any) => (
         <ExerciseCard
-          key={exercise.id}
-          layoutId={exercise.id + exercise.title + "_card"}
+          key={exercise.title + "-no-exercises"}
+          layoutId={exercise.title + "_card-no-exercises"}
         >
           <ExerciseCardHeader
             title={exercise.title}
