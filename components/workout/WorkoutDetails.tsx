@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { createClient } from "@/utils/supabase/client";
 
 import { useRouter } from "next/navigation";
@@ -125,6 +125,7 @@ export default function WorkoutDetails(props: WorkoutDetailsProps) {
                 <ExerciseCardBody
                   target_sets={exercise.target_sets}
                   workout_exercise_id={exercise.id}
+                  sets={exercise.sets || null}
                 />
               </ExerciseCard>
             ))}

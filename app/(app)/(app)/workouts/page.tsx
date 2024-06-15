@@ -42,7 +42,7 @@ export default async function ProtectedPage({ searchParams }: { searchParams: { 
     const { data: workouts, error } = await supabase
       .from("workouts")
       .select(
-        "id, title, date, status_id, workout_exercises(*, target_sets(*), exercises(*)), workout_statuses(name) workout_body_parts(name)"
+        "id, title, date, status_id, workout_exercises(*, sets(*), target_sets(*), exercises(*)), workout_statuses(name) workout_body_parts(name)"
       )
       .eq("user_id", user.id)
       .in("date", daysOfWeek);
