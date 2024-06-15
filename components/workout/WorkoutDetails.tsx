@@ -24,6 +24,8 @@ export default function WorkoutDetails(props: WorkoutDetailsProps) {
   const supabase = createClient();
   const router = useRouter();
 
+  const isEditing = !exercises.some((exercises: any) => exercises.sets && exercises.sets.length > 0);
+
   useEffect(() => {
     if (workout) {
       setExercises(workout.workout_exercises.sort((a: any, b: any) => a.order - b.order));
@@ -126,6 +128,7 @@ export default function WorkoutDetails(props: WorkoutDetailsProps) {
                   target_sets={exercise.target_sets}
                   workout_exercise_id={exercise.id}
                   sets={exercise.sets || null}
+                  isEditing={isEditing}
                 />
               </ExerciseCard>
             ))}

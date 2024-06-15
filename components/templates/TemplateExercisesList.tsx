@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect} from "react";
+import { useState, useEffect } from "react";
 import { createClient } from "@/utils/supabase/client";
 import { useRouter } from "next/navigation";
 
@@ -129,6 +129,7 @@ export default function TemplateExercisesList(props: TemplateExercisesListProps)
               <ExerciseCardBody
                 target_sets={exercise.target_sets}
                 workout_exercise_id={exercise.id}
+                isEditing={true}
               ></ExerciseCardBody>
             </ExerciseCard>
           ))}

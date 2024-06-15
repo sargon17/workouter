@@ -22,6 +22,7 @@ type ExerciseCardBodyProps = {
     weight: number;
   }[];
   workout_exercise_id: number;
+  isEditing?: boolean;
 };
 const ExerciseCardBody = (props: ExerciseCardBodyProps) => {
   const [targetSets, setTargetSets] = useState(props.target_sets);
@@ -150,32 +151,36 @@ const ExerciseCardBody = (props: ExerciseCardBodyProps) => {
                     <span className="text-xs font-normal text-stone-500">Kg</span>
                   </TargetData>
                 </SetDataAdvancedEditor>
-                <Button
-                  size="icon"
-                  variant="ghost"
-                  className=" aspect-square"
-                  onClick={() => handleRemoveTargetSet(set.id)}
-                >
-                  <Trash2 className="h-4 w-4 text-rose-500" />
-                </Button>
+                {props.isEditing && (
+                  <Button
+                    size="icon"
+                    variant="ghost"
+                    className=" aspect-square"
+                    onClick={() => handleRemoveTargetSet(set.id)}
+                  >
+                    <Trash2 className="h-4 w-4 text-rose-500" />
+                  </Button>
+                )}
               </motion.div>
             ))}
         </AnimatePresence>
-        <div className="w-full flex justify-end">
-          <div className="w-full">
-            <p className=" text-xs text-stone-500 text-balance antialiased">
-              by clicking on each set you can edit the target reps and weight. Click the trash icon to remove
-              the set.
-            </p>
+        {props.isEditing && (
+          <div className="w-full flex justify-end">
+            <div className="w-full">
+              <p className=" text-xs text-stone-500 text-balance antialiased">
+                by clicking on each set you can edit the target reps and weight. Click the trash icon to
+                remove the set.
+              </p>
+            </div>
+            <Button
+              size="icon"
+              variant="ghost"
+              onClick={handleAddTargetSet}
+            >
+              <Plus className="h-4 w-4" />
+            </Button>
           </div>
-          <Button
-            size="icon"
-            variant="ghost"
-            onClick={handleAddTargetSet}
-          >
-            <Plus className="h-4 w-4" />
-          </Button>
-        </div>
+        )}
       </div>
     </div>
   );
@@ -220,14 +225,14 @@ const SetsList = (props: SetsListProps) => {
             {set.weight}
             <span className="text-xs font-normal text-stone-500">Kg</span>
           </TargetData>
-          <Button
+          {/* <Button
             size="icon"
             variant="ghost"
             className=" aspect-square"
             // onClick={() => handleRemoveSet(set.id)}
           >
             <Trash2 className="h-4 w-4 text-rose-500" />
-          </Button>
+          </Button> */}
         </motion.div>
       ))}
     </AnimatePresence>
