@@ -16,7 +16,7 @@ type WorkoutDetailsProps = {
   workout: any;
 };
 
-export default async function WorkoutDetails(props: WorkoutDetailsProps) {
+export default function WorkoutDetails(props: WorkoutDetailsProps) {
   const workout = props.workout;
   const [exercises, setExercises] = useState<any>([]);
   const supabase = createClient();
@@ -34,11 +34,9 @@ export default async function WorkoutDetails(props: WorkoutDetailsProps) {
     // find the workout_exercise with the current index
     const workout_exercise = exercises.find((exercise: any) => exercise.order === currentIndex);
     const target_workout_exercise = exercises.find((exercise: any) => exercise.order === targetIndex);
-
     if (!workout_exercise || !target_workout_exercise) {
       return;
     }
-
     // optimistic update
     setExercises((prev: any) => {
       const updated = prev.map((exercise: any) => {
@@ -50,10 +48,8 @@ export default async function WorkoutDetails(props: WorkoutDetailsProps) {
         }
         return exercise;
       });
-
       return updated.sort((a: any, b: any) => a.order - b.order);
     });
-
     const { data, error } = await supabase.from("workout_exercises").upsert([
       {
         id: workout_exercise.id,
@@ -64,7 +60,6 @@ export default async function WorkoutDetails(props: WorkoutDetailsProps) {
         order: currentIndex,
       },
     ]);
-
     if (error) {
       console.error(error);
       toast.error("Failed to reorder exercises.");
@@ -74,8 +69,8 @@ export default async function WorkoutDetails(props: WorkoutDetailsProps) {
 
   return (
     <>
-      {workout ? (
-        <AnimatePresence mode="wait">
+      <AnimatePresence mode="wait">
+        {workout ? (
           <div className="flex flex-col gap-2 mb-12 ">
             {exercises.map((exercise: any) => (
               <ExerciseCard
@@ -95,20 +90,10 @@ export default async function WorkoutDetails(props: WorkoutDetailsProps) {
               </ExerciseCard>
             ))}
           </div>
-        </AnimatePresence>
-      ) : (
-        <NoExercisesList />
-      )}
+        ) : (
+          <NoExercisesList />
+        )}
+      </AnimatePresence>
     </>
   );
 }
-
-const WorkoutDetailsLoading = () => {
-  return (
-    <div className="w-full h-[70vh] flex flex-col justify-center items-center">
-      <h1 className=" animate-pulse font-bold text-lg">Loading your workout details...</h1>
-    </div>
-  );
-};
-
-export { WorkoutDetailsLoading };

@@ -6,8 +6,6 @@ import { SetDataAdvancedEditor } from "../../session/CurrentSet";
 
 import { Plus, Trash2 } from "lucide-react";
 
-// import { block, For } from "million/react";
-
 type ExerciseCardBodyProps = {
   target_sets: {
     id: number;
