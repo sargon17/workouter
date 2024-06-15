@@ -14,6 +14,9 @@ import isoWeek from "dayjs/plugin/isoWeek";
 import dayjs from "dayjs";
 import { toast } from "sonner";
 
+import { WorkoutDetailsHeader } from "@/components/workout/details/WorkoutDetailsHeader";
+import StatusLabel from "@/components/status/StatusLabel";
+
 export default async function ProtectedPage({ searchParams }: { searchParams: { date: string } }) {
   const supabase = createClient();
   const searchDate = searchParams.date || new Date().toISOString().split("T")[0];
@@ -59,13 +62,7 @@ export default async function ProtectedPage({ searchParams }: { searchParams: { 
 
   const workouts: any = await fetchWorkouts();
 
-  // cleaned up workouts to status and date
-  const cleanedWorkouts = workouts.map((workout: any) => {
-    return {
-      date: dayjs(workout.date).format("YYYY-MM-DD"),
-      status: workout.workout_statuses?.name,
-    };
-  });
+  const workout = workouts.find((workout: any) => workout.date === searchDate) || null;
 
   return (
     <>
@@ -83,10 +80,23 @@ export default async function ProtectedPage({ searchParams }: { searchParams: { 
           date={searchDate}
           user_id={user.id}
         />
+        <WorkoutDetailsHeader
+          workout={workout && workout}
+          status={workout && workout.workout_statuses?.name}
+          date={searchDate}
+          chip={
+            workout && (
+              <StatusLabel
+                status={workout.workout_statuses?.name}
+                workout_id={workout.id}
+              />
+            )
+          }
+        />
         <WorkoutDetails
           date={searchDate}
           key={searchDate}
-          workout={workouts.find((workout: any) => workout.date === searchDate) || null}
+          workout={workout}
         />
       </Body>
     </>

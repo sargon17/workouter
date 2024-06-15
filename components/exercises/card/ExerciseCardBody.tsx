@@ -6,7 +6,7 @@ import { SetDataAdvancedEditor } from "../../session/CurrentSet";
 
 import { Plus, Trash2 } from "lucide-react";
 
-import { block, For } from "million/react";
+// import { block, For } from "million/react";
 
 type ExerciseCardBodyProps = {
   target_sets: {
@@ -16,7 +16,7 @@ type ExerciseCardBodyProps = {
   }[];
   workout_exercise_id: number;
 };
-const  ExerciseCardBody = (props: ExerciseCardBodyProps) => {
+const ExerciseCardBody = (props: ExerciseCardBodyProps) => {
   const [targetSets, setTargetSets] = useState(props.target_sets);
 
   const supabase = createClient();
@@ -71,8 +71,7 @@ const  ExerciseCardBody = (props: ExerciseCardBodyProps) => {
     <div className="flex flex-col gap-1">
       <p className=" text-sm font-semibold text-stone-500">Target sets:</p>
       <div className="flex gap-1 flex-col">
-        <For each={targetSets}>
-          {(set: any, index) => (
+        {targetSets.map((set: any, index: number) => (
           <div
             key={index + "-target-set"}
             className=" flex items-center w-full gap-1"
@@ -110,9 +109,7 @@ const  ExerciseCardBody = (props: ExerciseCardBodyProps) => {
               <Trash2 className="h-4 w-4 text-rose-500" />
             </Button>
           </div>
-
-          )}
-        </For>
+        ))}
         <div className="w-full flex justify-end">
           <div className="w-full">
             <p className=" text-xs text-stone-500 text-balance antialiased">
@@ -133,7 +130,7 @@ const  ExerciseCardBody = (props: ExerciseCardBodyProps) => {
   );
 };
 
-const TargetData = (props: { children: React.ReactNode | React.ReactNode[]; }) => {
+const TargetData = (props: { children: React.ReactNode | React.ReactNode[] }) => {
   return (
     <p className="text-xl font-black flex justify-center items-baseline gap-1 p-1 bg-stone-950 border border-stone-800 rounded-md w-full hover:bg-stone-950/60 transition-colors">
       {props.children}

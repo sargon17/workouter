@@ -1,4 +1,3 @@
-import MillionLint from "@million/lint";
 import { withPayload } from "@payloadcms/next/withPayload";
 /** @type {import('next').NextConfig} */
 import withPWA from "next-pwa";
@@ -29,4 +28,4 @@ const nextConfig = withPWA({
   },
 });
 
-export default MillionLint.next({ rsc: true })(withPayload(nextConfig));
+export default withPayload(nextConfig);
