@@ -11,6 +11,8 @@ import NoExercisesList from "../exercises/list/NoExercisesList";
 
 import { AnimatePresence } from "framer-motion";
 
+import handleMassExercisesReorder from "@/utils/handleMassExercisesReorder";
+
 type WorkoutDetailsProps = {
   date: string;
   workout: any;
@@ -21,8 +23,6 @@ export default function WorkoutDetails(props: WorkoutDetailsProps) {
   const [exercises, setExercises] = useState<any>([]);
   const supabase = createClient();
   const router = useRouter();
-
-  // let exercises: any = [];
 
   useEffect(() => {
     if (workout) {
@@ -67,11 +67,49 @@ export default function WorkoutDetails(props: WorkoutDetailsProps) {
     }
   };
 
+  const handleDeleteExercise = async (workout_exercise_id: number) => {
+    // optimistic update
+    try {
+      const newExercises = await handleMassExercisesReorder(
+        exercises.filter((exercise: any) => exercise.id !== workout_exercise_id),
+        supabase
+      );
+
+      console.log("new exercises", newExercises);
+
+      setExercises(newExercises);
+    } catch (error) {
+      console.error(error);
+      toast.error("An error occurred while deleting the exercise");
+      // revert the optimistic update
+      setExercises(exercises.sort((a: any, b: any) => a.order - b.order));
+      return;
+    }
+    // setExercises(exercises.filter((exercise: any) => exercise.id !== workout_exercise_id));
+
+    const { data, error } = await supabase
+      .from("workout_exercises")
+      .delete()
+      .eq("id", workout_exercise_id)
+      .single();
+
+    if (error) {
+      console.error(error);
+      toast.error("An error occurred while deleting the exercise");
+      // revert the optimistic update
+      setExercises(exercises.sort((a: any, b: any) => a.order - b.order));
+      return;
+    } else {
+    }
+
+    return;
+  };
+
   return (
     <>
-      <AnimatePresence mode="wait">
-        {workout ? (
-          <div className="flex flex-col gap-2 mb-12 ">
+      {workout ? (
+        <div className="flex flex-col gap-2 mb-12 ">
+          <AnimatePresence>
             {exercises.map((exercise: any) => (
               <ExerciseCard
                 layoutId={exercise.id + props.date + "_card"}
@@ -82,6 +120,7 @@ export default function WorkoutDetails(props: WorkoutDetailsProps) {
                   workout_exercise_id={exercise.id}
                   onReorder={handleExercisesReorder}
                   index={exercise.order}
+                  onDelete={handleDeleteExercise}
                 />
                 <ExerciseCardBody
                   target_sets={exercise.target_sets}
@@ -89,11 +128,11 @@ export default function WorkoutDetails(props: WorkoutDetailsProps) {
                 />
               </ExerciseCard>
             ))}
-          </div>
-        ) : (
-          <NoExercisesList />
-        )}
-      </AnimatePresence>
+          </AnimatePresence>
+        </div>
+      ) : (
+        <NoExercisesList />
+      )}
     </>
   );
 }
