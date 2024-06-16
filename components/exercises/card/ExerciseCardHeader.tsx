@@ -77,11 +77,11 @@ const ExerciseCardHeader = (props: ExerciseCardHeaderProps) => {
             Done Editing
           </Button>
         )}
-        {props.onDelete && props.onEditClick && (
+        {(props.onDelete || props.onEditClick) && (
           <ExerciseMoreButton
             workout_exercise_id={props.workout_exercise_id}
-            onDelete={props.onDelete}
-            onEditClick={props.onEditClick}
+            onDelete={props.onDelete && props.onDelete}
+            onEditClick={props.onEditClick && props.onEditClick}
           >
             <Button
               size="icon"
@@ -99,7 +99,7 @@ const ExerciseCardHeader = (props: ExerciseCardHeaderProps) => {
 type ExerciseMoreButtonProps = {
   children: React.ReactNode;
   workout_exercise_id: number;
-  onDelete: (id: number) => void;
+  onDelete?: (id: number) => void;
   onEditClick?: () => void;
 };
 
@@ -111,13 +111,15 @@ const ExerciseMoreButton = (props: ExerciseMoreButtonProps) => {
         <DropdownMenuLabel>Workout Actions</DropdownMenuLabel>
         <DropdownMenuSeparator />
 
-        <DropdownMenuItem
-          className="text-red-500 dark:focus:bg-red-900 "
-          onClick={() => props.onDelete(props.workout_exercise_id)}
-        >
-          <Trash2 className="h-4 w-4 mr-2" />
-          Delete
-        </DropdownMenuItem>
+        {props.onDelete && (
+          <DropdownMenuItem
+            className="text-red-500 dark:focus:bg-red-900 "
+            onClick={() => props.onDelete && props.onDelete(props.workout_exercise_id)}
+          >
+            <Trash2 className="h-4 w-4 mr-2" />
+            Delete
+          </DropdownMenuItem>
+        )}
         {props.onEditClick && (
           <DropdownMenuItem onClick={props.onEditClick}>
             <Edit className="h-4 w-4 mr-2" />
