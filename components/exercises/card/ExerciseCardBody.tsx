@@ -105,7 +105,10 @@ const ExerciseCardBody = (props: ExerciseCardBodyProps) => {
   console.log("sets", props.sets);
 
   return (
-    <div className="flex flex-col gap-1">
+    <motion.div
+      className="flex flex-col gap-1"
+      layout
+    >
       <p className=" text-sm font-semibold text-stone-500">
         {props.sets && props.sets.length > 0 ? "Sets" : "Target sets"}
       </p>
@@ -152,37 +155,48 @@ const ExerciseCardBody = (props: ExerciseCardBodyProps) => {
                   </TargetData>
                 </SetDataAdvancedEditor>
                 {props.isEditing && (
-                  <Button
-                    size="icon"
-                    variant="ghost"
-                    className=" aspect-square"
-                    onClick={() => handleRemoveTargetSet(set.id)}
+                  <motion.div
+                    initial={{ opacity: 0, width: 0 }}
+                    animate={{ opacity: 1, width: "auto" }}
+                    exit={{ opacity: 0, width: 0 }}
                   >
-                    <Trash2 className="h-4 w-4 text-rose-500" />
-                  </Button>
+                    <Button
+                      size="icon"
+                      variant="ghost"
+                      className=" aspect-square"
+                      onClick={() => handleRemoveTargetSet(set.id)}
+                    >
+                      <Trash2 className="h-4 w-4 text-rose-500" />
+                    </Button>
+                  </motion.div>
                 )}
               </motion.div>
             ))}
-        </AnimatePresence>
-        {props.isEditing && (
-          <div className="w-full flex justify-end">
-            <div className="w-full">
-              <p className=" text-xs text-stone-500 text-balance antialiased">
-                by clicking on each set you can edit the target reps and weight. Click the trash icon to
-                remove the set.
-              </p>
-            </div>
-            <Button
-              size="icon"
-              variant="ghost"
-              onClick={handleAddTargetSet}
+          {props.isEditing && (
+            <motion.div
+              className="w-full flex justify-end"
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: "auto" }}
+              exit={{ opacity: 0, height: 0 }}
             >
-              <Plus className="h-4 w-4" />
-            </Button>
-          </div>
-        )}
+              <div className="w-full">
+                <p className=" text-xs text-stone-500 text-balance antialiased">
+                  by clicking on each set you can edit the target reps and weight. Click the trash icon to
+                  remove the set.
+                </p>
+              </div>
+              <Button
+                size="icon"
+                variant="ghost"
+                onClick={handleAddTargetSet}
+              >
+                <Plus className="h-4 w-4" />
+              </Button>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
-    </div>
+    </motion.div>
   );
 };
 

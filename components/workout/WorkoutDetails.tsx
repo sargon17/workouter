@@ -87,7 +87,6 @@ export default function WorkoutDetails(props: WorkoutDetailsProps) {
       setExercises(exercises.sort((a: any, b: any) => a.order - b.order));
       return;
     }
-    // setExercises(exercises.filter((exercise: any) => exercise.id !== workout_exercise_id));
 
     const { data, error } = await supabase
       .from("workout_exercises")
@@ -113,24 +112,12 @@ export default function WorkoutDetails(props: WorkoutDetailsProps) {
         <div className="flex flex-col gap-2 mb-12 ">
           <AnimatePresence>
             {exercises.map((exercise: any) => (
-              <ExerciseCard
-                layoutId={exercise.id + props.date + "_card"}
-                key={exercise.id + workout.id + props.date + "_card"}
-              >
-                <ExerciseCardHeader
-                  title={exercise.exercises.title}
-                  workout_exercise_id={exercise.id}
-                  onReorder={handleExercisesReorder}
-                  index={exercise.order}
-                  onDelete={handleDeleteExercise}
-                />
-                <ExerciseCardBody
-                  target_sets={exercise.target_sets}
-                  workout_exercise_id={exercise.id}
-                  sets={exercise.sets || null}
-                  isEditing={isEditing}
-                />
-              </ExerciseCard>
+              <WorkoutExerciseCard
+                key={exercise.id + "_card"}
+                exercise={exercise}
+                handleExercisesReorder={handleExercisesReorder}
+                handleDeleteExercise={handleDeleteExercise}
+              />
             ))}
           </AnimatePresence>
         </div>
@@ -140,3 +127,40 @@ export default function WorkoutDetails(props: WorkoutDetailsProps) {
     </>
   );
 }
+
+type WorkoutExerciseCardProps = {
+  exercise: any;
+  handleExercisesReorder: (currentIndex: number, targetIndex: number) => void;
+  handleDeleteExercise: (workout_exercise_id: number) => void;
+};
+
+const WorkoutExerciseCard = (props: WorkoutExerciseCardProps) => {
+  const [isEditing, setIsEditing] = useState(false);
+
+  const handleEditClick = () => {
+    setIsEditing(!isEditing);
+  };
+
+  return (
+    <ExerciseCard
+      layoutId={props.exercise.id + "_card"}
+      key={props.exercise.id + "_card"}
+    >
+      <ExerciseCardHeader
+        title={props.exercise.exercises.title}
+        workout_exercise_id={props.exercise.id}
+        onReorder={props.handleExercisesReorder}
+        index={props.exercise.order}
+        onDelete={props.handleDeleteExercise}
+        onEditClick={handleEditClick}
+        isEditing={isEditing}
+      />
+      <ExerciseCardBody
+        target_sets={props.exercise.target_sets}
+        workout_exercise_id={props.exercise.id}
+        sets={props.exercise.sets || null}
+        isEditing={isEditing}
+      />
+    </ExerciseCard>
+  );
+};

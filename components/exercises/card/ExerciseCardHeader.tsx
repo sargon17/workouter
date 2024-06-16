@@ -1,12 +1,10 @@
-"use client"
+"use client";
 
 import React from "react";
 
-
 import { Button } from "@/components/ui/button";
 
-
-import { Trash2, ChevronUp, ChevronDown, MoreHorizontal } from "lucide-react";
+import { Trash2, ChevronUp, ChevronDown, MoreHorizontal, Edit } from "lucide-react";
 
 import {
   DropdownMenu,
@@ -16,7 +14,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-
+import { on } from "events";
 
 type ExerciseCardHeaderProps = {
   title: string;
@@ -25,6 +23,8 @@ type ExerciseCardHeaderProps = {
   onReorder?: (currentIndex: number, targetIndex: number) => void;
   index?: number;
   onDelete?: (id: number) => void;
+  onEditClick?: () => void;
+  isEditing?: boolean;
 };
 
 const ExerciseCardHeader = (props: ExerciseCardHeaderProps) => {
@@ -66,29 +66,41 @@ const ExerciseCardHeader = (props: ExerciseCardHeaderProps) => {
         </div>
         {props.subtitle && <p className=" text-sm text-stone-500">{props.subtitle}</p>}
       </div>
-      {props.onDelete && (
-        <ExerciseMoreButton
-          workout_exercise_id={props.workout_exercise_id}
-          onDelete={props.onDelete}
-        >
+      <div>
+        {props.isEditing && (
           <Button
-            size="icon"
+            size="sm"
             variant="ghost"
+            onMouseDown={props.onEditClick}
+            className=" text-sm text-stone-500 "
           >
-            <MoreHorizontal className="h-4 w-4" />
+            Done Editing
           </Button>
-        </ExerciseMoreButton>
-      )}
+        )}
+        {props.onDelete && props.onEditClick && (
+          <ExerciseMoreButton
+            workout_exercise_id={props.workout_exercise_id}
+            onDelete={props.onDelete}
+            onEditClick={props.onEditClick}
+          >
+            <Button
+              size="icon"
+              variant="ghost"
+            >
+              <MoreHorizontal className="h-4 w-4" />
+            </Button>
+          </ExerciseMoreButton>
+        )}
+      </div>
     </div>
   );
 };
-
-
 
 type ExerciseMoreButtonProps = {
   children: React.ReactNode;
   workout_exercise_id: number;
   onDelete: (id: number) => void;
+  onEditClick?: () => void;
 };
 
 const ExerciseMoreButton = (props: ExerciseMoreButtonProps) => {
@@ -106,6 +118,12 @@ const ExerciseMoreButton = (props: ExerciseMoreButtonProps) => {
           <Trash2 className="h-4 w-4 mr-2" />
           Delete
         </DropdownMenuItem>
+        {props.onEditClick && (
+          <DropdownMenuItem onClick={props.onEditClick}>
+            <Edit className="h-4 w-4 mr-2" />
+            Edit
+          </DropdownMenuItem>
+        )}
       </DropdownMenuContent>
     </DropdownMenu>
   );
