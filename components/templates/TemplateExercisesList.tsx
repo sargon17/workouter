@@ -74,7 +74,22 @@ export default function TemplateExercisesList(props: TemplateExercisesListProps)
 
   const handleDeleteExercise = async (workout_exercise_id: number) => {
     // optimistic update
-    setWorkoutExercises(workout_exercises.filter((exercise: any) => exercise.id !== workout_exercise_id));
+    try {
+      const newExercises = await handleMassExercisesReorder(
+        workout_exercises.filter((exercise: any) => exercise.id !== workout_exercise_id),
+        supabase
+      );
+
+      console.log("new exercises", newExercises);
+
+      setWorkoutExercises(newExercises);
+    } catch (error) {
+      console.error(error);
+      toast.error("An error occurred while deleting the exercise");
+      // revert the optimistic update
+      setWorkoutExercises(workout_exercises.sort((a: any, b: any) => a.order - b.order));
+      return;
+    }
 
     const { data, error } = await supabase
       .from("workout_exercises")
@@ -86,16 +101,10 @@ export default function TemplateExercisesList(props: TemplateExercisesListProps)
       console.error(error);
       toast.error("An error occurred while deleting the exercise");
       // revert the optimistic update
-      setWorkoutExercises(props.workout_exercises.sort((a: any, b: any) => a.order - b.order));
+      setWorkoutExercises(workout_exercises.sort((a: any, b: any) => a.order - b.order));
       return;
+    } else {
     }
-
-    setWorkoutExercises(async () => {
-      return await handleMassExercisesReorder(
-        workout_exercises.filter((exercise: any) => exercise.id !== workout_exercise_id),
-        supabase
-      );
-    });
 
     return;
   };
