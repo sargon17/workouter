@@ -9,9 +9,11 @@ import { ExerciseCard, ExerciseCardBody, ExerciseCardHeader } from "../exercises
 
 import NoExercisesList from "../exercises/list/NoExercisesList";
 
-import { AnimatePresence } from "framer-motion";
-
 import handleMassExercisesReorder from "@/utils/handleMassExercisesReorder";
+
+import { Button } from "@/components/ui/button";
+
+import { motion, AnimatePresence } from "framer-motion";
 
 type WorkoutDetailsProps = {
   date: string;
@@ -153,7 +155,6 @@ const WorkoutExerciseCard = (props: WorkoutExerciseCardProps) => {
         index={props.exercise.order}
         onDelete={props.handleDeleteExercise}
         onEditClick={handleEditClick}
-        isEditing={isEditing}
       />
       <ExerciseCardBody
         target_sets={props.exercise.target_sets}
@@ -161,6 +162,25 @@ const WorkoutExerciseCard = (props: WorkoutExerciseCardProps) => {
         sets={props.exercise.sets || null}
         isEditing={isEditing}
       />
+      <AnimatePresence>
+        {isEditing && (
+          <motion.div
+            className="flex justify-end"
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={{ opacity: 0, height: 0 }}
+          >
+            <Button
+              size="sm"
+              variant="ghost"
+              onMouseDown={handleEditClick}
+              className=" text-sm text-stone-500 "
+            >
+              Done Editing
+            </Button>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </ExerciseCard>
   );
 };

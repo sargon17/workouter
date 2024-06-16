@@ -24,7 +24,6 @@ type ExerciseCardHeaderProps = {
   index?: number;
   onDelete?: (id: number) => void;
   onEditClick?: () => void;
-  isEditing?: boolean;
 };
 
 const ExerciseCardHeader = (props: ExerciseCardHeaderProps) => {
@@ -67,16 +66,6 @@ const ExerciseCardHeader = (props: ExerciseCardHeaderProps) => {
         {props.subtitle && <p className=" text-sm text-stone-500">{props.subtitle}</p>}
       </div>
       <div>
-        {props.isEditing && (
-          <Button
-            size="sm"
-            variant="ghost"
-            onMouseDown={props.onEditClick}
-            className=" text-sm text-stone-500 "
-          >
-            Done Editing
-          </Button>
-        )}
         {(props.onDelete || props.onEditClick) && (
           <ExerciseMoreButton
             workout_exercise_id={props.workout_exercise_id}
