@@ -17,6 +17,14 @@ import { toast } from "sonner";
 import { WorkoutDetailsHeader } from "@/components/workout/details/WorkoutDetailsHeader";
 import StatusLabel from "@/components/status/StatusLabel";
 
+import NewWorkoutExerciseButton from "@/components/workout_exercises/NewWorkoutExerciseButton";
+
+import { ExerciseActions } from "@/components/exercises/ExerciseCardsList";
+
+const body_parts_ids = (body_parts: any) => {
+  return body_parts.map((bp: any) => bp.body_parts.id);
+};
+
 export default async function ProtectedPage({ searchParams }: { searchParams: { date: string } }) {
   const supabase = createClient();
   const searchDate = searchParams.date || new Date().toISOString().split("T")[0];
@@ -42,7 +50,7 @@ export default async function ProtectedPage({ searchParams }: { searchParams: { 
     const { data: workouts, error } = await supabase
       .from("workouts")
       .select(
-        "id, title, date, status_id, workout_exercises(*, sets(*), target_sets(*), exercises(*)), workout_statuses(name) workout_body_parts(name)"
+        "id, title, date, status_id, workout_exercises(*, sets(*), target_sets(*), exercises(*)), workout_statuses(name), workout_body_parts(*)"
       )
       .eq("user_id", user.id)
       .in("date", daysOfWeek);
@@ -98,6 +106,21 @@ export default async function ProtectedPage({ searchParams }: { searchParams: { 
           key={searchDate}
           workout={workout}
         />
+        <div className="absolute bottom-20 left-0 w-full flex justify-center items-center py-2 bg-gradient-to-t from-stone-950/90 from-50% ">
+          <ExerciseActions>
+            <NewWorkoutExerciseButton
+              workout_id={workout.id}
+              // body_parts={body_parts_ids(workout.workout_body_parts)}
+            >
+              <Button
+                size="sm"
+                variant="secondary"
+              >
+                Add exercise
+              </Button>
+            </NewWorkoutExerciseButton>
+          </ExerciseActions>
+        </div>
       </Body>
     </>
   );

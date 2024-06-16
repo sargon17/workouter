@@ -12,6 +12,8 @@ import {
 
 import { NewWorkoutExerciseForm } from "./NewWorkoutExerciseForm";
 
+import { cache } from "react";
+
 import { getUser } from "@/lib/fetch";
 
 export default async function NewWorkoutExerciseButton(props: {
@@ -26,7 +28,7 @@ export default async function NewWorkoutExerciseButton(props: {
   let { data: exercises, error } = await supabase
     .from("exercises")
     .select("id, title, body_part_id, body_parts(*)")
-    .in("body_part_id", props.body_parts || []);
+    .in("body_part_id", props.body_parts || [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]);
 
   return (
     <Drawer>

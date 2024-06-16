@@ -15,6 +15,10 @@ import { Button } from "@/components/ui/button";
 
 import { motion, AnimatePresence } from "framer-motion";
 
+import NewWorkoutExerciseButton from "@/components/workout_exercises/NewWorkoutExerciseButton";
+
+import { ExerciseActions } from "../exercises/ExerciseCardsList";
+
 type WorkoutDetailsProps = {
   date: string;
   workout: any;
@@ -25,8 +29,6 @@ export default function WorkoutDetails(props: WorkoutDetailsProps) {
   const [exercises, setExercises] = useState<any>([]);
   const supabase = createClient();
   const router = useRouter();
-
-  const isEditing = !exercises.some((exercises: any) => exercises.sets && exercises.sets.length > 0);
 
   useEffect(() => {
     if (workout) {

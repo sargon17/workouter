@@ -1,16 +1,10 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useMemo, useEffect } from "react";
 
 import { createClient } from "@/utils/supabase/client";
 import { useRouter } from "next/navigation";
 
-import { zodResolver } from "@hookform/resolvers/zod";
-import { ChevronsUpDown, Plus, Minus } from "lucide-react";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
-
-import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Input } from "../ui/input";
 
@@ -44,10 +38,28 @@ export function NewWorkoutExerciseForm(props: NewWorkoutExerciseFormProps) {
   const [inputValue, setInputValue] = useState<string>("");
   const [filteredExercises, setFilteredExercises] = useState<any>(props.exercises);
   const [selectedExercise, setSelectedExercise] = useState<Exercise | null>(null);
+  const [bodyPartsFilter, setBodyPartsFilter] = useState<any>([]);
 
   // const [isCommandOpen, setIsCommandOpen] = useState(true);
   const [suggestedSets, setSuggestedSets] = useState([]) as any;
   const [isWithSuggested, setIsWithSuggested] = useState(false);
+
+  // console.log("props.exercises", props.exercises);
+
+  const bodyPartsFilterList = useMemo(() => {
+    // return filtered unique Body Parts { id: number; name: string; }
+    return props.exercises
+      .map((exercise: any) => exercise.body_parts)
+      .flat()
+      .filter(
+        (bodyPart: any, index: number, self: any) =>
+          index === self.findIndex((t: any) => t.id === bodyPart.id)
+      );
+  }, [props.exercises]);
+
+  useEffect(() => {
+    handleFilter(inputValue);
+  }, [bodyPartsFilter]);
 
   const closeBtnRef = useRef<HTMLButtonElement>(null);
 
@@ -120,11 +132,17 @@ export function NewWorkoutExerciseForm(props: NewWorkoutExerciseFormProps) {
   const handleFilter = (value: string) => {
     setInputValue(value);
 
-    setFilteredExercises(
-      props.exercises.filter((exercise: Exercise) =>
-        exercise.title.toLowerCase().includes(value.toLowerCase())
-      )
+    let filteredExercises = props.exercises.filter((exercise: Exercise) =>
+      exercise.title.toLowerCase().includes(value.toLowerCase())
     );
+
+    if (bodyPartsFilter.length > 0) {
+      filteredExercises = filteredExercises.filter((exercise: Exercise) =>
+        bodyPartsFilter.includes(exercise.body_parts.id)
+      );
+    }
+
+    setFilteredExercises(filteredExercises.sort((a: any, b: any) => a.order - b.order));
   };
 
   const handleItemClick = (exercise: Exercise) => {
@@ -139,14 +157,35 @@ export function NewWorkoutExerciseForm(props: NewWorkoutExerciseFormProps) {
     <div className=" px-4">
       {!selectedExercise ? (
         <>
-          <Input
-            type="text"
-            placeholder="Search for an exercise..."
-            onChange={(e) => {
-              handleFilter(e.target.value);
-            }}
-            value={inputValue}
-          />
+          <div>
+            <Input
+              type="text"
+              placeholder="Search for an exercise..."
+              onChange={(e) => {
+                handleFilter(e.target.value);
+              }}
+              value={inputValue}
+            />
+            <div className="flex gap-2 mt-2">
+              {bodyPartsFilterList.map((bodyPart: any) => (
+                <Chip
+                  key={bodyPart}
+                  color={handleColor({ id: bodyPart.id })}
+                  size="xs"
+                  isActive={bodyPartsFilter.includes(bodyPart.id)}
+                  onClick={() => {
+                    if (bodyPartsFilter.includes(bodyPart.id)) {
+                      setBodyPartsFilter((prev: any) => prev.filter((id: any) => id !== bodyPart.id));
+                    } else {
+                      setBodyPartsFilter((prev: any) => [...prev, bodyPart.id]);
+                    }
+                  }}
+                >
+                  {bodyPart.name}
+                </Chip>
+              ))}
+            </div>
+          </div>
 
           <div className="mt-2">
             {filteredExercises.length !== 0 ? (
